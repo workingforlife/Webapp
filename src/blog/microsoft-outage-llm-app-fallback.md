@@ -2,13 +2,14 @@
 title: Microsoft Outage: What It Means for LLM Apps
 description: Microsoft's November 2026 outage shows how one failure can spread. Learn how cascading failures work and how to add a fallback model to your LLM app.
 date: 2026-11-13
+updated: 2026-11-16
 image: /assets/blog/microsoft-outage-llm-app-fallback-hero.jpg
 imageAlt: An app routing traffic to a backup provider after the main provider fails
 tools: cost-forecaster, token-counter, model-prices
 ---
 On 12 November 2026, a major Microsoft outage disrupted Outlook, Teams, Copilot and other services in many countries. If you build products on large language models (LLMs), the useful question is not who was at fault but how your own app would cope if a provider or platform it depends on failed for several hours. This guide explains how failures spread, where LLM apps are exposed, how to add a fallback, and what a fallback costs.
 
-> **Written during an ongoing incident.** This article was written on 13 November 2026, before Microsoft published a root cause. We describe only what Microsoft and news outlets have reported, and we will update the article when Microsoft's post-incident report is out.
+> **Updated 16 November 2026.** Microsoft has given a preliminary cause, which we summarise below, but it has not yet published a full post-incident report. We describe only what Microsoft and news outlets have reported, and we will update this article again when the full report is out.
 
 [[toc]]
 
@@ -16,7 +17,11 @@ On 12 November 2026, a major Microsoft outage disrupted Outlook, Teams, Copilot 
 
 The outage began on 12 November 2026 and reached users in many regions. Microsoft said it was not aware of a cyberattack, and an executive said there was no indication of malicious activity. Microsoft's own updates, as reported by [CyberSecurityNews](https://cybersecuritynews.com/microsoft-365-massive-outage-fixes-fail-as-restored-servers-keep-going-unresponsive/), said that a number of servers became unexpectedly unavailable, that the affected servers were failing health checks, and that restored servers could become unresponsive again once traffic returned. [Al Jazeera](https://www.aljazeera.com/news/2026/11/13/microsoft-hit-by-global-outages-what-happened-and-why) reported that tools relying on Microsoft services, including ones used by OpenAI and Anthropic, were also disrupted.
 
-What has not been reported is why the first servers failed. Microsoft has said a post-incident report with the root cause will follow. Anything beyond that is speculation, and this article does not claim to know what went wrong inside Microsoft.
+Microsoft's explanation changed as the incident went on. At first it said it had not identified any recent change linked to the start of the impact. Later it said it was reverting a recent network configuration change that correlated with the start of impact, and that a process responsible for establishing secure connections was being overwhelmed, according to [AzureBlog](https://azureblog.co.uk/posts/microsoft-365-outage-12-november-2026/) and [TechRadar's live blog](https://www.techradar.com/news/live/outlook-outage-nov-2026).
+
+On 13 November Microsoft gave a preliminary cause in a post on X: the incident was introduced by an issue during an earlier network capacity upgrade, which surfaced after a recent network change. It said it had addressed the underlying issue and had no evidence of malicious activity. [StatusStack](https://statusstack.com/blog/microsoft-365-exchange-online-outage-november-12-2026) notes that outlets paraphrase this wording, so check Microsoft's own post for the exact text. Reports give a stated end time of 16:10 UTC on 13 November, and Microsoft declared the incident fixed early on 14 November UK time.
+
+This is a preliminary account, not the full post-incident report. As of 16 November we have not found that report, and sources disagree on when it will appear. The preliminary cause does not say why the first servers failed or how much spare capacity was available, so we do not claim to know the internal details. The full report may add to or change this account.
 
 ## Why one failure can become many
 
@@ -26,7 +31,7 @@ An outage that starts small can grow through a pattern called a **cascading fail
 3. Those servers now carry more load than they were built for, so some fail too.
 4. The load shifts again, and the failure spreads.
 
-Recovery can be hard for the same reason. If you bring a server back while all the waiting traffic hits it at once, it can fail again straight away. Engineers deal with this by limiting traffic, bringing capacity back gradually and rerouting. Microsoft described taking steps of this kind. We are not saying this is what caused the outage, only that it is a well-known way for failures to spread.
+Recovery can be hard for the same reason. If you bring a server back while all the waiting traffic hits it at once, it can fail again straight away. Engineers deal with this by limiting traffic, bringing capacity back gradually and rerouting. Microsoft described taking steps of this kind. Its preliminary cause points to a network change, not to cascading overload alone, so treat this section as a general pattern and not as a claim about what happened inside Microsoft.
 
 The lesson for your own app is the same one: a failure in one place can become a failure everywhere if nothing limits it.
 
@@ -74,7 +79,7 @@ To estimate the bill for a failover period, count your prompt with the [Token Co
 
 ### What caused the November 2026 Microsoft outage?
 
-Microsoft has not published a root cause yet. It has said there is no indication of a cyberattack and that a number of servers became unexpectedly unavailable. A post-incident report is expected to give the full cause, and we will update this article when it is out.
+Microsoft's preliminary explanation is that the incident was introduced by an issue during an earlier network capacity upgrade, which surfaced after a recent network change. It said it has no evidence of malicious activity. Its full post-incident report has not been published yet, so this may be refined, and we will update this article when it is out.
 
 ### What is a cascading failure?
 
@@ -92,4 +97,7 @@ Usually not. Pay-as-you-go APIs charge for what you use, so the backup model onl
 
 - [CyberSecurityNews: Microsoft 365 massive outage, fixes fail as restored servers keep going unresponsive](https://cybersecuritynews.com/microsoft-365-massive-outage-fixes-fail-as-restored-servers-keep-going-unresponsive/)
 - [Al Jazeera: Microsoft hit by global outages, what happened and why](https://www.aljazeera.com/news/2026/11/13/microsoft-hit-by-global-outages-what-happened-and-why)
+- [AzureBlog: Microsoft 365 outage, 12 November 2026](https://azureblog.co.uk/posts/microsoft-365-outage-12-november-2026/)
+- [StatusStack: Microsoft 365 and Exchange Online outage, 12 November 2026](https://statusstack.com/blog/microsoft-365-exchange-online-outage-november-12-2026)
+- [TechRadar: Outlook outage live blog](https://www.techradar.com/news/live/outlook-outage-nov-2026)
 - [Forbes: Microsoft outage, what happened and what to do next](https://www.forbes.com/sites/kateoflahertyuk/2026/11/13/microsoft-outage-what-happened-and-what-to-do-next/)
