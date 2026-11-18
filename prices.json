@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-17",
+ "updated": "2026-11-18",
  "source": "LiteLLM community price list",
- "count": 208,
+ "count": 211,
  "models": [
   {"provider":"Anthropic","name":"claude-fable-5","in":10,"out":50,"ctx":1000,"cr":1},
   {"provider":"Anthropic","name":"claude-fable-5-1","in":10,"out":50,"ctx":1000,"cr":0.25},
@@ -148,6 +148,9 @@
   {"provider":"OpenAI","name":"gpt-6-sol","in":2,"out":10,"ctx":922,"cr":0.2},
   {"provider":"OpenAI","name":"gpt-6.1-sol","in":2,"out":10,"ctx":922,"cr":0.1},
   {"provider":"OpenAI","name":"gpt-6.1-terra","in":1,"out":5,"ctx":922,"cr":0.05},
+  {"provider":"OpenAI","name":"gpt-6.2-astra","in":8,"out":40,"ctx":922,"cr":0.4},
+  {"provider":"OpenAI","name":"gpt-6.2-astra-law","in":8,"out":40,"ctx":922,"cr":0.4},
+  {"provider":"OpenAI","name":"gpt-6.2-sol","in":2,"out":10,"ctx":922,"cr":0.1},
   {"provider":"OpenAI","name":"gpt-audio","in":2.5,"out":10,"ctx":128},
   {"provider":"OpenAI","name":"gpt-audio-1.5","in":2.5,"out":10,"ctx":128},
   {"provider":"OpenAI","name":"gpt-audio-mini","in":0.6,"out":2.4,"ctx":128},

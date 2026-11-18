@@ -28,16 +28,16 @@
   "d": "2026-11-12"
  },
  "/model-prices": {
-  "h": "1e70b310cc77a536a41b9d6c5d7de393d9f4349c",
-  "d": "2026-11-17"
+  "h": "466593416af39f6fccc6ed82e5577ab36db579f4",
+  "d": "2026-11-18"
  },
  "/pdf-to-text": {
   "h": "035c4b18c94ea11cd84ddfc8163cf9688ac58a1d",
   "d": "2026-11-12"
  },
  "/privacy": {
-  "h": "fa69f3408cefb3a0011a51eae0104b591057a2cf",
-  "d": "2026-11-17"
+  "h": "a69c4efed274f7c191ddf1a643c49f187e369886",
+  "d": "2026-11-18"
  },
  "/prompt-builder": {
   "h": "547ed849aa59b0980f029f1561ea0c1481429a6c",
@@ -48,8 +48,8 @@
   "d": "2026-11-12"
  },
  "/terms": {
-  "h": "47ec09201b94e9b7179405b6dcfaaf4c842f57d4",
-  "d": "2026-11-17"
+  "h": "e6eaa8949ebc2d45f5195aaab5dab56f5287c687",
+  "d": "2026-11-18"
  },
  "/text-cleaner": {
   "h": "f8eb9d320fb9d19bb58b4389c89ef2f5692cd24c",
@@ -68,12 +68,12 @@
   "d": "2026-11-14"
  },
  "/blog/nvidia-ceo-exit-ai-api-prices": {
-  "h": "44cacbd28996ec0fbf5877e59161079dded0ef9c",
-  "d": "2026-11-14"
+  "h": "d203ef3d1d752502200c2ad353994334ea04c9df",
+  "d": "2026-11-18"
  },
  "/blog/microsoft-outage-llm-app-fallback": {
-  "h": "cc827601ccc2c6837c090b877d31bec358b55872",
-  "d": "2026-11-16"
+  "h": "0d90d02093688be68dd6f5d2ee9459b809a89f00",
+  "d": "2026-11-18"
  },
  "/blog/claude-pro-price-india": {
   "h": "81a5aba8948ad960bb4b619235da011f70eb63d2",
@@ -100,8 +100,8 @@
   "d": "2026-11-14"
  },
  "/openai-api-pricing": {
-  "h": "24b26792f7e171d9b27045e5a024f553a8773c22",
-  "d": "2026-11-12"
+  "h": "c6f47c0852ec7eec5111ea07d3e378730edc1e51",
+  "d": "2026-11-18"
  },
  "/claude-api-pricing": {
   "h": "814feff0ccd36e5252e07291369420cbdcec6184",
