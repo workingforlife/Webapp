@@ -1,14 +1,14 @@
 {
  "/about": {
-  "h": "ee613feb8565037ae527715a200fc518f7c71402",
-  "d": "2026-11-12"
+  "h": "331a97f832940425eb6fd05efacecf1b9dc1ab22",
+  "d": "2026-11-19"
  },
  "/chat-export": {
-  "h": "efcba6c52c1e5c321167859bcee43317d05b7397",
+  "h": "758a0ce18d3d9b7b97a3c382191f362d3b609b17",
   "d": "2026-11-19"
  },
  "/chunker": {
-  "h": "011c0c0726522db1fc609f245b3ec5dd546c2a07",
+  "h": "054573d5aea38d676032093c09c972030f0813d7",
   "d": "2026-11-19"
  },
  "/cost-forecaster": {
@@ -24,7 +24,7 @@
   "d": "2026-11-19"
  },
  "/json-validator": {
-  "h": "d41b56b1203429f9b5d775cebd5505965a32fa4f",
+  "h": "1d4c925a4fd2d6f2e732ebe6bed2dafa590ba6d2",
   "d": "2026-11-19"
  },
  "/model-prices": {
@@ -32,15 +32,15 @@
   "d": "2026-11-19"
  },
  "/pdf-to-text": {
-  "h": "608a6eb79cd4afd11c5caa0792595ace00a748bb",
+  "h": "b3835c88c7137b51719c9851882c457686334627",
   "d": "2026-11-19"
  },
  "/privacy": {
-  "h": "45587ec556ec7d24c4f55d4d010c942d0cb3f086",
+  "h": "677231ba76990cf02c70c30ae9d1bd5c382a2bd8",
   "d": "2026-11-19"
  },
  "/prompt-builder": {
-  "h": "eab07e21d5e3c34901ea3b7e76cb2098dee9aa66",
+  "h": "9d34f2529a937080868631547686f4e5b2a295ff",
   "d": "2026-11-19"
  },
  "/prompt-token-optimizer": {
@@ -48,11 +48,11 @@
   "d": "2026-11-19"
  },
  "/terms": {
-  "h": "3d4b242119e34c6f559a140ed169333df234481b",
+  "h": "8fb391517c15135c845987d54b3ee2b3747c3168",
   "d": "2026-11-19"
  },
  "/text-cleaner": {
-  "h": "e7c995b651512e4a44edef336ba1861ac42ce083",
+  "h": "bfbaea10bb1bb3a747178c5714c036249765ab0d",
   "d": "2026-11-19"
  },
  "/token-counter": {
@@ -60,8 +60,8 @@
   "d": "2026-11-19"
  },
  "/glossary": {
-  "h": "d79e945ae8d9c47d73590caddac16653f46cad70",
-  "d": "2026-11-12"
+  "h": "eebe2557b0a37eaf83ed690c13ff9f6d9b671df0",
+  "d": "2026-11-19"
  },
  "/blog/": {
   "h": "9f7f9651584b200345373250d73d90aec08b10c9",
@@ -72,11 +72,11 @@
   "d": "2026-11-19"
  },
  "/blog/reusable-prompt-templates": {
-  "h": "41b1831e3ee06bead9642f9cfc3915402209aaea",
+  "h": "e72b96dda17fb5f6a8a4f2952d86a634bd50926c",
   "d": "2026-11-19"
  },
  "/blog/reliable-json-from-llm": {
-  "h": "e2eebedec1e4c68528b7f9b70ff07c1093c61b3e",
+  "h": "792e4c6a822bdfeab8e9b20f2a4230af74c620b4",
   "d": "2026-11-19"
  },
  "/blog/prompt-caching-and-batch-discounts-explained": {
@@ -84,7 +84,7 @@
   "d": "2026-11-19"
  },
  "/blog/pdf-to-ai-chatbot-without-wasting-tokens": {
-  "h": "fe1cbe6419122227bae63ad45556163a9e98b4b9",
+  "h": "1ee9ead149a84ec0fec2311b81f16b9eaafa6b0e",
   "d": "2026-11-19"
  },
  "/blog/input-vs-output-tokens-why-output-costs-more": {
@@ -96,7 +96,7 @@
   "d": "2026-11-19"
  },
  "/blog/export-chatgpt-claude-chats": {
-  "h": "8b43c76174063ed449d1a0c48698896ef6f6615f",
+  "h": "fc21d3375c1f20301702b6dfca3ccc8a172ac345",
   "d": "2026-11-19"
  },
  "/blog/ai-agent-vs-chatbot-vs-batch-cost": {
@@ -104,15 +104,15 @@
   "d": "2026-11-19"
  },
  "/blog/nvidia-ceo-exit-ai-api-prices": {
-  "h": "4fb4f992d711ed57cd7f86df730ef2a621bbc86f",
+  "h": "c3dc0edadbd583d8aaded4cee54ce2186538b660",
   "d": "2026-11-19"
  },
  "/blog/microsoft-outage-llm-app-fallback": {
-  "h": "7f039fa81f3411b7cdcdf7a5d78e11027bd1000b",
+  "h": "d2631a8152ec733177c95e39c397de9dcc9861e4",
   "d": "2026-11-19"
  },
  "/blog/claude-pro-price-india": {
-  "h": "f453b0901e07110110e06d032e9c86c191c970ca",
+  "h": "b4b01f840c157193ac79e2fab9d5fa327d1989fc",
   "d": "2026-11-19"
  },
  "/blog/how-many-tokens-is-my-text": {
@@ -128,7 +128,7 @@
   "d": "2026-11-19"
  },
  "/blog/context-windows-explained": {
-  "h": "eca5ab464e21ee2f46fd24ae70793dfa62e60324",
+  "h": "d6ce9840c3236fbe1e9508c437281e740682c96e",
   "d": "2026-11-19"
  },
  "/blog/compare-llm-api-prices": {
@@ -136,27 +136,27 @@
   "d": "2026-11-19"
  },
  "/openai-api-pricing": {
-  "h": "c6f47c0852ec7eec5111ea07d3e378730edc1e51",
-  "d": "2026-11-18"
+  "h": "ff866d28f2c16d1d2de30d0acc876e955214413b",
+  "d": "2026-11-19"
  },
  "/claude-api-pricing": {
-  "h": "814feff0ccd36e5252e07291369420cbdcec6184",
-  "d": "2026-11-12"
+  "h": "ba35a6ae0d063e07e8cb9fae02a1ab4c5cccb867",
+  "d": "2026-11-19"
  },
  "/gemini-api-pricing": {
-  "h": "0b304178cc8961447a4594a3495e521e5d00162a",
-  "d": "2026-11-13"
+  "h": "518a61a7b17b918438be8072375b470d89f427a0",
+  "d": "2026-11-19"
  },
  "/mistral-api-pricing": {
-  "h": "049d05e7719f4a83e54770a8d9af29bca4923b81",
-  "d": "2026-11-12"
+  "h": "b7234083b7bdbfa5567d4b9b3070231e5615baef",
+  "d": "2026-11-19"
  },
  "/deepseek-api-pricing": {
-  "h": "e3762fd3a0189026231563fd77322995f5584db4",
-  "d": "2026-11-12"
+  "h": "9f42233048019693a02087bf8720d78db7cd6878",
+  "d": "2026-11-19"
  },
  "/grok-api-pricing": {
-  "h": "1e2a950bcc4c90c458e1b5f581369a16cce03fd8",
-  "d": "2026-11-12"
+  "h": "3a5ac51dfffcb5ef6e402ee2c037b543503af9e9",
+  "d": "2026-11-19"
  }
 }
