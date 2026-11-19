@@ -83,8 +83,13 @@ const header = rd("src/partials/header.html").trim(), footer = rd("src/partials/
 const dataLine = models.length ? `Prices verified ${PR.updated} · ${models.length} models · ${provNames.size} providers` : "Prices come from an open-source catalog and are refreshed daily.";
 
 // ---------- Blog ----------
-const inline = (s) => esc(s)
-  .replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, "$1<i>$2</i>")
+const inline = (s) => { // code spans are lifted out first so Markdown inside backticks is shown as typed
+  const keep = [];
+  const t = esc(s).replace(/(`{1,2})\s?([^`]+?)\s?\1(?!`)/g, (_, _q, c) => { keep.push(`<code>${c}</code>`); return `\u0000${keep.length - 1}\u0000`; });
+  return inlineText(t).replace(/\u0000(\d+)\u0000/g, (_, n) => keep[+n]);
+};
+const inlineText = (s) => s
+  .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, "$1<i>$2</i>")
   .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => {
     if (u.startsWith("tool:") || u.startsWith("page:")) u = hrefFor(u.split(":")[1]);
     else if (u.startsWith("post:")) u = (clean ? POSTDIR + u.slice(5) : POSTDIR + u.slice(5) + ".html");
@@ -151,7 +156,7 @@ function render(h, o) {
   if (m0) h = h.slice(m0[0].length);
   const t = T.find((x) => x.slug == (o.slug ?? (m0 && m0[1]))) || {};
   const rel = T.filter((x) => x.slug != t.slug && x.group == t.group).concat(T.filter((x) => x.slug != t.slug && x.group != t.group)).slice(0, 3);
-  const guides = t.slug ? posts.filter((x) => x.tools.includes(t.slug)).map((x, i) => ({ x, i, k: x.tools.indexOf(t.slug) })).sort((a, b) => a.k - b.k || b.i - a.i).slice(0, 3).map((r) => r.x) : [];
+  const guides = t.slug ? posts.filter((x) => x.tools.includes(t.slug) && x.guide !== "no").map((x, i) => ({ x, i, k: x.tools.indexOf(t.slug) })).sort((a, b) => a.k - b.k || b.i - a.i).slice(0, 3).map((r) => r.x) : [];
   const toks = []; h = h.replace(/<script src="(https:\/\/cdn\.jsdelivr\.net\/npm\/gpt-tokenizer[^"]+)"[^>]*><\/script>/g, (_, u) => { toks.push(u); return ""; });
   h = h.replaceAll("{{HEADER}}", () => header).replaceAll("{{FOOTER}}", () => footer).replaceAll("{{SHARED_CSS}}", () => css)
     .replaceAll("{{GRID}}", () => grid)

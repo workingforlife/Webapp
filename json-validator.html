@@ -80,7 +80,7 @@ function scan(){if(!G.length)return;var els=document.querySelectorAll("main labe
 document.addEventListener("click",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip")))close()});document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
 document.addEventListener("mouseover",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip"))&&matchMedia("(hover:hover)").matches&&cur&&!cur.contains(e.target))close()});
 var tm=null,mo=new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(function(){mo.disconnect();scan();obs()},120)});function obs(){var m=document.querySelector("main");if(m)mo.observe(m,{childList:true,subtree:true})}
-window.lazy("/assets/tips.js?v=6069e596").then(function(){G=(window.TIPS||[]).map(function(g){g.re=new RegExp(g.m,"i");return g});scan();obs()}).catch(function(){});
+window.lazy("/assets/tips.js?v=b4500667").then(function(){G=(window.TIPS||[]).map(function(g){g.re=new RegExp(g.m,"i");return g});scan();obs()}).catch(function(){});
 
 })();</script>
 <script>

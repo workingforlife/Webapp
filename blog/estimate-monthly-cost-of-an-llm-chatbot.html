@@ -75,7 +75,7 @@ select[size]{width:100%}input[type=search]{-webkit-appearance:none;appearance:no
 <nav class="crumbs" aria-label="Breadcrumb" style="max-width:760px"><a href="/">Home</a><span>&rsaquo;</span><a href="/blog/">Blog</a><span>&rsaquo;</span><span style="margin:0">How to Estimate the Monthly Cost of an LLM Chatbot</span></nav><main class="prose"><article><h1>How to Estimate the Monthly Cost of an LLM Chatbot</h1><p class="meta">By AI Utility Belt &middot; Published <time datetime="2026-11-10">November 10, 2026</time> &middot; 3 min read</p>
 <figure class="hero-img"><img src="/assets/blog/estimate-monthly-cost-of-an-llm-chatbot-hero.jpg" alt="Chat messages growing longer as a conversation continues" width="1600" height="900" fetchpriority="high" decoding="async"></figure>
 
-<p>A chatbot looks cheap per message, then the first invoice arrives and it is several times your estimate. The reason is almost always the same: the model has no memory, so every turn re-sends the whole conversation. Here is a method that accounts for it. It is part of our cost series, and the main guide is <a href="/blog/cut-your-llm-bill">Seven Ways to Cut Your LLM Bill</a>.</p>
+<p>A chatbot looks cheap per message, then the first invoice arrives and it is several times your estimate. The reason is almost always the same: the model has no memory, so every turn re-sends the whole conversation. Here is a method that accounts for it. It is part of our cost series, and the main guide is <a href="/blog/cut-your-llm-bill">Seven Ways to Cut Your LLM Bill</a>. Building an agent instead? See <a href="/blog/ai-agent-vs-chatbot-vs-batch-cost">what agents, chatbots and batch jobs cost</a>.</p>
 <h2 id="the-inputs-you-need">The inputs you need</h2>
 <ol><li><b>System prompt size</b> in tokens. Paste it into the <a href="/token-counter">Token Counter</a> to measure it.</li><li><b>Average user message</b> in tokens.</li><li><b>Average reply</b> in tokens.</li><li><b>Turns per conversation.</b> How many back-and-forths a typical user has.</li><li><b>Conversations per month.</b></li><li><b>The model's prices</b>, for input and for output, per million tokens. Find them on <a href="/model-prices">Model Prices</a>.</li></ol>
 <h2 id="step-1-cost-of-a-single-turn">Step 1: cost of a single turn</h2>
@@ -116,7 +116,7 @@ function scan(){if(!G.length)return;var els=document.querySelectorAll("main labe
 document.addEventListener("click",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip")))close()});document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
 document.addEventListener("mouseover",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip"))&&matchMedia("(hover:hover)").matches&&cur&&!cur.contains(e.target))close()});
 var tm=null,mo=new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(function(){mo.disconnect();scan();obs()},120)});function obs(){var m=document.querySelector("main");if(m)mo.observe(m,{childList:true,subtree:true})}
-window.lazy("/assets/tips.js?v=6069e596").then(function(){G=(window.TIPS||[]).map(function(g){g.re=new RegExp(g.m,"i");return g});scan();obs()}).catch(function(){});
+window.lazy("/assets/tips.js?v=b4500667").then(function(){G=(window.TIPS||[]).map(function(g){g.re=new RegExp(g.m,"i");return g});scan();obs()}).catch(function(){});
 
 })();</script>
 </body></html>

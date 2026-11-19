@@ -15,7 +15,7 @@ Providers quote dollars per million tokens, with separate rates for input and ou
 
 ## Look at input and output separately
 
-Output is typically several times pricier than input. A model with cheap input but expensive output can be a bad deal for a chatbot that writes long answers, and a good deal for a classifier that reads a lot and answers in one word. Look at the ratio between the two prices as well as each one.
+Output is typically several times pricier than input. A model with cheap input but expensive output can be a bad deal for a chatbot that writes long answers, and a good deal for a classifier that reads a lot and answers in one word. Look at the ratio between the two prices as well as each one. For why the gap exists and how big it is, see [why output tokens cost more than input](post:input-vs-output-tokens-why-output-costs-more).
 
 ## Use your own token mix
 

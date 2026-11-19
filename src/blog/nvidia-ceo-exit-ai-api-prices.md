@@ -6,6 +6,7 @@ image: /assets/blog/nvidia-ceo-exit-ai-api-prices-hero.jpg
 imageAlt: A flat price line with a marker for 12 November, showing no change in AI API prices after the news
 tools: model-prices, cost-forecaster, token-counter
 related: compare-llm-api-prices, microsoft-outage-llm-app-fallback
+guide: no
 ---
 Nvidia's CEO, Jensen Huang, resigned on 12 November 2026, and many AI teams asked the same practical question: will this change what we pay for AI? We track API prices for more than 200 models every day, so we checked. **In our data, no model's price changed on 13 or 14 November.** That is only two daily snapshots after the news, so it means "no evidence of a change yet", not "no effect". This article shows what we checked, what the data can and cannot tell you, and why a leadership change is unlikely to move API prices quickly.
 

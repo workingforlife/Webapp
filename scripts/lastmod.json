@@ -12,15 +12,15 @@
   "d": "2026-11-19"
  },
  "/cost-forecaster": {
-  "h": "3afff879416050a9a6894d1f8ead51c39de7c1f7",
+  "h": "08c1440a28fe8089b05a088ec0719f74e352297d",
   "d": "2026-11-19"
  },
  "/how-it-works": {
-  "h": "59af7a19458bed389eee8153992f2049953c9790",
-  "d": "2026-11-12"
+  "h": "43cf415c77db08666833d9e20c7bc1fcc0a86f37",
+  "d": "2026-11-19"
  },
  "/": {
-  "h": "e3172155d66a7e6f5483cdde829a98089ad67aaf",
+  "h": "55672e663dafd04f695b8b846c2330676d747720",
   "d": "2026-11-19"
  },
  "/json-validator": {
@@ -28,7 +28,7 @@
   "d": "2026-11-19"
  },
  "/model-prices": {
-  "h": "638adbee45f55f3bd021e795655ac8ea281e583e",
+  "h": "b6a9c143741ec54ec2cd09504e0e4b880aa9d64b",
   "d": "2026-11-19"
  },
  "/pdf-to-text": {
@@ -44,7 +44,7 @@
   "d": "2026-11-19"
  },
  "/prompt-token-optimizer": {
-  "h": "9483aa0bfd4068392526947d2c76453971d58ca6",
+  "h": "5d756ae930ca7181d589d5b73f1a90307dcba159",
   "d": "2026-11-19"
  },
  "/terms": {
@@ -56,7 +56,7 @@
   "d": "2026-11-19"
  },
  "/token-counter": {
-  "h": "cfc1d7a441773fef2bd15c1e99f1b9d91bdf947b",
+  "h": "3ac97f6a12e8962c64c7675d71dd1b8fdc330dd6",
   "d": "2026-11-19"
  },
  "/glossary": {
@@ -64,7 +64,11 @@
   "d": "2026-11-12"
  },
  "/blog/": {
-  "h": "9ba9232a474c3daca5ffd84ca67ca3c26d00e98c",
+  "h": "9f7f9651584b200345373250d73d90aec08b10c9",
+  "d": "2026-11-19"
+ },
+ "/blog/why-token-counts-differ-between-models": {
+  "h": "cc1c9e8b371eef461095a3faf2e9d3daccb67762",
   "d": "2026-11-19"
  },
  "/blog/reusable-prompt-templates": {
@@ -75,12 +79,28 @@
   "h": "e2eebedec1e4c68528b7f9b70ff07c1093c61b3e",
   "d": "2026-11-19"
  },
+ "/blog/prompt-caching-and-batch-discounts-explained": {
+  "h": "e6ddd7f64dccc851a8dd98252f467de87773fb06",
+  "d": "2026-11-19"
+ },
  "/blog/pdf-to-ai-chatbot-without-wasting-tokens": {
   "h": "fe1cbe6419122227bae63ad45556163a9e98b4b9",
   "d": "2026-11-19"
  },
+ "/blog/input-vs-output-tokens-why-output-costs-more": {
+  "h": "d968f41f81ecfd21e16a2e02f19e799946d23b9d",
+  "d": "2026-11-19"
+ },
+ "/blog/how-many-tokens-do-code-json-and-hindi-use": {
+  "h": "9cb920966e2ab089f51999607c6ed6eb630373cb",
+  "d": "2026-11-19"
+ },
  "/blog/export-chatgpt-claude-chats": {
   "h": "8b43c76174063ed449d1a0c48698896ef6f6615f",
+  "d": "2026-11-19"
+ },
+ "/blog/ai-agent-vs-chatbot-vs-batch-cost": {
+  "h": "7bef31626a30a61f3f2f8abc90da41b47e03d945",
   "d": "2026-11-19"
  },
  "/blog/nvidia-ceo-exit-ai-api-prices": {
@@ -96,15 +116,15 @@
   "d": "2026-11-19"
  },
  "/blog/how-many-tokens-is-my-text": {
-  "h": "e4dd4aa706b3c0fc1bd43e3668966f3898620005",
+  "h": "5463279303c57a458c91ccacab81d16d234b3860",
   "d": "2026-11-19"
  },
  "/blog/estimate-monthly-cost-of-an-llm-chatbot": {
-  "h": "c9da4175c33ce71c1617d15ffef6a7c8d8631456",
+  "h": "e2e96f858a9d2e619c0cdd6860b8b68384316037",
   "d": "2026-11-19"
  },
  "/blog/cut-your-llm-bill": {
-  "h": "1cf156407352f0d0a1d5dac0a8d8783b26035724",
+  "h": "0db471f0f9ea679e1c2897229e85fbb8d181d91b",
   "d": "2026-11-19"
  },
  "/blog/context-windows-explained": {
@@ -112,7 +132,7 @@
   "d": "2026-11-19"
  },
  "/blog/compare-llm-api-prices": {
-  "h": "780f0ac81b390fdbdac43b28b13322cfa4420e65",
+  "h": "cc377d4a143174f82fcd356fd7279e817d631d23",
   "d": "2026-11-19"
  },
  "/openai-api-pricing": {

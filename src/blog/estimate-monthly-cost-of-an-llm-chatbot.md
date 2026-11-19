@@ -7,7 +7,7 @@ imageAlt: Chat messages growing longer as a conversation continues
 tools: cost-forecaster, token-counter, model-prices
 related: cut-your-llm-bill, compare-llm-api-prices
 ---
-A chatbot looks cheap per message, then the first invoice arrives and it is several times your estimate. The reason is almost always the same: the model has no memory, so every turn re-sends the whole conversation. Here is a method that accounts for it. It is part of our cost series, and the main guide is [Seven Ways to Cut Your LLM Bill](post:cut-your-llm-bill).
+A chatbot looks cheap per message, then the first invoice arrives and it is several times your estimate. The reason is almost always the same: the model has no memory, so every turn re-sends the whole conversation. Here is a method that accounts for it. It is part of our cost series, and the main guide is [Seven Ways to Cut Your LLM Bill](post:cut-your-llm-bill). Building an agent instead? See [what agents, chatbots and batch jobs cost](post:ai-agent-vs-chatbot-vs-batch-cost).
 
 ## The inputs you need
 

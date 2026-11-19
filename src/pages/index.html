@@ -37,7 +37,7 @@ details.q{background:var(--sf);border:1px solid var(--bd);border-radius:12px;pad
 {{LATEST_POSTS}}
 <h2 class="sec" id="faq">Questions</h2><p class="sub">&nbsp;</p>
 <details class="q"><summary>Are my prompts or files uploaded?</summary><p>No. Text, PDFs and chats are processed in your browser. The Cost Forecaster share link contains only your settings.</p></details>
-<details class="q"><summary>How accurate are the token counts?</summary><p>Exact for OpenAI models where the tokenizer loads. For other providers they are estimates, typically within 10 to 15 percent, and labeled as such.</p></details>
+<details class="q"><summary>How accurate are the token counts?</summary><p>Exact for OpenAI models where the tokenizer loads. For other providers they are approximate estimates, labeled as such. Anthropic says its newer Claude models count about 30 percent more tokens than earlier ones for the same text.</p></details>
 <details class="q"><summary>Where do the prices come from?</summary><p>From the open-source LiteLLM price catalog, refreshed daily. They are not independently verified against provider billing, so check a provider's page before committing to a budget.</p></details>
 <details class="q"><summary>Do I need an account?</summary><p>No. There is nothing to sign up for.</p></details>
 </main>
@@ -50,7 +50,7 @@ const b64=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/
 function qc(){const t=$('qt').value,n=est(t),o=+$('qo').value||0,r=+$('qr').value||0;$('qn').textContent=n.toLocaleString();
 const R=M.map(m=>({m,c:(n*m[2]+o*m[3])/1e6*r})).sort((a,b)=>a.c-b.c),row=(x,l)=>`<tr><td>${l}: ${E(x.m[0])} ${E(x.m[1])}</td><td>${money(x.c)}</td></tr>`;
 $('qk').innerHTML=n&&R.length?R.slice(0,3).map((x,i)=>row(x,i?'Next':'Cheapest')).join('')+(R.length>3?row(R[R.length-1],'Most expensive'):''):'<tr><td class="mu">Paste some text to see costs.</td></tr>';
-$('qv').textContent='Estimate: token counts are approximate (±10–15%). '+(VF?'Prices verified '+VF+'.':'Sample prices shown because the price file could not be loaded.');
+$('qv').textContent='Estimate: token counts are approximate. '+(VF?'Prices verified '+VF+'.':'Sample prices shown because the price file could not be loaded.');
 if(n&&R.length)$('ql').href='{{HREF:cost-forecaster}}#c~'+b64(JSON.stringify({w:'batch',S:n,R:o,N:r,B:0,C:0,cf:10,mk:R[0].m[0]+'|'+R[0].m[1]}))}
 ['qt','qo','qr'].forEach(i=>$(i).oninput=qc);loadPrices(qc);
 fetch('/prices.json').then(r=>r.json()).then(j=>{document.getElementById('ds').textContent='Prices verified '+j.updated+' · '+(j.count||j.models.length)+' models · '+new Set(j.models.map(m=>m.provider)).size+' providers'}).catch(()=>{});

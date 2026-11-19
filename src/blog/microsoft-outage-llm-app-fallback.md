@@ -6,6 +6,7 @@ updated: 2026-11-19
 image: /assets/blog/microsoft-outage-llm-app-fallback-hero.jpg
 imageAlt: An app routing traffic to a backup provider after the main provider fails
 tools: cost-forecaster, token-counter, model-prices
+guide: no
 related: estimate-monthly-cost-of-an-llm-chatbot, compare-llm-api-prices
 ---
 On 12 November 2026, a major Microsoft outage disrupted Outlook, Teams, Copilot and other services in many countries. If you build products on large language models (LLMs), the useful question is not who was at fault but how your own app would cope if a provider or platform it depends on failed for several hours. This guide explains how failures spread, where LLM apps are exposed, how to add a fallback, and what a fallback costs.

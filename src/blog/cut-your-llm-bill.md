@@ -17,7 +17,7 @@ Prompts collect filler: repeated instructions, polite padding, examples nobody n
 
 ## 2. Use prompt caching
 
-If a long chunk of your prompt is identical across requests (system prompt, reference documents, tool definitions), many providers bill repeated reads at a steep discount. It helps most when requests come close together, because caches expire.
+If a long chunk of your prompt is identical across requests (system prompt, reference documents, tool definitions), many providers bill repeated reads at a steep discount. It helps most when requests come close together, because caches expire. See [prompt caching and batch discounts explained](post:prompt-caching-and-batch-discounts-explained) for the published terms and a worked example.
 
 ## 3. Pick the right model for the job
 
@@ -37,7 +37,7 @@ Instead of pasting a whole document into every request, split it into chunks and
 
 ## 7. Use batch pricing for work that can wait
 
-Several providers discount asynchronous batch jobs by around half in exchange for slower turnaround. Evaluations, bulk classification and overnight document processing fit well.
+Several providers discount asynchronous batch jobs by around half in exchange for slower turnaround. Evaluations, bulk classification and overnight document processing fit well. The same guide on [caching and batch discounts](post:prompt-caching-and-batch-discounts-explained) covers what each provider documents.
 
 ## Measure before and after
 

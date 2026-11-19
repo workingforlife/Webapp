@@ -33,11 +33,11 @@ Some content uses noticeably more tokens than its length suggests:
 | JSON and markup | More, because of brackets, quotes and keys |
 | Text with odd characters or emoji | More |
 
-If your workload is mostly one of these, measure it instead of guessing.
+If your workload is mostly one of these, measure it instead of guessing. For samples and published figures on code, JSON and Hindi, see [how many tokens code, JSON and Hindi use](post:how-many-tokens-do-code-json-and-hindi-use).
 
 ## Exact counts and estimates
 
-Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so counts for OpenAI models can be exact. Anthropic and Google do not offer one that runs offline, so for those models any tool can only estimate. An estimate is typically within 10 to 15 percent, which is fine for planning but not for hitting a hard limit exactly.
+Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so counts for OpenAI models can be exact. Anthropic and Google do not offer one that runs offline, so for those models any tool can only estimate. An estimate is fine for planning but not for hitting a hard limit exactly, and the gap can be large: Anthropic says its newer Claude models count about 30 percent more tokens than earlier ones for the same text. See [why token counts differ between models](post:why-token-counts-differ-between-models).
 
 The [Token Counter](tool:token-counter) shows the exact count for OpenAI tokenizers and a clearly labeled estimate for everything else.
 

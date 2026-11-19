@@ -84,9 +84,9 @@ select[size]{width:100%}input[type=search]{-webkit-appearance:none;appearance:no
 <h2 id="when-the-rule-of-thumb-is-wrong">When the rule of thumb is wrong</h2>
 <p>Some content uses noticeably more tokens than its length suggests:</p>
 <div class="ov"><table><thead><tr><th>Content</th><th>Tokens compared with English prose</th></tr></thead><tbody><tr><td>Source code</td><td>Often more, because of symbols and indentation</td></tr><tr><td>Numbers and IDs</td><td>More, because digits are split into short pieces</td></tr><tr><td>Non-English languages</td><td>Often more, sometimes two to three times as many</td></tr><tr><td>JSON and markup</td><td>More, because of brackets, quotes and keys</td></tr><tr><td>Text with odd characters or emoji</td><td>More</td></tr></tbody></table></div>
-<p>If your workload is mostly one of these, measure it instead of guessing.</p>
+<p>If your workload is mostly one of these, measure it instead of guessing. For samples and published figures on code, JSON and Hindi, see <a href="/blog/how-many-tokens-do-code-json-and-hindi-use">how many tokens code, JSON and Hindi use</a>.</p>
 <h2 id="exact-counts-and-estimates">Exact counts and estimates</h2>
-<p>Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so counts for OpenAI models can be exact. Anthropic and Google do not offer one that runs offline, so for those models any tool can only estimate. An estimate is typically within 10 to 15 percent, which is fine for planning but not for hitting a hard limit exactly.</p>
+<p>Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so counts for OpenAI models can be exact. Anthropic and Google do not offer one that runs offline, so for those models any tool can only estimate. An estimate is fine for planning but not for hitting a hard limit exactly, and the gap can be large: Anthropic says its newer Claude models count about 30 percent more tokens than earlier ones for the same text. See <a href="/blog/why-token-counts-differ-between-models">why token counts differ between models</a>.</p>
 <p>The <a href="/token-counter">Token Counter</a> shows the exact count for OpenAI tokenizers and a clearly labeled estimate for everything else.</p>
 <h2 id="how-to-count-your-tokens">How to count your tokens</h2>
 <ol><li>Paste your text into the <a href="/token-counter">Token Counter</a>. Nothing is uploaded, it all runs in your browser.</li><li>Pick a tokenizer. Use the OpenAI one for OpenAI models, or the estimate for other providers.</li><li>Read the count and check which models' context windows it fits.</li></ol>
@@ -116,7 +116,7 @@ function scan(){if(!G.length)return;var els=document.querySelectorAll("main labe
 document.addEventListener("click",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip")))close()});document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
 document.addEventListener("mouseover",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip"))&&matchMedia("(hover:hover)").matches&&cur&&!cur.contains(e.target))close()});
 var tm=null,mo=new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(function(){mo.disconnect();scan();obs()},120)});function obs(){var m=document.querySelector("main");if(m)mo.observe(m,{childList:true,subtree:true})}
-window.lazy("/assets/tips.js?v=6069e596").then(function(){G=(window.TIPS||[]).map(function(g){g.re=new RegExp(g.m,"i");return g});scan();obs()}).catch(function(){});
+window.lazy("/assets/tips.js?v=b4500667").then(function(){G=(window.TIPS||[]).map(function(g){g.re=new RegExp(g.m,"i");return g});scan();obs()}).catch(function(){});
 
 })();</script>
 </body></html>
