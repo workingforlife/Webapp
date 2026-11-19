@@ -28,7 +28,7 @@
   "d": "2026-11-19"
  },
  "/model-prices": {
-  "h": "b6a9c143741ec54ec2cd09504e0e4b880aa9d64b",
+  "h": "23f3e022927fac07450ba47cb1c889e74312836c",
   "d": "2026-11-19"
  },
  "/pdf-to-text": {
@@ -88,7 +88,7 @@
   "d": "2026-11-19"
  },
  "/blog/input-vs-output-tokens-why-output-costs-more": {
-  "h": "d968f41f81ecfd21e16a2e02f19e799946d23b9d",
+  "h": "b4958e64892545c8590d7256effd5d20f4f2d7d1",
   "d": "2026-11-19"
  },
  "/blog/how-many-tokens-do-code-json-and-hindi-use": {
@@ -100,19 +100,19 @@
   "d": "2026-11-19"
  },
  "/blog/ai-agent-vs-chatbot-vs-batch-cost": {
-  "h": "7bef31626a30a61f3f2f8abc90da41b47e03d945",
+  "h": "0ba520c61eb32eace28c366606120a89b9a28909",
   "d": "2026-11-19"
  },
  "/blog/nvidia-ceo-exit-ai-api-prices": {
-  "h": "c3dc0edadbd583d8aaded4cee54ce2186538b660",
+  "h": "f970f6bc0d85430eb5aef8cfd68c7db8b906ac8d",
   "d": "2026-11-19"
  },
  "/blog/microsoft-outage-llm-app-fallback": {
-  "h": "d2631a8152ec733177c95e39c397de9dcc9861e4",
+  "h": "d84c8d49f7fbfa5395dd668a775a57f505e041da",
   "d": "2026-11-19"
  },
  "/blog/claude-pro-price-india": {
-  "h": "b4b01f840c157193ac79e2fab9d5fa327d1989fc",
+  "h": "426e61eae09c0748b40e3c90dfef5495427a2fe3",
   "d": "2026-11-19"
  },
  "/blog/how-many-tokens-is-my-text": {
@@ -136,19 +136,19 @@
   "d": "2026-11-19"
  },
  "/openai-api-pricing": {
-  "h": "ff866d28f2c16d1d2de30d0acc876e955214413b",
+  "h": "39e002e2aecbbfbd8bd4029327cbc0f98be8dd46",
   "d": "2026-11-19"
  },
  "/claude-api-pricing": {
-  "h": "ba35a6ae0d063e07e8cb9fae02a1ab4c5cccb867",
+  "h": "7085e3618ffa2cb30dc7737c7b426ae4cfcdc91e",
   "d": "2026-11-19"
  },
  "/gemini-api-pricing": {
-  "h": "518a61a7b17b918438be8072375b470d89f427a0",
+  "h": "fff2e3d3ac10036ffaecea68738efbeb6e0b2230",
   "d": "2026-11-19"
  },
  "/mistral-api-pricing": {
-  "h": "b7234083b7bdbfa5567d4b9b3070231e5615baef",
+  "h": "61e38c483653f50defb0357a4011836e79750543",
   "d": "2026-11-19"
  },
  "/deepseek-api-pricing": {
