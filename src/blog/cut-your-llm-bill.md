@@ -5,8 +5,11 @@ date: 2026-11-10
 image: /assets/blog/cut-your-llm-bill-hero.jpg
 imageAlt: Bars falling to show a lower LLM bill
 tools: prompt-token-optimizer, cost-forecaster, model-prices
+related: estimate-monthly-cost-of-an-llm-chatbot, compare-llm-api-prices
 ---
 Most LLM bills are driven by a few things: how many tokens you send, how many the model writes, and which model you use. These seven changes tackle each, in roughly the order worth trying.
+
+> **Start here for LLM costs.** This is the main guide in our cost series. First work out your numbers with [how to estimate the monthly cost of an LLM chatbot](post:estimate-monthly-cost-of-an-llm-chatbot), then choose a model with [how to compare LLM API prices fairly](post:compare-llm-api-prices), then use the seven changes below to bring the bill down.
 
 ## 1. Trim your prompts
 
@@ -38,6 +41,6 @@ Several providers discount asynchronous batch jobs by around half in exchange fo
 
 ## Measure before and after
 
-A change is only a saving if you can see it. Enter your workload into the [Cost Forecaster](tool:cost-forecaster) before and after the change, and compare the monthly totals. The forecaster also shows which inputs the bill is most sensitive to, so you know where to look first.
+A change is only a saving if you can see it. Enter your workload into the [Cost Forecaster](tool:cost-forecaster) before and after the change, and compare the monthly totals. The forecaster also shows which inputs the bill is most sensitive to, so you know where to look first. For a worked monthly example, see [how to estimate the monthly cost of an LLM chatbot](post:estimate-monthly-cost-of-an-llm-chatbot), and to choose between models, see [how to compare LLM API prices fairly](post:compare-llm-api-prices).
 
 > Quality matters more than the last percent of savings. Test any cheaper model or shorter prompt on real examples before rolling it out.

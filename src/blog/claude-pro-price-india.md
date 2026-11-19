@@ -6,6 +6,7 @@ checked: 2026-11-12
 image: /assets/blog/claude-pro-price-india-hero.jpg
 imageAlt: Claude Pro in India costs 1,999 rupees a month in the Android app and 2,399 rupees a month on the website
 tools: cost-forecaster, token-counter, model-prices
+related: compare-llm-api-prices, estimate-monthly-cost-of-an-llm-chatbot
 ---
 Claude Pro is cheaper in the Android app than on the website in India. When we checked, the app charged ₹1,999 a month for Pro and the website charged ₹2,399, a gap of ₹400 a month, or about 17%. For Max the website looked about 4% cheaper, and Ultra was listed only in the app at ₹24,987.50. This guide lays out every price we saw, what we could not confirm, and when the pay-as-you-go API is the better fit.
 
@@ -66,7 +67,7 @@ Some online advice suggests store gift cards or changing your store region to pa
 
 ## Pro or the API: which costs less?
 
-Pro, Max and Ultra are flat monthly subscriptions for using Claude in the apps. The API is a separate product billed by the token, and it suits building your own tool or running a fixed workload. A subscription tends to win when you chat or code interactively most days. The API tends to win for a steady, predictable job you can measure. Here are the current Claude API prices, which update automatically.
+Pro, Max and Ultra are flat monthly subscriptions for using Claude in the apps. The API is a separate product billed by the token, and it suits building your own tool or running a fixed workload. A subscription tends to win when you chat or code interactively most days. The API tends to win for a steady, predictable job you can measure. To compare API prices across providers, see [how to compare LLM API prices fairly](post:compare-llm-api-prices). Here are the current Claude API prices, which update automatically.
 
 [[api-prices Anthropic]]
 

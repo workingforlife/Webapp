@@ -5,8 +5,9 @@ date: 2026-11-10
 image: /assets/blog/estimate-monthly-cost-of-an-llm-chatbot-hero.jpg
 imageAlt: Chat messages growing longer as a conversation continues
 tools: cost-forecaster, token-counter, model-prices
+related: cut-your-llm-bill, compare-llm-api-prices
 ---
-A chatbot looks cheap per message, then the first invoice arrives and it is several times your estimate. The reason is almost always the same: the model has no memory, so every turn re-sends the whole conversation. Here is a method that accounts for it.
+A chatbot looks cheap per message, then the first invoice arrives and it is several times your estimate. The reason is almost always the same: the model has no memory, so every turn re-sends the whole conversation. Here is a method that accounts for it. It is part of our cost series, and the main guide is [Seven Ways to Cut Your LLM Bill](post:cut-your-llm-bill).
 
 ## The inputs you need
 
@@ -58,4 +59,4 @@ Real traffic includes retries, longer conversations than average and tool calls.
 
 ## Skip the spreadsheet
 
-The [Cost Forecaster](tool:cost-forecaster) does all of this for you. Enter the six inputs, pick a model, and it models growing history, prompt caching and the context window, then shows which inputs move the bill most. You can export the result as Excel, PDF or an image to share with your team.
+The [Cost Forecaster](tool:cost-forecaster) does all of this for you. Enter the six inputs, pick a model, and it models growing history, prompt caching and the context window, then shows which inputs move the bill most. You can export the result as Excel, PDF or an image to share with your team. Once you have the number, [seven ways to cut your LLM bill](post:cut-your-llm-bill) shows where to trim it, and [comparing API prices fairly](post:compare-llm-api-prices) helps you choose the model.

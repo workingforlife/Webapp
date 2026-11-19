@@ -5,6 +5,7 @@ date: 2026-11-10
 image: /assets/blog/how-many-tokens-is-my-text-hero.jpg
 imageAlt: The phrase "How many tokens is my text?" split into tokens
 tools: token-counter, text-cleaner, cost-forecaster
+related: context-windows-explained, cut-your-llm-bill
 ---
 Every AI model reads and writes **tokens**, not words. Providers bill by the token and limit requests by the token, so knowing roughly how many tokens your text uses is the first step to controlling cost and avoiding errors.
 
@@ -49,11 +50,11 @@ The [Token Counter](tool:token-counter) shows the exact count for OpenAI tokeniz
 ## Why it matters
 
 - **Cost.** You pay per million tokens, with separate rates for input and output. See [what a price per million tokens means](page:glossary).
-- **Limits.** A request that exceeds the model's context window fails or gets truncated.
+- **Limits.** A request that exceeds the model's context window fails or gets truncated. See [context windows explained](post:context-windows-explained).
 - **Speed.** More tokens means slower responses.
 
 ## Reducing the count
 
-Strip formatting you do not need, remove repeated boilerplate and trim long system prompts. The [AI Text Cleaner](tool:text-cleaner) removes Markdown symbols and invisible characters, and the [Prompt Token Optimizer](tool:prompt-token-optimizer) shows every cut before you accept it.
+Strip formatting you do not need, remove repeated boilerplate and trim long system prompts. The [AI Text Cleaner](tool:text-cleaner) removes Markdown symbols and invisible characters, and the [Prompt Token Optimizer](tool:prompt-token-optimizer) shows every cut before you accept it. For PDFs, see [how to send a PDF to an AI chatbot without wasting tokens](post:pdf-to-ai-chatbot-without-wasting-tokens).
 
 Once you know your count, the [Cost Forecaster](tool:cost-forecaster) turns it into a monthly budget.

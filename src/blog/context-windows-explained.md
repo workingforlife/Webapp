@@ -5,6 +5,7 @@ date: 2026-11-10
 image: /assets/blog/context-windows-explained-hero.jpg
 imageAlt: A context window filling with tokens
 tools: token-counter, chunker, cost-forecaster
+related: how-many-tokens-is-my-text, cut-your-llm-bill
 ---
 A model's **context window** is the maximum number of tokens it can handle in a single request. Think of it as the size of the desk the model works on: everything it needs has to fit on the desk at once.
 
@@ -26,7 +27,7 @@ A large window lets you send more at once, but it does not give the model a memo
 
 ## Bigger window, bigger bill
 
-You pay for every token you send, so filling a very large window on every request is expensive. A 200,000-token request costs far more than a 2,000-token one, even if the model could handle both. A big window is a capacity, not a target.
+You pay for every token you send, so filling a very large window on every request is expensive. A 200,000-token request costs far more than a 2,000-token one, even if the model could handle both. A big window is a capacity, not a target. Our guide to [cutting your LLM bill](post:cut-your-llm-bill) covers ways to send less.
 
 ## What happens when you go over
 
@@ -42,11 +43,11 @@ You pay for every token you send, so filling a very large window on every reques
 
 ## When your text is too long
 
-- **Split it.** Break the document into overlapping chunks with the [Text Chunker](tool:chunker) and process them separately.
+- **Split it.** Break the document into overlapping chunks with the [Text Chunker](tool:chunker) and process them separately. For PDFs, [extract clean text first](post:pdf-to-ai-chatbot-without-wasting-tokens).
 - **Retrieve.** Send only the passages relevant to each question rather than the whole document.
 - **Summarize.** Replace old history with a short summary.
 - **Trim.** Remove boilerplate and repeated content.
 
 ## Context and cost over a long conversation
 
-As a chat grows, the input grows with it, until it hits the window and older turns are dropped. The [Cost Forecaster](tool:cost-forecaster) models that curve, so you can see how cost rises with conversation length and where the window caps it.
+As a chat grows, the input grows with it, until it hits the window and older turns are dropped. The [Cost Forecaster](tool:cost-forecaster) models that curve, so you can see how cost rises with conversation length and where the window caps it. To count the tokens in your own text, see [how many tokens is my text](post:how-many-tokens-is-my-text).

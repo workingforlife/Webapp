@@ -114,7 +114,8 @@ function md(src) {
     const l = L[i];
     if (!l.trim()) { i++; continue; }
     let m;
-    if (/^\[\[toc\]\]\s*$/.test(l)) { out.push("<!--toc-->"); i++; }
+    if (/^```/.test(l)) { const code = []; i++; while (i < L.length && !/^```/.test(L[i])) code.push(L[i++]); i++; out.push(`<pre style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;overflow:auto;font-size:.92em;line-height:1.5;white-space:pre-wrap;margin:0 0 14px"><code style="background:none;border:0;padding:0">${esc(code.join("\n"))}</code></pre>`); }
+    else if (/^\[\[toc\]\]\s*$/.test(l)) { out.push("<!--toc-->"); i++; }
     else if ((m = l.match(/^\[\[api-prices\s+([^\]]+)\]\]\s*$/))) { out.push(apiBlock(m[1].trim())); i++; }
     else if (/^!\[[^\]]*\]\(/.test(l)) { const figs = []; while (i < L.length && (m = L[i].match(/^!\[([^\]]*)\]\((\S+?)(?:\s+"([^"]*)")?\)\s*$/))) { figs.push(figure(m[1], m[2], m[3])); i++; } if (!figs.length) throw new Error("Bad image line: " + l); out.push(figs.length > 1 ? `<div class="shots">${figs.join("")}</div>` : figs[0]); }
     else if ((m = l.match(/^(#{2,3})\s+(.*)$/))) { const id = m[2].toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); out.push(`<h${m[1].length} id="${id}">${inline(m[2])}</h${m[1].length}>`); i++; }
@@ -150,13 +151,14 @@ function render(h, o) {
   if (m0) h = h.slice(m0[0].length);
   const t = T.find((x) => x.slug == (o.slug ?? (m0 && m0[1]))) || {};
   const rel = T.filter((x) => x.slug != t.slug && x.group == t.group).concat(T.filter((x) => x.slug != t.slug && x.group != t.group)).slice(0, 3);
+  const guides = t.slug ? posts.filter((x) => x.tools.includes(t.slug)).map((x, i) => ({ x, i, k: x.tools.indexOf(t.slug) })).sort((a, b) => a.k - b.k || b.i - a.i).slice(0, 3).map((r) => r.x) : [];
   const toks = []; h = h.replace(/<script src="(https:\/\/cdn\.jsdelivr\.net\/npm\/gpt-tokenizer[^"]+)"[^>]*><\/script>/g, (_, u) => { toks.push(u); return ""; });
   h = h.replaceAll("{{HEADER}}", () => header).replaceAll("{{FOOTER}}", () => footer).replaceAll("{{SHARED_CSS}}", () => css)
     .replaceAll("{{GRID}}", () => grid)
     .replaceAll("{{TOOL_CSS}}", () => `<style>${rd("src/partials/tool.css")}</style>`)
     .replaceAll("{{PROSE_CSS}}", () => `<style>${rd("src/partials/prose.css")}</style>`)
     .replaceAll("{{PRICES_JS}}", () => rd("src/partials/prices.js"))
-    .replaceAll("{{RELATED}}", () => adBlock("bottom") + `<div class="rel"><h3>Related tools</h3><div class="tg">${rel.map(card).join("")}</div></div>`)
+    .replaceAll("{{RELATED}}", () => adBlock("bottom") + (guides.length ? `<style>.rel .posts{display:grid;gap:12px}.rel .post{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px;text-decoration:none;color:var(--tx)}.rel .post:hover{border-color:var(--ac)}.rel .post b{display:block;font-size:18px;margin-bottom:4px}.rel .post span{color:var(--mu);font-size:14px}.rel .post time{display:block;color:var(--mu2);font-size:12px;margin-top:6px}</style><div class="rel"><h3>Guides for this tool</h3><div class="posts">${guides.map(postCard).join("")}</div></div>` : "") + `<div class="rel"><h3>Related tools</h3><div class="tg">${rel.map(card).join("")}</div></div>`)
     .replace(/\{\{AD:(\w+)\}\}/g, (_, k) => adBlock(k))
     .replaceAll("{{LATEST_POSTS}}", () => posts.length ? `<h2 class="sec">From the Blog</h2><p class="sub">Plain-English guides to AI costs, tokens and prompts.</p><div class="posts">${posts.slice(0, 3).map(postCard).join("")}</div>` : "")
     .replaceAll("{{DATA_LINE}}", () => esc(dataLine))
@@ -234,7 +236,7 @@ for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) 
 if (posts.length) {
   emit("blog/index.html", render(rd("src/templates/blog-index.html").replaceAll("{{POST_CARDS}}", () => posts.map(postCard).join("")), { path: POSTDIR, title: `Blog | ${S.name}`, desc: "Plain-English guides to LLM pricing, tokens, context windows and cutting AI costs.", crumbs: [["Home", "/"], ["Blog", POSTDIR]], narrow: true }), POSTDIR);
   for (const p of posts) {
-    const tools = p.tools.map((s) => T.find((t) => t.slug === s)).filter(Boolean), more = posts.filter((x) => x.slug !== p.slug).slice(0, 2);
+    const tools = p.tools.map((s) => T.find((t) => t.slug === s)).filter(Boolean), more = (() => { const use = {}; posts.forEach((x) => x.tools.forEach((k) => (use[k] = (use[k] || 0) + 1))); const cur = (p.related || "").split(",").map((k) => k.trim()).map((k) => posts.find((x) => x.slug === k)).filter((x) => x && x.slug !== p.slug); const rest = posts.filter((x) => x.slug !== p.slug && !cur.includes(x)).map((x, i) => ({ x, i, n: x.tools.filter((k) => p.tools.includes(k)).reduce((m, k) => m + 1 / use[k], 0) })).sort((a, b) => b.n - a.n || a.i - b.i).map((r) => r.x); return cur.concat(rest).slice(0, 2); })();
     let h = rd("src/templates/article.html")
       .replaceAll("{{POST_TITLE}}", () => esc(p.title)).replaceAll("{{POST_DATE}}", () => p.date).replaceAll("{{POST_DATE_NICE}}", () => nice(p.date))
       .replaceAll("{{POST_META2}}", () => p.checked ? `<p class="meta dates">Subscription prices checked <time datetime="${p.checked}">${nice(p.checked)}</time>${p.hasApi && PR ? ` &middot; <span class="apiu">API prices updated <time datetime="${PR.updated}">${nice(PR.updated)}</time></span>` : ""}</p>` : "")

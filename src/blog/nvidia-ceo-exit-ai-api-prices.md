@@ -5,6 +5,7 @@ date: 2026-11-14
 image: /assets/blog/nvidia-ceo-exit-ai-api-prices-hero.jpg
 imageAlt: A flat price line with a marker for 12 November, showing no change in AI API prices after the news
 tools: model-prices, cost-forecaster, token-counter
+related: compare-llm-api-prices, microsoft-outage-llm-app-fallback
 ---
 Nvidia's CEO, Jensen Huang, resigned on 12 November 2026, and many AI teams asked the same practical question: will this change what we pay for AI? We track API prices for more than 200 models every day, so we checked. **In our data, no model's price changed on 13 or 14 November.** That is only two daily snapshots after the news, so it means "no evidence of a change yet", not "no effect". This article shows what we checked, what the data can and cannot tell you, and why a leadership change is unlikely to move API prices quickly.
 
@@ -56,7 +57,7 @@ This section is our reasoning, not a forecast.
 ## How to protect your AI budget
 
 1. **Do not assume prices are fixed.** Model your cost at your current price and at higher and lower prices. The [Cost Forecaster](tool:cost-forecaster) has a sensitivity chart for this.
-2. **Measure your tokens.** Cost is tokens times price, so count your real prompts with the [Token Counter](tool:token-counter).
+2. **Measure your tokens.** Cost is tokens times price, so count your real prompts with the [Token Counter](tool:token-counter). Our guide on [comparing LLM API prices fairly](post:compare-llm-api-prices) shows what to look at.
 3. **Keep a second model ready.** If one provider's price or availability changes, a backup lets you switch. Our guide on [adding a fallback model](post:microsoft-outage-llm-app-fallback) explains how.
 4. **Re-check prices monthly,** or before you sign anything, on [Model Prices](tool:model-prices).
 

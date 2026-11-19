@@ -4,100 +4,116 @@
   "d": "2026-11-12"
  },
  "/chat-export": {
-  "h": "73a3476121b6d855cfee3ef3f6ecb6cfed5e4513",
-  "d": "2026-11-12"
+  "h": "efcba6c52c1e5c321167859bcee43317d05b7397",
+  "d": "2026-11-19"
  },
  "/chunker": {
-  "h": "d5cde8eb3b6c02a488a38974528acbce49858ffe",
-  "d": "2026-11-12"
+  "h": "011c0c0726522db1fc609f245b3ec5dd546c2a07",
+  "d": "2026-11-19"
  },
  "/cost-forecaster": {
-  "h": "a3c8beb3f6db01c30c1eb173eb079ae5d21cd9a1",
-  "d": "2026-11-12"
+  "h": "3afff879416050a9a6894d1f8ead51c39de7c1f7",
+  "d": "2026-11-19"
  },
  "/how-it-works": {
   "h": "59af7a19458bed389eee8153992f2049953c9790",
   "d": "2026-11-12"
  },
  "/": {
-  "h": "5cdd414317b7756cc0e0fede0fac7d927872dd33",
-  "d": "2026-11-14"
+  "h": "e3172155d66a7e6f5483cdde829a98089ad67aaf",
+  "d": "2026-11-19"
  },
  "/json-validator": {
-  "h": "db62f0507cb1817a553ed5b80455311113e3eb9a",
-  "d": "2026-11-12"
+  "h": "d41b56b1203429f9b5d775cebd5505965a32fa4f",
+  "d": "2026-11-19"
  },
  "/model-prices": {
-  "h": "466593416af39f6fccc6ed82e5577ab36db579f4",
-  "d": "2026-11-18"
+  "h": "638adbee45f55f3bd021e795655ac8ea281e583e",
+  "d": "2026-11-19"
  },
  "/pdf-to-text": {
-  "h": "035c4b18c94ea11cd84ddfc8163cf9688ac58a1d",
-  "d": "2026-11-12"
+  "h": "608a6eb79cd4afd11c5caa0792595ace00a748bb",
+  "d": "2026-11-19"
  },
  "/privacy": {
   "h": "a69c4efed274f7c191ddf1a643c49f187e369886",
   "d": "2026-11-18"
  },
  "/prompt-builder": {
-  "h": "547ed849aa59b0980f029f1561ea0c1481429a6c",
-  "d": "2026-11-12"
+  "h": "eab07e21d5e3c34901ea3b7e76cb2098dee9aa66",
+  "d": "2026-11-19"
  },
  "/prompt-token-optimizer": {
-  "h": "a09c1a3d27ca2fd77b0bc12dd1f906aa790c518b",
-  "d": "2026-11-12"
+  "h": "9483aa0bfd4068392526947d2c76453971d58ca6",
+  "d": "2026-11-19"
  },
  "/terms": {
   "h": "e6eaa8949ebc2d45f5195aaab5dab56f5287c687",
   "d": "2026-11-18"
  },
  "/text-cleaner": {
-  "h": "f8eb9d320fb9d19bb58b4389c89ef2f5692cd24c",
-  "d": "2026-11-12"
+  "h": "e7c995b651512e4a44edef336ba1861ac42ce083",
+  "d": "2026-11-19"
  },
  "/token-counter": {
-  "h": "340784407e75c8184ccd54ef235cf20c6b131219",
-  "d": "2026-11-12"
+  "h": "cfc1d7a441773fef2bd15c1e99f1b9d91bdf947b",
+  "d": "2026-11-19"
  },
  "/glossary": {
   "h": "d79e945ae8d9c47d73590caddac16653f46cad70",
   "d": "2026-11-12"
  },
  "/blog/": {
-  "h": "2ed84acae556c7266769cd8c133ab8fa28b05f89",
-  "d": "2026-11-14"
+  "h": "9ba9232a474c3daca5ffd84ca67ca3c26d00e98c",
+  "d": "2026-11-19"
+ },
+ "/blog/reusable-prompt-templates": {
+  "h": "41b1831e3ee06bead9642f9cfc3915402209aaea",
+  "d": "2026-11-19"
+ },
+ "/blog/reliable-json-from-llm": {
+  "h": "e2eebedec1e4c68528b7f9b70ff07c1093c61b3e",
+  "d": "2026-11-19"
+ },
+ "/blog/pdf-to-ai-chatbot-without-wasting-tokens": {
+  "h": "fe1cbe6419122227bae63ad45556163a9e98b4b9",
+  "d": "2026-11-19"
+ },
+ "/blog/export-chatgpt-claude-chats": {
+  "h": "8b43c76174063ed449d1a0c48698896ef6f6615f",
+  "d": "2026-11-19"
  },
  "/blog/nvidia-ceo-exit-ai-api-prices": {
-  "h": "d203ef3d1d752502200c2ad353994334ea04c9df",
-  "d": "2026-11-18"
+  "h": "4fb4f992d711ed57cd7f86df730ef2a621bbc86f",
+  "d": "2026-11-19"
  },
  "/blog/microsoft-outage-llm-app-fallback": {
-  "h": "0d90d02093688be68dd6f5d2ee9459b809a89f00",
-  "d": "2026-11-18"
+  "h": "7f039fa81f3411b7cdcdf7a5d78e11027bd1000b",
+  "d": "2026-11-19"
  },
  "/blog/claude-pro-price-india": {
-  "h": "81a5aba8948ad960bb4b619235da011f70eb63d2",
-  "d": "2026-11-14"
+  "h": "f453b0901e07110110e06d032e9c86c191c970ca",
+  "d": "2026-11-19"
  },
  "/blog/how-many-tokens-is-my-text": {
-  "h": "136a189aa3b567daf3ce944d2c7c763f5aa20a55",
-  "d": "2026-11-14"
+  "h": "e4dd4aa706b3c0fc1bd43e3668966f3898620005",
+  "d": "2026-11-19"
  },
  "/blog/estimate-monthly-cost-of-an-llm-chatbot": {
-  "h": "d8bec8acf737ae98c1970b6637ba33b4871bd04a",
-  "d": "2026-11-14"
+  "h": "c9da4175c33ce71c1617d15ffef6a7c8d8631456",
+  "d": "2026-11-19"
  },
  "/blog/cut-your-llm-bill": {
-  "h": "ea25ecf3746d791a1fddabfd4a9c3ad1e06ec119",
-  "d": "2026-11-14"
+  "h": "1cf156407352f0d0a1d5dac0a8d8783b26035724",
+  "d": "2026-11-19"
  },
  "/blog/context-windows-explained": {
-  "h": "a2b8ba6e772b9bd07088d78d0182f4d14ec2179e",
-  "d": "2026-11-14"
+  "h": "eca5ab464e21ee2f46fd24ae70793dfa62e60324",
+  "d": "2026-11-19"
  },
  "/blog/compare-llm-api-prices": {
-  "h": "b79d4abe7d149a37866112c49be0167cd845317f",
-  "d": "2026-11-14"
+  "h": "780f0ac81b390fdbdac43b28b13322cfa4420e65",
+  "d": "2026-11-19"
  },
  "/openai-api-pricing": {
   "h": "c6f47c0852ec7eec5111ea07d3e378730edc1e51",
