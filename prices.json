@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-19",
+ "updated": "2026-11-20",
  "source": "LiteLLM community price list",
- "count": 213,
+ "count": 214,
  "models": [
   {"provider":"Anthropic","name":"claude-fable-5","in":10,"out":50,"ctx":1000,"cr":1},
   {"provider":"Anthropic","name":"claude-fable-5-1","in":10,"out":50,"ctx":1000,"cr":0.25},
@@ -64,6 +64,7 @@
   {"provider":"Google","name":"gemini-pro-latest","in":2,"out":12,"ctx":1049,"cr":0.2},
   {"provider":"Google","name":"gemini-robotics-er-2-preview","in":1,"out":5,"ctx":131,"cr":0.1},
   {"provider":"Google","name":"gemini-robotics-er-2-streaming-preview","in":1,"out":5,"ctx":131},
+  {"provider":"Google","name":"genie-4","in":1.5,"out":9,"ctx":1049},
   {"provider":"Mistral","name":"codestral-2508","in":0.3,"out":0.9,"ctx":128,"cr":0.03},
   {"provider":"Mistral","name":"codestral-latest","in":0.3,"out":0.9,"ctx":128,"cr":0.03},
   {"provider":"Mistral","name":"codestral-mamba-latest","in":0.25,"out":0.25,"ctx":256,"cr":0.025},
@@ -240,6 +241,7 @@
   {"d":"2026-11-19","p":"Google","n":["gemini-4-neon"],"t":"added","in":3,"out":15,"cr":0.15,"ctx":1049},
   {"d":"2026-11-19","p":"Mistral","n":["ministral-3b-2512","ministral-3b-latest"],"t":"context","ctx":[131,262]},
   {"d":"2026-11-19","p":"Mistral","n":["mistral-large-latest"],"t":"price","in":[0.5,0.7],"out":[1.5,2.1],"cr":[0.05,0.07],"ctx":[262,1049]},
-  {"d":"2026-11-19","p":"OpenAI","n":["gpt-6-rosalind"],"t":"price","in":[15,10],"out":[75,50],"cr":[1.5,1]}
+  {"d":"2026-11-19","p":"OpenAI","n":["gpt-6-rosalind"],"t":"price","in":[15,10],"out":[75,50],"cr":[1.5,1]},
+  {"d":"2026-11-20","p":"Google","n":["genie-4"],"t":"added","in":1.5,"out":9,"ctx":1049}
  ]
 }
