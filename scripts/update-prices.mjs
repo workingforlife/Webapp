@@ -1,6 +1,7 @@
 // Builds prices.json from the community-maintained LiteLLM price list. Node 20+, no dependencies.
 // Test locally:  SOURCE_FILE=litellm.json node scripts/update-prices.mjs
 import fs from "node:fs";
+import { diffModels, formatPrices, MAX_EVENTS } from "./price-diff.mjs";
 
 const SOURCE = "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json";
 const OUT = "prices.json";
@@ -45,8 +46,8 @@ const models = [...best.values()].sort((a, b) => a.provider.localeCompare(b.prov
 
 // Safety checks: refuse to publish suspicious data.
 if (models.length < 30) fail(`only ${models.length} models found; the source format may have changed`);
-let old = [];
-try { old = JSON.parse(fs.readFileSync(OUT, "utf8")).models; } catch {}
+let old = [], oldFile = {};
+try { oldFile = JSON.parse(fs.readFileSync(OUT, "utf8")); old = oldFile.models || []; } catch {}
 if (old.length && models.length < old.length * 0.7) fail(`model count fell from ${old.length} to ${models.length}`);
 const prev = new Map(old.map((o) => [o.provider + "|" + o.name, o]));
 const jumps = [];
@@ -59,6 +60,10 @@ for (const m of models) {
 if (jumps.length && !FORCE)
   fail("prices changed by more than 50%. Check them, then re-run the workflow with 'Accept large price changes' ticked:\n" + jumps.join("\n"));
 
-const lines = models.map((m) => "  " + JSON.stringify(m));
-fs.writeFileSync(OUT, `{\n "updated": "${today}",\n "source": "LiteLLM community price list",\n "count": ${models.length},\n "models": [\n${lines.join(",\n")}\n ]\n}\n`);
+// Change log: what differs from the previous snapshot is appended, so the Price Change Tracker has a history.
+let changes = Array.isArray(oldFile.changes) ? oldFile.changes.slice() : [];
+const trackedSince = oldFile.trackedSince || (old.length ? oldFile.updated : "");
+if (old.length) changes.push(...diffModels(old, models, today));
+if (changes.length > MAX_EVENTS) changes = changes.slice(-MAX_EVENTS);
+fs.writeFileSync(OUT, formatPrices({ updated: today, source: "LiteLLM community price list", models, trackedSince, changes }));
 console.log(`Wrote ${models.length} models`);

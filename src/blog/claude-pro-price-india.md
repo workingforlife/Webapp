@@ -66,6 +66,8 @@ The website price says it includes GST. The Google Play checkout and invoice we 
 
 Some online advice suggests store gift cards or changing your store region to pay less. We have not tested either and list no prices for them. Changing region can go against a store's terms and may cause problems with your account, so we do not recommend it.
 
+Comparing Claude with other assistants? See [ChatGPT vs Claude vs Gemini price in India](post:chatgpt-vs-claude-vs-gemini-price-in-india).
+
 ## Pro or the API: which costs less?
 
 Pro, Max and Ultra are flat monthly subscriptions for using Claude in the apps. The API is a separate product billed by the token, and it suits building your own tool or running a fixed workload. A subscription tends to win when you chat or code interactively most days. The API tends to win for a steady, predictable job you can measure. To compare API prices across providers, see [how to compare LLM API prices fairly](post:compare-llm-api-prices). Here are the current Claude API prices, which update automatically.

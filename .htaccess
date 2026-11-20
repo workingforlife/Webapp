@@ -6,6 +6,9 @@ RedirectMatch 404 ^/(README\.md|tools\.json)$
 RedirectMatch 404 ^/404/?$
 
 RewriteEngine On
+# www -> bare host (one version of every URL)
+RewriteCond %{HTTP_HOST} ^www\.aiutilitybelt\.dev$ [NC]
+RewriteRule ^ https://aiutilitybelt.dev%{REQUEST_URI} [R=301,L,QSA]
 # Old page names
 RewriteRule ^prompt-trimmer(\.html)?$ /prompt-token-optimizer [R=301,L]
 # /index.html and /anything.html -> clean URL

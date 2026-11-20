@@ -49,6 +49,13 @@
    "title": "LLM Model Picker: Shortlist by Monthly Cost"
   },
   {
+   "slug": "price-changes",
+   "name": "Price Change Tracker",
+   "group": 0,
+   "desc": "See which LLM API prices were cut or raised, and which models were added or removed, from our daily price snapshots.",
+   "title": "LLM API Price Change Tracker"
+  },
+  {
    "slug": "token-counter",
    "name": "Token Counter",
    "group": 0,

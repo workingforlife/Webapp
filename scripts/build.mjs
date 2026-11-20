@@ -222,6 +222,36 @@ function pickerDefault() {
   return rows ? `<div class="card"><h2>Cheapest ten for the example workload</h2><p class="note">2,000 input and 500 output tokens per request, 10,000 requests a month. Change the numbers above to see your own. Prices verified ${PR.updated}.</p><div class="ov tw"><table><thead><tr><th>#</th><th>Provider</th><th>Model</th><th class="n">Context (K)</th><th class="n">Input $/1M</th><th class="n">Output $/1M</th><th class="n">Per request</th><th class="n">Per month</th></tr></thead><tbody>${rows}</tbody></table></div></div>` : "";
 }
 
+// Static view for the Price Change Tracker (last 30 days of the log, newest first), so the page has real content before its script runs.
+const chgNice = (d) => new Date(d + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const chgPr = (n) => "$" + +(+n).toFixed(4), chgK = (n) => Math.round(n).toLocaleString("en-US");
+function chgKind(e) {
+  if (e.t !== "price") return e.t;
+  let dn = 0, up = 0;
+  for (const f of ["in", "out", "cr"]) { const a = e[f]; if (a && a[0] != null && a[1] != null) { if (a[1] < a[0]) dn++; else if (a[1] > a[0]) up++; } }
+  return dn && !up ? "cut" : up && !dn ? "up" : "mix";
+}
+const CHG_KIND = { cut: ["Price cut", "cut"], up: ["Price increase", "up"], mix: ["Price change", "mix"], added: ["New model", "new"], removed: ["Removed", "rem"], context: ["Context change", "ctx"] };
+function chgDetail(e) {
+  if (e.t === "added" || e.t === "removed") return (e.t === "added" ? "" : "Last listed at ") + `input ${chgPr(e.in)} · output ${chgPr(e.out)}` + (e.cr != null ? ` · cache read ${chgPr(e.cr)}` : "") + ` per 1M · context ${chgK(e.ctx)}K`;
+  const L = { in: "Input", out: "Output", cr: "Cache read" }, p = [];
+  for (const f of ["in", "out", "cr"]) {
+    const a = e[f]; if (!a) continue;
+    if (a[0] == null) p.push(`${L[f]} now ${chgPr(a[1])}`);
+    else if (a[1] == null) p.push(`${L[f]} no longer listed`);
+    else { const x = a[0] > 0 ? Math.round((a[1] / a[0] - 1) * 100) : null; p.push(`${L[f]} ${chgPr(a[0])} → ${chgPr(a[1])}` + (x == null ? "" : ` (${x > 0 ? "+" : ""}${x}%)`)); }
+  }
+  if (e.ctx) p.push(`Context ${chgK(e.ctx[0])}K → ${chgK(e.ctx[1])}K`);
+  return p.join(" · ");
+}
+const chgMeta = () => PR && Array.isArray(PR.changes) ? `Tracking since ${chgNice(PR.trackedSince || PR.updated)} · last checked ${chgNice(PR.updated)} · ${PR.changes.length} changes recorded` : "Loading the change history.";
+function chgStatic() {
+  if (!PR || !Array.isArray(PR.changes)) return "";
+  const cut = new Date(new Date(PR.updated + "T00:00:00Z").getTime() - 30 * 864e5).toISOString().slice(0, 10);
+  const R = PR.changes.filter((e) => e.d > cut).sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : a.p < b.p ? -1 : 1)).slice(0, 10);
+  if (!R.length) return `<div class="card"><p>No price changes were recorded in the last 30 days. Tracking began on ${chgNice(PR.trackedSince || PR.updated)}.</p></div>`;
+  return `<div class="card"><h2>Changes in the last 30 days, newest first</h2><div class="ov tw"><table><thead><tr><th>Date</th><th>Provider</th><th>Model</th><th>Change</th><th>Details</th></tr></thead><tbody>${R.map((e) => { const K = CHG_KIND[chgKind(e)]; return `<tr><td class="dt" data-label="Date">${chgNice(e.d)}</td><td data-label="Provider">${esc(e.p)}</td><td class="mdl" data-label="Model">${e.n.map(esc).join(", ")}</td><td data-label="Change"><span class="tg ${K[1]}">${K[0]}</span></td><td class="dtl" data-label="Details">${esc(chgDetail(e))}</td></tr>`; }).join("")}</tbody></table></div></div>`;
+}
 
 // ---------- Pages ----------
 const org = { "@type": "Organization", name: S.name, url: origin + "/", logo: origin + "/logo.svg" };
@@ -234,6 +264,7 @@ for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) 
     .replaceAll("{{PRICES_META}}", () => models.length ? `Last updated ${PR.updated} · ${models.length} models from ${provNames.size} providers · refreshed daily` : "Prices are refreshed daily from an open-source catalog.")
     .replaceAll("{{PRICE_HIGHLIGHTS}}", () => highlights())
     .replaceAll("{{PICKER_DEFAULT}}", () => pickerDefault())
+    .replaceAll("{{PRICE_CHANGES_STATIC}}", () => chgStatic()).replaceAll("{{CHANGES_META}}", () => chgMeta())
     .replaceAll("{{PRICE_COUNT}}", () => models.length ? `${models.length} of ${models.length} models` : "")
     .replaceAll("{{PROVIDER_LINKS}}", () => providers.map((x) => `<a href="${U(x.slug)}">${esc(x.name)} API Pricing</a>`).join(" &middot; "));
   if (isHome) ld.push({ "@context": "https://schema.org", "@type": "WebSite", name: S.name, url: origin + "/", description: S.description }, { "@context": "https://schema.org", ...org });
@@ -292,6 +323,9 @@ if (origin) {
 } else if (fs.existsSync("sitemap.xml")) fs.unlinkSync("sitemap.xml");
 if (adsOn) wr("ads.txt", `google.com, ${ADS.client.replace(/^ca-/, "")}, DIRECT, f08c47fec0942fa0\n`); else if (fs.existsSync("ads.txt")) fs.unlinkSync("ads.txt");
 
+// Send www.<host> to <host> so search engines see one version of every URL (canonical tags and the sitemap use the bare host).
+let wwwRule = "";
+if (origin) { const host = new URL(origin).host; if (!/^www\./i.test(host) && /\./.test(host) && !/^(localhost|\d)/.test(host)) wwwRule = `# www -> bare host (one version of every URL)\nRewriteCond %{HTTP_HOST} ^www\\.${host.replace(/\./g, "\\.")}$ [NC]\nRewriteRule ^ ${origin}%{REQUEST_URI} [R=301,L,QSA]\n`; }
 wr(".htaccess", `# Generated by scripts/build.mjs. Edit the build script, not this file.
 ErrorDocument 404 /404.html
 # Keep repo helper files and page templates out of the public site
@@ -300,7 +334,7 @@ RedirectMatch 404 ^/(README\\.md|tools\\.json)$
 RedirectMatch 404 ^/404/?$
 ${clean ? `
 RewriteEngine On
-# Old page names
+${wwwRule}# Old page names
 RewriteRule ^prompt-trimmer(\\.html)?$ /prompt-token-optimizer [R=301,L]
 # /index.html and /anything.html -> clean URL
 RewriteRule ^(.*/)?index\\.html$ /$1 [R=301,L]

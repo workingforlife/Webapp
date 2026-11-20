@@ -1,42 +1,46 @@
 {
  "/about": {
-  "h": "f66125063e0c72fca387a5d46b9db6420514fdc5",
+  "h": "e4ffb5de7f7aa138f6205b119554b1c6b6e516b0",
   "d": "2026-11-20"
  },
  "/chat-export": {
-  "h": "fb2ae5cdcbdf5d1a34b40415291fd710ba59da76",
+  "h": "767068926b94b82fcf9777a66536ccb0b7cdabde",
   "d": "2026-11-20"
  },
  "/chunker": {
-  "h": "ce3a6ce2fc8686ef5b09fc9556920998099f4a72",
+  "h": "0983a25d94f1051c9096e6cce94d2cf8cfdaa2c1",
   "d": "2026-11-20"
  },
  "/cost-forecaster": {
-  "h": "4006c53e61d04746800793454261d54c962027e9",
+  "h": "3da2ae69d343034ac13185e488985dc21b7472cb",
   "d": "2026-11-20"
  },
  "/how-it-works": {
-  "h": "c59fd04503b36b4f07a9ca9d3c832af37425f772",
+  "h": "f64b7dd933c9f33101a2dd962b433b58f78bada9",
   "d": "2026-11-20"
  },
  "/": {
-  "h": "915437cd80dc43b1523afb5ca943a5814b4aaaa4",
+  "h": "1c3ac5aa2a6c5b59832676bb3be757370429b26c",
   "d": "2026-11-20"
  },
  "/json-validator": {
-  "h": "9101be6e926bcb6cbea5b9afdd8c730afe592c9b",
+  "h": "708756af7b440a0a4b0ef6378f26d802b1751b86",
   "d": "2026-11-20"
  },
  "/model-picker": {
-  "h": "a3df3ba255ffd7af924d45cf376a513fa7ebb656",
+  "h": "d9a52ded7def78cf6e9b281d21153306f33c8d70",
   "d": "2026-11-20"
  },
  "/model-prices": {
-  "h": "863e376a1d88430682ac308229047739f8069b66",
+  "h": "afddb1c9b3c7277470fe8b1b04a801b395b5e19d",
   "d": "2026-11-20"
  },
  "/pdf-to-text": {
-  "h": "11ea1796afeea0f1a58ef5961a24bdb0d7351d28",
+  "h": "6855c1daeacc867d1d589bf0c007c99b2284c89f",
+  "d": "2026-11-20"
+ },
+ "/price-changes": {
+  "h": "135449282f3e58c4578c94c34ce7f32915acf92e",
   "d": "2026-11-20"
  },
  "/privacy": {
@@ -44,11 +48,11 @@
   "d": "2026-11-20"
  },
  "/prompt-builder": {
-  "h": "fd1c6c67165d7967dc2321c5704b0f93f4e63e78",
+  "h": "2cc4b6b0cc27fa99c7b40c622537f5d6eec8f65e",
   "d": "2026-11-20"
  },
  "/prompt-token-optimizer": {
-  "h": "ac4e341fc55139bcf67efe4d46a658170671c2bf",
+  "h": "7f38c524460c54fb0c6bf291abb357a1ba1eb46e",
   "d": "2026-11-20"
  },
  "/terms": {
@@ -56,127 +60,151 @@
   "d": "2026-11-20"
  },
  "/text-cleaner": {
-  "h": "5bf465184828f691e38fdb6117ab02b50db9944b",
+  "h": "3f36e451585a5440cb577fbc63d81d810d654e18",
   "d": "2026-11-20"
  },
  "/token-counter": {
-  "h": "22e2e6759a51e8623b188862af9209cf583b1e03",
+  "h": "218930854fdc073f6992fc2e7e6594caa5d45e6a",
   "d": "2026-11-20"
  },
  "/glossary": {
-  "h": "3abe35b4a980c4083b372154882d3c642125003a",
+  "h": "4471da31e960ba91425928ff1ca426a78dc0cba5",
   "d": "2026-11-20"
  },
  "/blog/": {
-  "h": "d3591b96a95cf16b9ca1ce401ca8f4314b1fccec",
+  "h": "e7494471d8e57f32dcd60bc869573ff4c617ec5e",
+  "d": "2026-11-20"
+ },
+ "/blog/why-llm-price-list-changes-and-when-to-trust-them": {
+  "h": "47f43e5598f0b9663b8a5bc1e38fd3ee3ecf8739",
+  "d": "2026-11-20"
+ },
+ "/blog/track-llm-price-changes-protect-your-budget": {
+  "h": "e81f1c8478a9cc15030d4ffa14019dbc77804344",
+  "d": "2026-11-20"
+ },
+ "/blog/how-often-do-llm-api-prices-change": {
+  "h": "e2df3c6ef31b80837351c7d59edda74bee03e8f2",
+  "d": "2026-11-20"
+ },
+ "/blog/gemini-price-in-india": {
+  "h": "60cab217901a90b8cbd8d16fa52be4382290ff11",
   "d": "2026-11-20"
  },
  "/blog/claude-projects-one-chat-threads-explained": {
-  "h": "21c8559a3266fe314e7367fcf320a620d885b476",
+  "h": "aca716828c04ae4ea99e22cd1fd9a026f5cb79ec",
+  "d": "2026-11-20"
+ },
+ "/blog/chatgpt-vs-claude-vs-gemini-price-in-india": {
+  "h": "559d372293197ae1590cab566848f91ae62a9d15",
+  "d": "2026-11-20"
+ },
+ "/blog/chatgpt-price-in-india": {
+  "h": "8e49102ee150fbc86be829d25a64f824c3ff3f98",
   "d": "2026-11-20"
  },
  "/blog/why-token-counts-differ-between-models": {
-  "h": "b12ea3a72f102b7c691af906f948e56651ba064a",
+  "h": "71d9f80cf2e5e277cb769750f42fdef631f9332e",
   "d": "2026-11-20"
  },
  "/blog/reusable-prompt-templates": {
-  "h": "bb14ff4688020dae645a5777db6a268e6d8dfa76",
+  "h": "49d94f497c2d6efdbf3853621b89f845b58d35a6",
   "d": "2026-11-20"
  },
  "/blog/reliable-json-from-llm": {
-  "h": "4823b2282149f2f8d59f44199f6416cf53c2482e",
+  "h": "7e1d9156890ef90800e4c650b90497547de5c585",
   "d": "2026-11-20"
  },
  "/blog/prompt-caching-and-batch-discounts-explained": {
-  "h": "2a5915d1645728503e6fd507886f1d0a9759dc6d",
+  "h": "ba9bca274c0a8eb1fc889396fe8fb220b3bc796e",
   "d": "2026-11-20"
  },
  "/blog/pdf-to-ai-chatbot-without-wasting-tokens": {
-  "h": "ba39f6c872825ffc6746c3e29f30c455e74b0597",
+  "h": "5bbfed7216f5ef992090ffd40210511bd7b4cb05",
   "d": "2026-11-20"
  },
  "/blog/llm-cost-by-workload-chatbot-rag-classification": {
-  "h": "4dceb808ec15e2139937ad3d5d5510297110961c",
+  "h": "5e671cc83715d0bf9754b03c3cba41c3fbc00414",
   "d": "2026-11-20"
  },
  "/blog/input-vs-output-tokens-why-output-costs-more": {
-  "h": "b2ecb2f2c89173049973cc87320df183d71e0509",
+  "h": "ce0d08fd9af57b105b687371ace6d7c2b1e9f44d",
   "d": "2026-11-20"
  },
  "/blog/how-many-tokens-do-code-json-and-hindi-use": {
-  "h": "2a17805b246707f3f0de2a5f095c89f17cd560a6",
+  "h": "0abde9db158e49a89a0d6daef24158045ffb0fe1",
   "d": "2026-11-20"
  },
  "/blog/export-chatgpt-claude-chats": {
-  "h": "821721b8e3850d2fe1539bf4bb3db687d755de26",
+  "h": "5a21900b4f8180bab177355fa923e9fcba1240aa",
   "d": "2026-11-20"
  },
  "/blog/choose-an-llm-for-your-budget": {
-  "h": "bcdc2ac0f9fa65f0640434eefd59d4700b763dda",
+  "h": "eed51c169ccda2d923f3d7b6f0a7a97e29fcee0f",
   "d": "2026-11-20"
  },
  "/blog/cheapest-llm-vs-best-value-test-before-you-switch": {
-  "h": "dae17afa4c1d54a731767fe736cb79d52650e911",
+  "h": "3982e3ca6f3710ab61476b1ceed8c773549d23a4",
   "d": "2026-11-20"
  },
  "/blog/ai-agent-vs-chatbot-vs-batch-cost": {
-  "h": "9a1be95e6f88cbbfebcdd4461e525406ea16b212",
+  "h": "c348541da321beaf2946ba5309cf53987e170ca3",
   "d": "2026-11-20"
  },
  "/blog/nvidia-ceo-exit-ai-api-prices": {
-  "h": "6db3cd6c334883c780fb0d1309a16f35e574104d",
+  "h": "5adf32191784e12245097998d692e56be6f5388a",
   "d": "2026-11-20"
  },
  "/blog/microsoft-outage-llm-app-fallback": {
-  "h": "b6ba6b7a53e05a59f4165e23703ce4e8a9cf10b4",
+  "h": "473e4fe52f684baf781aa06843a25f2ba70da718",
   "d": "2026-11-20"
  },
  "/blog/claude-pro-price-india": {
-  "h": "5518a429dbc1ec4925d7dec1a284c198facd3064",
+  "h": "dff607721daeffe989fe69f4dc50c729ce532850",
   "d": "2026-11-20"
  },
  "/blog/how-many-tokens-is-my-text": {
-  "h": "aa36b597c15ee1df23de46ca976f948ecef7488b",
+  "h": "6d2ee27abeb35c92ff01f3f78ffdb0a9bdadec9c",
   "d": "2026-11-20"
  },
  "/blog/estimate-monthly-cost-of-an-llm-chatbot": {
-  "h": "fc421aebb1927365134255e3e64762ceb36c98c8",
+  "h": "bb44dd31d471c4e733dda6662d7a2566c73a651f",
   "d": "2026-11-20"
  },
  "/blog/cut-your-llm-bill": {
-  "h": "576ea9c83aba50370a8cf436ff54a7be4cae8763",
+  "h": "a7becf71fd9ed95fad4a9a5a90761bc68cdea073",
   "d": "2026-11-20"
  },
  "/blog/context-windows-explained": {
-  "h": "d3ef2ec3277ea64b27a26a7b2d98564634fd3f0a",
+  "h": "314b4f24083a1f41b50c0af727cdfb7bfc97f904",
   "d": "2026-11-20"
  },
  "/blog/compare-llm-api-prices": {
-  "h": "8682e73f6929a074382b7baccf6dc51d1bd7f561",
+  "h": "73fddece419c44b7a8e40c665fcd69bc5c12acad",
   "d": "2026-11-20"
  },
  "/openai-api-pricing": {
-  "h": "94887f4b38826eb835ffbcf88af2f77be4bbf024",
+  "h": "a80dca5cca3ba1e80570b93d9194091bef15e658",
   "d": "2026-11-20"
  },
  "/claude-api-pricing": {
-  "h": "00d2c286c69f0250490a697901963815853b5570",
+  "h": "47a1b70a7d6f0fd64babe85b203605d0bc843e2e",
   "d": "2026-11-20"
  },
  "/gemini-api-pricing": {
-  "h": "f91858c99adbafda58ff48b5ba0cefa2699718e3",
+  "h": "b78afeb09b707b0837e9dd1243720f142da675cc",
   "d": "2026-11-20"
  },
  "/mistral-api-pricing": {
-  "h": "fed55b39bfa9b8f22a3648793ea894e985efd48a",
+  "h": "88b35b6298285a8e9f93a769db605a66b6b0abb2",
   "d": "2026-11-20"
  },
  "/deepseek-api-pricing": {
-  "h": "bbda6cea96ac5a94c15080f52a209c36893a55af",
+  "h": "4496ee5474c976431296d535a90516cd3cd9c324",
   "d": "2026-11-20"
  },
  "/grok-api-pricing": {
-  "h": "b1a9f724c287c3fb246319f6a77c9ef53f264fdf",
+  "h": "2584915c9549122a3431fdec24f91b207ce870ca",
   "d": "2026-11-20"
  }
 }
