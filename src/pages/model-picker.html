@@ -1,0 +1,110 @@
+<!--slug:model-picker-->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}<style>
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0}.chips .c{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--bg);color:var(--ac2);border-radius:999px;padding:6px 12px;margin:0}
+.pvs{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 0}.pvs label{display:flex;gap:6px;align-items:center;margin:0;color:var(--tx);font-size:14px}
+.pvs input,.ck input{width:18px;height:18px;accent-color:var(--ac)}.ck{display:flex;gap:8px;align-items:center;color:var(--tx);margin-top:14px}
+.tw{max-height:520px;overflow:auto;border:1px solid var(--bd);border-radius:10px}.tw table{margin:0}.tw th{position:sticky;top:0;background:var(--sf);z-index:1}
+td.n,th.n{text-align:right;white-space:nowrap}td.mdl{font-weight:600}
+.rs h2{font-size:18px;margin:22px 0 4px}.rs h2:first-child{margin-top:0}
+.sv{color:var(--ok)}.up{color:var(--er)}
+.sp{display:inline-block;margin-left:8px;border:1px solid #f59e0b;color:#f59e0b;border-radius:999px;padding:0 8px;font-size:11px;font-weight:600;white-space:nowrap;vertical-align:middle}.rs tr.spr td:first-child{box-shadow:inset 3px 0 0 #f59e0b}
+@media(max-width:700px){.rs tr.spr{border-color:#f59e0b}.sp{display:block;width:max-content;margin:6px 0 0}}
+.mo2{display:none}
+@media(max-width:700px){.tw{max-height:none;border:0;overflow:visible}.rs table{display:block;min-width:0}.rs thead{display:none}.rs tbody{display:block}
+.rs tr{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}
+.rs td{display:block;border:0;padding:0;text-align:left!important;white-space:normal}.rs td::before{content:attr(data-label);display:block;color:var(--mu);font-size:11px;font-weight:400}
+.rs td[data-label=Model]{grid-column:1/-1;order:-3;font-size:16px}.rs td[data-label=Provider]{grid-column:1/-1;order:-2;color:var(--mu)}
+.rs td[data-label=Model]::before,.rs td[data-label=Provider]::before,.rs td[data-label="#"]{display:none}.rs td[data-label="#"]{display:none}.rs td[data-label="Per month"]{order:-1;font-size:16px}}
+</style></head><body>
+{{HEADER}}
+<main><h1>Model Picker</h1><p class="lead">Describe a typical request and see which models fit, ranked by what your job would really cost each month. No quality scores, just prices and context sizes.</p>
+<div class="card"><p class="note" id="vf" style="margin:0 0 8px">Loading prices. Last verified {{PRICES_DATE}}.</p>
+<div class="chips" aria-label="Example workloads"><button class="c" data-p="chat">Support chatbot</button><button class="c" data-p="rag">Document Q&amp;A (RAG)</button><button class="c" data-p="docs">Summarise documents</button><button class="c" data-p="cls">Classify short texts</button></div>
+<p class="note" style="margin:6px 0 0">Examples only: typical-looking sizes to start from, not benchmarks. Replace them with your own numbers.</p>
+<div class="g"><div><label for="qi">Input tokens per request</label><input id="qi" type="number" min="0" value="2000" inputmode="numeric"></div><div><label for="qo">Output tokens per request</label><input id="qo" type="number" min="0" value="500" inputmode="numeric"></div><div><label for="qr">Requests per month</label><input id="qr" type="number" min="0" value="10000" inputmode="numeric"></div></div>
+<p class="note" style="margin:4px 0 0">Not sure about token counts? Paste a sample into the <a href="{{HREF:token-counter}}">Token Counter</a>. Count reasoning tokens as output.</p>
+<details class="mf" style="margin-top:10px" open><summary style="cursor:pointer;color:var(--ac2);padding:6px 0">Filters and assumptions</summary>
+<div class="g"><div><label for="qm">Minimum context window (K tokens)</label><input id="qm" type="number" min="0" placeholder="Optional" inputmode="numeric"></div><div><label for="qu">Monthly budget (USD)</label><input id="qu" type="number" min="0" placeholder="Optional" inputmode="decimal"></div><div><label for="qc">Share of input served from cache (%)</label><input id="qc" type="number" min="0" max="100" value="0" inputmode="numeric"></div><div><label for="qb">Batch discount (%)</label><input id="qb" type="number" min="0" max="100" value="0" inputmode="numeric"></div></div>
+<div class="g"><div><label for="cu">Your current model (optional)</label><select id="cu"><option value="">None</option></select></div><div><label for="so">Sort by</label><select id="so"><option value="cost">Monthly cost, lowest first</option><option value="out">Output price, lowest first</option><option value="ctx">Context window, largest first</option></select></div></div>
+<label>Providers</label><div class="pvs" id="pv"></div><p class="note" style="margin:6px 0 0"><button class="b s" id="pa" style="margin:0 6px 0 0;padding:4px 10px">All</button><button class="b s" id="pn" style="margin:0;padding:4px 10px">None</button></p>
+<label class="ck"><input type="checkbox" id="qx"> Include audio, search, research and other specialised models</label>
+</details>
+<p class="note">Models whose context window is smaller than your input plus output are hidden automatically.</p></div>
+<div class="rs" id="res" role="region" aria-live="polite" aria-label="Results">{{PICKER_DEFAULT}}</div>
+<div class="card" id="act" style="display:none"><button class="b" id="cmpb">Compare the four cheapest</button><button class="b s" id="cpl">Copy Link</button><button class="b s" id="csv">Download CSV</button><span class="note" id="am" role="status"></span></div>
+<div class="about"><h2>How the Model Picker Ranks Models</h2><p>For every model in our price list, it works out what your request would cost: input tokens times the input price, plus output tokens times the output price, divided by a million. It then multiplies by your monthly volume and sorts. Models that cannot hold your request in their context window are left out. That is all it does, on purpose.</p>
+<h2>What It Does Not Do</h2><p>It does not score quality. Price tells you what a model costs, not how well it handles your task, and any quality ranking we invented would be a guess. Use the picker to cut a long list down to a shortlist of three to five models, then test those on your own examples before you choose.</p>
+<h2>How to Use the Results</h2><ul><li>Start with your real token sizes and volume, or one of the example workloads.</li><li>Add your current model to see what each alternative would save or add.</li><li>Open the four cheapest in <a href="{{HREF:model-prices}}">Model Prices</a> to compare them side by side, or take the shortlist into the <a href="{{HREF:cost-forecaster}}">Cost Forecaster</a> for chatbots and agents whose cost grows with history.</li></ul>
+<h2>Assumptions</h2><ul><li>Cache: if you enter a cache share, that part of the input is charged at the model's cache-read price where our list has one, and at the full input price where it does not. Cache-write charges and the cache lifetime are not included, so treat cached figures as a best case.</li><li>Batch: the discount you enter is applied to the whole cost. Not every provider or model offers batch pricing, so check before you rely on it.</li><li>Prices come from an open-source catalog and are refreshed daily. Provider pages are the final word.</li></ul>
+<h2>Questions</h2>
+<details class="q"><summary>Does the cheapest model give the best value?</summary><p>Not necessarily. A cheaper model that needs retries, longer prompts or human fixing can cost more overall. That is why the picker only builds a shortlist. Test the shortlist on your own task.</p></details>
+<details class="q"><summary>Why are some models missing?</summary><p>Models whose context window is smaller than your request are hidden, as are models with a zero input or output price, because their real cost is not in the price per token. Audio, search, research and similar specialised models are hidden unless you tick the box in the filters.</p></details>
+<details class="q"><summary>Does it include reasoning or thinking tokens?</summary><p>Only if you include them. Reasoning tokens are usually billed as output, so add them to the output tokens per request.</p></details>
+<details class="q"><summary>Is anything I enter uploaded?</summary><p>No. The page downloads the price file and does all the arithmetic in your browser. Your numbers are only kept in the link if you copy it.</p></details>
+<details class="q"><summary>Where do the prices come from?</summary><p>From an open-source model price catalog, refreshed daily. The date it was last verified is shown at the top of the page.</p></details></div>
+{{RELATED}}
+{{FOOTER}}
+<script>
+{{PRICES_JS}}
+const $=s=>document.getElementById(s);
+const EX=/audio|tts|realtime|search|deep-research|embed|image|moderation|transcribe|whisper/i;
+const MPU='{{HREF:model-prices}}';
+const PRE={chat:[800,200,30000],rag:[4000,400,20000],docs:[6000,600,5000],cls:[500,20,100000]};
+const nm=n=>Math.round(n).toLocaleString('en-US');
+const b64=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const ub64=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0)));
+const cs_=v=>{v=String(v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
+const base=()=>matchMedia('(max-width:700px)').matches?5:25;
+let P=[],SHOW=base(),ROWS=[],ST=null;
+const num=id=>{const v=parseFloat($(id).value);return isFinite(v)&&v>0?v:0};
+const pct=id=>Math.min(100,num(id));
+function S(){return{i:num('qi'),o:num('qo'),r:num('qr'),c:pct('qc'),b:pct('qb'),m:num('qm'),u:num('qu'),cur:$('cu').value,x:$('qx').checked,so:$('so').value,pv:[...document.querySelectorAll('.pvc:checked')].map(e=>e.value)}}
+const key=m=>m.p+'|'+m.n;
+const cc=(m,s)=>{const ch=s.i*s.c/100,ci=m.c!=null?m.c:m.i;return((s.i-ch)*m.i+ch*ci+s.o*m.o)/1e6*(1-s.b/100)};
+function calc(s){
+let R=P.filter(m=>m.i>0&&m.o>0&&(s.x||!EX.test(m.n))&&m.x*1000>=s.i+s.o&&m.x>=s.m&&s.pv.includes(m.p)).map(m=>{const per=cc(m,s);return{m,per,mo:per*s.r}});
+const nmc=(a,b)=>a.m.p+a.m.n<b.m.p+b.m.n?-1:1;
+R.sort(s.so=='out'?(a,b)=>a.m.o-b.m.o||a.mo-b.mo||nmc(a,b):s.so=='ctx'?(a,b)=>b.m.x-a.m.x||a.mo-b.mo||nmc(a,b):(a,b)=>a.mo-b.mo||nmc(a,b));
+return R}
+function table(R,s,cm,start){
+const cur=cm!=null,bud=s.u>0;
+const h='<tr><th>#</th><th>Provider</th><th>Model</th><th class="n">Context (K)</th><th class="n">Input $/1M</th><th class="n">Output $/1M</th><th class="n">Per request</th><th class="n">Per month</th>'+(cur?'<th class="n">vs current</th>':'')+(bud?'<th>Budget</th>':'')+'</tr>';
+return'<div class="ov tw"><table><thead>'+h+'</thead><tbody>'+R.map((r,k)=>{const d=cur&&cm>0?(r.mo-cm)/cm:null;
+const sp=EX.test(r.m.n);return'<tr'+(sp?' class="spr"':'')+'><td data-label="#">'+(start+k+1)+'</td><td data-label="Provider">'+E(r.m.p)+'</td><td class="mdl" data-label="Model">'+E(r.m.n)+(sp?'<span class="sp" title="Audio, search, research or other specialised model: priced per token here, but may have other charges">Specialised</span>':'')+'</td><td class="n" data-label="Context (K)">'+nm(r.m.x)+'</td><td class="n" data-label="Input $/1M">'+r.m.i+'</td><td class="n" data-label="Output $/1M">'+r.m.o+'</td><td class="n" data-label="Per request">'+money(r.per)+'</td><td class="n" data-label="Per month"><b>'+money(r.mo)+'</b></td>'+(cur?'<td class="n '+(d==null?'':d<0?'sv':'up')+'" data-label="vs current">'+(d==null?'':(d<0?'':'+')+(d*100).toFixed(0)+'%')+'</td>':'')+(bud?'<td class="'+(r.mo<=s.u?'ok':'er')+'" data-label="Budget">'+(r.mo<=s.u?'Within':'Over')+'</td>':'')+'</tr>'}).join('')+'</tbody></table></div>'}
+function draw(){
+if(!P.length)return;const s=S();ST=s;const R=calc(s);ROWS=R;
+const curm=s.cur?P.find(m=>key(m)==s.cur):null,cm=curm?cc(curm,s)*s.r:null;
+const res=$('res');
+if(!s.i&&!s.o){res.innerHTML='<div class="card"><p>Enter your tokens per request to see results.</p></div>';$('act').style.display='none';return}
+if(!R.length){res.innerHTML='<div class="card"><p><b>No models match.</b> Try a lower minimum context, tick more providers, or reduce the input and output sizes.</p></div>';$('act').style.display='none';save(s);return}
+const mos=R.map(r=>r.mo).sort((a,b)=>a-b),med=mos.length%2?mos[(mos.length-1)/2]:(mos[mos.length/2-1]+mos[mos.length/2])/2,within=s.u>0?R.filter(r=>r.mo<=s.u).length:null;
+let ca='';if(s.c>0){const n=R.filter(r=>r.m.c==null).length;if(n)ca=' '+n+' of these '+R.length+' models have no cache price in our list, so they are charged the full input price.'}
+let o='<div class="card"><div class="st"><div><b>'+R.length+'</b>models fit</div><div><b>'+money(mos[0])+'</b>cheapest per month</div><div><b>'+money(med)+'</b>median per month</div><div><b>'+money(mos[mos.length-1])+'</b>highest per month</div>'+(within!=null?'<div><b>'+within+'</b>within budget</div>':'')+'</div>';
+o+='<p class="note">'+nm(s.i)+' input + '+nm(s.o)+' output tokens per request · '+nm(s.r)+' requests per month'+(s.c?' · '+s.c+'% of input cached':'')+(s.b?' · '+s.b+'% batch discount':'')+'.'+ca+'</p></div>';
+const seen=new Set(),per=[];for(const r of R.slice().sort((a,b)=>a.mo-b.mo)){if(!seen.has(r.m.p)){seen.add(r.m.p);per.push(r)}}
+o+='<div class="card"><h2>Cheapest from each provider</h2>'+table(per,s,cm,0).replace('<div class="ov tw">','<div class="ov">')+'</div>';
+const so={cost:'cheapest first',out:'lowest output price first',ctx:'largest context first'}[s.so],ns=R.filter(r=>EX.test(r.m.n)).length;
+o+='<div class="card"><h2>All matching models <span class="note" style="font-weight:400;font-size:14px">('+so+')</span></h2>'+(ns?'<p class="note" style="margin:0 0 8px">'+ns+' specialised '+(ns>1?'models are':'model is')+' included and marked <span class="sp" style="margin:0">Specialised</span>. Their per-token price may not cover everything they charge for, such as searches or audio minutes.</p>':'')+table(R.slice(0,SHOW),s,cm,0)+(R.length>SHOW?'<button class="b s" id="more">Show '+Math.min(base(),R.length-SHOW)+' more ('+(R.length-SHOW)+' left)</button>':'')+'</div>';
+res.innerHTML=o;$('act').style.display='block';$('cmpb').disabled=R.length<2;
+const mb=$('more');if(mb)mb.onclick=()=>{SHOW+=base();draw()};
+save(s);verified('vf')}
+function save(s){try{history.replaceState(null,'',location.pathname+'#pick~'+b64(JSON.stringify(s)))}catch(e){}}
+function apply(x){$('qi').value=x.i||'';$('qo').value=x.o||'';$('qr').value=x.r||'';$('qc').value=x.c||0;$('qb').value=x.b||0;$('qm').value=x.m||'';$('qu').value=x.u||'';$('qx').checked=!!x.x;if(x.so)$('so').value=x.so;if(x.cur&&P.some(m=>key(m)==x.cur))$('cu').value=x.cur;if(Array.isArray(x.pv)){const set=new Set(x.pv);document.querySelectorAll('.pvc').forEach(e=>e.checked=set.has(e.value))}}
+function init(){
+const ps=[...new Set(P.map(m=>m.p))].sort();
+$('pv').innerHTML=ps.map(p=>'<label><input type="checkbox" class="pvc" value="'+E(p)+'" checked>'+E(p)+'</label>').join('');
+const byP={};P.forEach(m=>{(byP[m.p]=byP[m.p]||[]).push(m)});
+$('cu').innerHTML='<option value="">None</option>'+ps.map(p=>'<optgroup label="'+E(p)+'">'+byP[p].sort((a,b)=>a.n<b.n?-1:1).map(m=>'<option value="'+E(key(m))+'">'+E(m.n)+'</option>').join('')+'</optgroup>').join('');
+const h=location.hash.slice(1);if(h.startsWith('pick~')){try{apply(JSON.parse(ub64(h.slice(5))))}catch(e){}}
+draw()}
+['qi','qo','qr','qc','qb','qm','qu'].forEach(id=>$(id).addEventListener('input',()=>{SHOW=base();draw()}));
+['cu','so','qx'].forEach(id=>$(id).addEventListener('change',()=>{SHOW=base();draw()}));
+$('pv').addEventListener('change',()=>{SHOW=base();draw()});
+$('pa').onclick=()=>{document.querySelectorAll('.pvc').forEach(e=>e.checked=true);SHOW=base();draw()};
+$('pn').onclick=()=>{document.querySelectorAll('.pvc').forEach(e=>e.checked=false);SHOW=base();draw()};
+document.querySelectorAll('.chips .c').forEach(b=>b.onclick=()=>{const[i,o,r]=PRE[b.dataset.p];$('qi').value=i;$('qo').value=o;$('qr').value=r;SHOW=base();draw()});
+$('cmpb').onclick=()=>{const s=ST,top=ROWS.slice().sort((a,b)=>a.mo-b.mo).slice(0,4);location.href=MPU+'#cmp~'+b64(JSON.stringify({k:top.map(r=>key(r.m)),i:s.i,o:s.o,r:s.r}))};
+$('cpl').onclick=()=>{const u=location.href.split('#')[0]+'#pick~'+b64(JSON.stringify(ST));(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>{$('am').textContent='Link copied.'}).catch(()=>{$('am').textContent='Copy the address from your browser bar.'})};
+$('csv').onclick=()=>{const s=ST,rows=[['Provider','Model','Context K tokens','Input USD per 1M','Output USD per 1M','USD per request','USD per month','Type'],...ROWS.map(r=>[r.m.p,r.m.n,r.m.x,r.m.i,r.m.o,r.per.toFixed(6),r.mo.toFixed(2),EX.test(r.m.n)?'Specialised':'General'])];rows.push([]);rows.push(['Assumptions',nm(s.i)+' input + '+nm(s.o)+' output tokens per request',nm(s.r)+' requests per month','Cache share '+s.c+'%','Batch discount '+s.b+'%','Prices verified '+VF]);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.map(x=>x.map(cs_).join(',')).join('\n')],{type:'text/csv'}));a.download='model-picker.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+fetch('/prices.json').then(r=>r.json()).then(j=>{P=j.models.map(m=>({p:m.provider||'Other',n:m.name,i:+m.in||0,o:+m.out||0,x:+(m.ctx||128),c:m.cr==null?null:+m.cr}));M=P.map(m=>[m.p,m.n,m.i,m.o,m.x]);VF=j.updated;init()}).catch(()=>{$('vf').textContent='The price file could not be loaded. Reload the page to try again.';$('vf').style.color='var(--er)'});
+</script></body></html>

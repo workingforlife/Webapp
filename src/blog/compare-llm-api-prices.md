@@ -11,7 +11,7 @@ Comparing LLM prices sounds simple: find the cheapest number. In practice, two m
 
 ## Start with price per million tokens
 
-Providers quote dollars per million tokens, with separate rates for input and output. The [Model Prices](tool:model-prices) page lists them side by side, along with the context window of each model.
+Providers quote dollars per million tokens, with separate rates for input and output. The [Model Prices](tool:model-prices) page lists them side by side, along with the context window of each model. To turn a price list into a shortlist for your own workload, see [how to choose an LLM for your budget](post:choose-an-llm-for-your-budget).
 
 ## Look at input and output separately
 

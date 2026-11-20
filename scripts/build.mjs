@@ -210,6 +210,19 @@ function highlights() {
     (per.length ? tbl("Cheapest Model from Each Major Provider", `By input price. See each provider's full list: ${providers.map((x) => `<a href="${U(x.slug)}">${esc(x.label || x.name)}</a>`).join(", ")}.`, per, cols) : "");
 }
 
+// Static default view for the Model Picker (2,000 input + 500 output tokens, 10,000 requests a month), so the page has real content before its script runs.
+const PICK_EX = /audio|tts|realtime|search|deep-research|embed|image|moderation|transcribe|whisper/i;
+function pickerDefault() {
+  if (!PR || !Array.isArray(PR.models)) return "";
+  const qi = 2000, qo = 500, qr = 10000, mo = (n) => "$" + (n > 0 && n < 0.01 ? n.toFixed(5) : n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  const R = PR.models.filter((m) => m.in > 0 && m.out > 0 && !PICK_EX.test(m.name) && (m.ctx || 128) * 1000 >= qi + qo)
+    .map((m) => { const per = (qi * m.in + qo * m.out) / 1e6; return { m, per, mo: per * qr }; })
+    .sort((a, b) => a.mo - b.mo || ((a.m.provider || "Other") + a.m.name < (b.m.provider || "Other") + b.m.name ? -1 : 1));
+  const rows = R.slice(0, 10).map((r, k) => `<tr><td>${k + 1}</td><td>${esc(r.m.provider || "Other")}</td><td class="mdl">${esc(r.m.name)}</td><td class="n">${Math.round(r.m.ctx || 128).toLocaleString("en-US")}</td><td class="n">${r.m.in}</td><td class="n">${r.m.out}</td><td class="n">${mo(r.per)}</td><td class="n"><b>${mo(r.mo)}</b></td></tr>`).join("");
+  return rows ? `<div class="card"><h2>Cheapest ten for the example workload</h2><p class="note">2,000 input and 500 output tokens per request, 10,000 requests a month. Change the numbers above to see your own. Prices verified ${PR.updated}.</p><div class="ov tw"><table><thead><tr><th>#</th><th>Provider</th><th>Model</th><th class="n">Context (K)</th><th class="n">Input $/1M</th><th class="n">Output $/1M</th><th class="n">Per request</th><th class="n">Per month</th></tr></thead><tbody>${rows}</tbody></table></div></div>` : "";
+}
+
+
 // ---------- Pages ----------
 const org = { "@type": "Organization", name: S.name, url: origin + "/", logo: origin + "/logo.svg" };
 for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) {
@@ -220,6 +233,7 @@ for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) 
   h = h.replaceAll("{{PRICE_ROWS}}", () => rows || '<tr><td colspan="6">Prices load in a moment.</td></tr>')
     .replaceAll("{{PRICES_META}}", () => models.length ? `Last updated ${PR.updated} · ${models.length} models from ${provNames.size} providers · refreshed daily` : "Prices are refreshed daily from an open-source catalog.")
     .replaceAll("{{PRICE_HIGHLIGHTS}}", () => highlights())
+    .replaceAll("{{PICKER_DEFAULT}}", () => pickerDefault())
     .replaceAll("{{PRICE_COUNT}}", () => models.length ? `${models.length} of ${models.length} models` : "")
     .replaceAll("{{PROVIDER_LINKS}}", () => providers.map((x) => `<a href="${U(x.slug)}">${esc(x.name)} API Pricing</a>`).join(" &middot; "));
   if (isHome) ld.push({ "@context": "https://schema.org", "@type": "WebSite", name: S.name, url: origin + "/", description: S.description }, { "@context": "https://schema.org", ...org });

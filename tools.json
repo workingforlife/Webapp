@@ -42,6 +42,13 @@
    "title": "LLM API Pricing Comparison: Prices & Context Windows"
   },
   {
+   "slug": "model-picker",
+   "name": "Model Picker",
+   "group": 0,
+   "desc": "Shortlist LLMs by monthly cost, context size and provider for your own workload. Enter a typical request and compare live prices.",
+   "title": "LLM Model Picker: Shortlist by Monthly Cost"
+  },
+  {
    "slug": "token-counter",
    "name": "Token Counter",
    "group": 0,
