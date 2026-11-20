@@ -45,7 +45,7 @@ details.q{background:var(--sf);border:1px solid var(--bd);border-radius:12px;pad
 <script>
 {{PRICES_JS}}
 const $=s=>document.getElementById(s);
-const est=t=>t.trim()?Math.ceil((t.length/4+t.trim().split(/\s+/).length/.75)/2):0;
+{{ESTIMATE_JS}}
 const b64=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 function qc(){const t=$('qt').value,n=est(t),o=+$('qo').value||0,r=+$('qr').value||0;$('qn').textContent=n.toLocaleString();
 const R=M.map(m=>({m,c:(n*m[2]+o*m[3])/1e6*r})).sort((a,b)=>a.c-b.c),row=(x,l)=>`<tr><td>${l}: ${E(x.m[0])} ${E(x.m[1])}</td><td>${money(x.c)}</td></tr>`;

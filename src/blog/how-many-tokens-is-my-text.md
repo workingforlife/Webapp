@@ -2,6 +2,7 @@
 title: How Many Tokens Is My Text?
 description: A plain-English guide to counting tokens: what a token is, the rules of thumb for English and code, and how to get an exact count.
 date: 2026-11-10
+updated: 2026-11-20
 image: /assets/blog/how-many-tokens-is-my-text-hero.jpg
 imageAlt: The phrase "How many tokens is my text?" split into tokens
 tools: token-counter, text-cleaner, cost-forecaster
@@ -39,7 +40,9 @@ If your workload is mostly one of these, measure it instead of guessing. For sam
 
 Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so counts for OpenAI models can be exact. Anthropic and Google do not offer one that runs offline, so for those models any tool can only estimate. An estimate is fine for planning but not for hitting a hard limit exactly, and the gap can be large: Anthropic says its newer Claude models count about 30 percent more tokens than earlier ones for the same text. See [why token counts differ between models](post:why-token-counts-differ-between-models).
 
-The [Token Counter](tool:token-counter) shows the exact count for OpenAI tokenizers and a clearly labeled estimate for everything else.
+For images, PDFs and audio, see [how many tokens each input type uses](post:how-many-tokens-by-input-type).
+
+The [Token Counter](tool:token-counter) shows the exact count for OpenAI tokenizers and a clearly labeled estimate for everything else. The estimate adjusts for code, JSON, numbers and non-English scripts, and shows a likely range, because the 4-characters rule fits English prose but not those.
 
 ## How to count your tokens
 

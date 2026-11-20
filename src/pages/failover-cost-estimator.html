@@ -1,0 +1,92 @@
+<!--slug:failover-cost-estimator-->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}<style>
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0}.chips .c{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--bg);color:var(--ac2);border-radius:999px;padding:6px 12px;margin:0}
+.big{font-size:38px;font-weight:700;line-height:1.15}.big small{font-size:15px;font-weight:400;color:var(--mu)}
+.sv{color:var(--ok)}.up{color:var(--er)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:14px 0 4px}.kv div{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;color:var(--mu);font-size:13px}.kv b{display:block;font-size:20px;color:var(--tx);margin-top:2px}
+.wn{border:1px solid var(--er);color:var(--er);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:14px}
+.rs h2{font-size:18px;margin:0 0 6px}
+.tw{max-height:520px;overflow:auto;border:1px solid var(--bd);border-radius:10px}.tw table{margin:0}.tw th{position:sticky;top:0;background:var(--sf);z-index:1}
+td.n,th.n{text-align:right;white-space:nowrap}td.mdl{font-weight:600}
+@media(max-width:700px){.tw{max-height:none;border:0;overflow:visible}.rs table{display:block;min-width:0}.rs thead{display:none}.rs tbody{display:block}
+.rs tr{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}
+.rs td{display:block;border:0;padding:0;text-align:left!important;white-space:normal}.rs td::before{content:attr(data-label);display:block;color:var(--mu);font-size:11px;font-weight:400}
+.rs td[data-label=Model]{grid-column:1/-1;order:-3;font-size:16px;overflow-wrap:anywhere}.rs td[data-label=Provider]{grid-column:1/-1;order:-2;color:var(--mu)}
+.rs td[data-label=Model]::before,.rs td[data-label=Provider]::before,.rs td[data-label="#"]{display:none}}
+</style></head><body>
+{{HEADER}}
+<main><h1>Failover Cost Estimator</h1><p class="lead">If your main model goes down and traffic moves to a backup, what does that extra time cost? Enter your usage, pick both models and the length of the outage.</p>
+<div class="card"><p class="note" id="vf" style="margin:0 0 8px">Loading prices. Last verified {{PRICES_DATE}}.</p>
+<div class="chips" aria-label="Example outages"><button class="c" data-p="short">1-hour blip</button><button class="c" data-p="half">Half-day outage</button><button class="c" data-p="long">Two-day outage</button></div>
+<p class="note" style="margin:6px 0 0">Examples only. Replace them with your own numbers.</p>
+<div class="g"><div><label for="pm">Main model</label><select id="pm"></select></div><div><label for="bm">Backup model</label><select id="bm"></select></div></div>
+<div class="g"><div><label for="qi">Input tokens per request</label><input id="qi" type="number" min="0" value="2000" inputmode="numeric"></div><div><label for="qo">Output tokens per request</label><input id="qo" type="number" min="0" value="500" inputmode="numeric"></div><div><label for="qr">Requests per month</label><input id="qr" type="number" min="0" value="100000" inputmode="numeric"></div></div>
+<div class="g"><div><label for="qh">Outage length (hours)</label><input id="qh" type="number" min="0" value="6" inputmode="decimal"></div><div><label for="qs">Share of traffic moved to the backup (%)</label><input id="qs" type="number" min="0" max="100" value="100" inputmode="decimal"></div><div><label for="qn">Outages per year</label><input id="qn" type="number" min="0" value="2" inputmode="numeric"></div></div>
+<details class="mf" style="margin-top:10px"><summary style="cursor:pointer;color:var(--ac2)">More options</summary><div class="g"><div><label for="qc">Share of input that is cached (%)</label><input id="qc" type="number" min="0" max="100" value="0" inputmode="decimal"></div><div><label for="qa">Extra tokens on the backup (%)</label><input id="qa" type="number" min="-50" max="200" value="0" inputmode="decimal"></div></div>
+<p class="note" style="margin:6px 0 0">Cached input is billed at each model's cache-read price when the price list has one, and the full input price when it does not. Models count tokens differently, so the same text can use more or fewer tokens on the backup. Enter the difference if you know it, and see <a href="/blog/why-token-counts-differ-between-models">why token counts differ</a>.</p></details>
+<p class="note" style="margin:10px 0 0">Not sure about token counts? Paste a sample into the <a href="{{HREF:token-counter}}">Token Counter</a>.</p></div>
+<div class="rs" id="res" role="region" aria-live="polite" aria-label="Failover cost results"></div>
+<div class="card" id="act" style="display:none"><button class="b s" id="cpl">Copy Link</button><button class="b s" id="csv">Download CSV</button><a class="b" href="{{HREF:model-picker}}" style="display:inline-block;text-decoration:none">Find a backup in the Model Picker</a><span class="note" id="am" role="status"></span></div>
+<div class="about"><h2>What This Estimates</h2><p>It estimates the extra token bill for the hours when your traffic runs on a backup model instead of your main one. It spreads your monthly requests evenly across 730 hours, takes the share you choose for the outage window, and prices those requests on both models. The difference is the extra cost, or the saving if the backup is cheaper.</p>
+<p>Not sure how long an outage to plan for? See the <a href="/blog/llm-outage-history-and-cost">history of ChatGPT and Claude outages</a>, with dates and durations.</p><h2>What It Does Not Include</h2><ul><li><b>Lost revenue, support load and engineering time.</b> Those are usually bigger than the token bill.</li><li><b>Failed requests.</b> It assumes requests that fail on the main provider are not billed, and that you switch at once. Check your provider's billing terms.</li><li><b>Busy periods.</b> Traffic is rarely even. An outage at your peak hour moves more requests than the average hour, so raise the traffic share or the hours to test it.</li><li><b>Rate limits and quotas.</b> A backup account can have lower limits than your main one. See <a href="/blog/microsoft-outage-llm-app-fallback">how to add a fallback to an LLM app</a>.</li><li><b>Quality.</b> A cheaper backup can answer worse. Test it on your own examples first.</li><li><b>Discounts and contracts.</b> It uses list prices per million tokens.</li></ul>
+<h2>How to Use It</h2><ul><li>Pick your main model and a backup, ideally from a different provider.</li><li>Enter a typical request and your monthly volume, then the length of an outage you want to plan for.</li><li>Look at the extra cost per outage and per year, then compare other backups in the table.</li></ul>
+<h2>Questions</h2>
+<details class="q"><summary>Will a failover double my costs?</summary><p>Not for the whole month. It only affects the requests moved during the outage. The result shows the extra cost as a share of your normal monthly bill.</p></details>
+<details class="q"><summary>Does a standby model cost anything while it is idle?</summary><p>With most pay-as-you-go APIs, no. You pay for tokens used. Check your provider for minimum fees or reserved capacity.</p></details>
+<details class="q"><summary>Where do the prices come from?</summary><p>From the open-source LiteLLM catalog, refreshed daily. They are not verified against provider billing, so confirm on the provider page before relying on a number.</p></details></div>
+{{RELATED}}
+{{FOOTER}}
+<script>
+{{PRICES_JS}}
+const $=s=>document.getElementById(s);
+const EX=/audio|tts|realtime|search|deep-research|embed|image|moderation|transcribe|whisper/i;
+const HRS=730;
+const PRE={short:[1,100],half:[12,100],long:[48,100]};
+const nm=n=>Math.round(n).toLocaleString('en-US');
+const b64=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const ub64=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0)));
+const cs_=v=>{v=String(v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
+const base=()=>matchMedia('(max-width:700px)').matches?5:10;
+let P=[],SHOW=base(),ST=null,OPT=[];
+const num=id=>{const v=parseFloat($(id).value);return isFinite(v)&&v>0?v:0};
+const key=m=>m.p+'|'+m.n;
+const mp=x=>'$'+(x<0.1?(+x.toFixed(5)).toString():money(x).slice(1));
+const sgn=x=>(x<0?'-':'')+money(Math.abs(x));
+function S(){const a=parseFloat($('qa').value);return{pm:$('pm').value,bm:$('bm').value,i:num('qi'),o:num('qo'),r:num('qr'),h:num('qh'),s:Math.min(100,num('qs')),n:num('qn'),c:Math.min(100,num('qc')),a:isFinite(a)?Math.max(-50,Math.min(200,a)):0}}
+const cc=(m,i,o,c)=>{const ch=i*c/100,ci=m.c!=null?m.c:m.i;return((i-ch)*m.i+ch*ci+o*m.o)/1e6};
+const costs=(m,s,back)=>{const f=back?1+s.a/100:1;return cc(m,s.i*f,s.o*f,s.c)};
+const fits=(m,s)=>{const f=1+s.a/100;return m.x*1000>=(s.i+s.o)*f};
+function draw(){
+if(!P.length)return;const s=S();ST=s;const pm=P.find(m=>key(m)==s.pm),bm=P.find(m=>key(m)==s.bm),res=$('res');
+if(!pm||!bm||(!s.i&&!s.o)||!s.r){res.innerHTML='<div class="card"><p>Enter your tokens per request and monthly requests to see the estimate.</p></div>';$('act').style.display='none';return}
+const per=costs(pm,s,false),perB=costs(bm,s,true),mo=per*s.r,moved=s.r*(s.h/HRS)*(s.s/100),onMain=moved*per,onBack=moved*perB,extra=onBack-onMain,yr=extra*s.n,pc=mo>0?extra/mo*100:0;
+const cls=extra>0?'up':extra<0?'sv':'';
+let o='<div class="card"><h2>Extra cost per outage</h2><div class="big '+cls+'">'+(extra>0?'+':extra<0?'-':'')+money(Math.abs(extra))+' <small>for '+nm(moved)+' requests moved</small></div>';
+o+='<div class="kv"><div>Normal monthly cost on the main model<b>'+money(mo)+'</b></div><div>Those requests on the main model<b>'+money(onMain)+'</b></div><div>Those requests on the backup<b>'+money(onBack)+'</b></div><div>Per year ('+nm(s.n)+(s.n==1?' outage':' outages')+')<b class="'+cls+'">'+sgn(yr)+'</b></div><div>Extra, as a share of a normal month<b class="'+cls+'">'+(pc>0?'+':'')+pc.toFixed(1)+'%</b></div><div>Cost per request: main / backup<b>'+mp(per)+' / '+mp(perB)+'</b></div></div>';
+if(extra<0)o+='<p class="note">The backup is cheaper per request here, so the outage lowers the token bill. Check quality and limits before relying on that.</p>';
+if(!fits(bm,s))o+='<div class="wn"><b>The backup may not fit your request.</b> It has a '+nm(bm.x)+'K token context window and your request needs about '+nm((s.i+s.o)*(1+s.a/100))+' tokens. Pick another backup.</div>';
+if(s.pm==s.bm)o+='<p class="note">Main and backup are the same model. A real fallback should be on a different provider, since an outage often takes out everything on one platform.</p>';
+if(s.s<100&&s.h>0)o+='<p class="note">Only '+s.s+'% of traffic is moved. The rest is assumed to keep running on the main model.</p>';
+o+='</div>';
+OPT=P.filter(m=>m.i>0&&m.o>0&&!EX.test(m.n)&&fits(m,s)&&m.p!=pm.p).map(m=>{const pb=costs(m,s,true);return{m,per:pb,ex:moved*pb-onMain}}).sort((a,b)=>a.ex-b.ex||(a.m.n<b.m.n?-1:1));
+if(OPT.length){const h='<tr><th>#</th><th>Provider</th><th>Model</th><th class="n">Context (K)</th><th class="n">Input $/1M</th><th class="n">Output $/1M</th><th class="n">Per request</th><th class="n">Extra per outage</th></tr>';
+o+='<div class="card"><h2>Backup options, lowest extra cost first</h2><p class="note" style="margin:0 0 8px">Models from other providers than your main model that can hold your request. Cost, not quality: test before you choose.</p><div class="ov tw"><table><thead>'+h+'</thead><tbody>'+OPT.slice(0,SHOW).map((r,k)=>'<tr><td data-label="#">'+(k+1)+'</td><td data-label="Provider">'+E(r.m.p)+'</td><td class="mdl" data-label="Model">'+E(r.m.n)+'</td><td class="n" data-label="Context (K)">'+nm(r.m.x)+'</td><td class="n" data-label="Input $/1M">'+r.m.i+'</td><td class="n" data-label="Output $/1M">'+r.m.o+'</td><td class="n" data-label="Per request">'+mp(r.per)+'</td><td class="n '+(r.ex>0?'up':'sv')+'" data-label="Extra per outage"><b>'+sgn(r.ex)+'</b></td></tr>').join('')+'</tbody></table></div>'+(OPT.length>SHOW?'<button class="b s" id="more">Show '+Math.min(base(),OPT.length-SHOW)+' more ('+(OPT.length-SHOW)+' left)</button>':'')+'</div>'}
+res.innerHTML=o;$('act').style.display='block';const mb=$('more');if(mb)mb.onclick=()=>{SHOW+=base();draw()};
+try{history.replaceState(null,'',location.pathname+'#fo~'+b64(JSON.stringify(s)))}catch(e){}}
+function apply(x){const set=(id,v)=>{if(v!=null)$(id).value=v};set('qi',x.i);set('qo',x.o);set('qr',x.r);set('qh',x.h);set('qs',x.s);set('qn',x.n);set('qc',x.c);set('qa',x.a);
+if(x.pm&&[...$('pm').options].some(o=>o.value==x.pm))$('pm').value=x.pm;if(x.bm&&[...$('bm').options].some(o=>o.value==x.bm))$('bm').value=x.bm}
+function init(){
+const ps=[...new Set(P.map(m=>m.p))].sort(),by={};P.forEach(m=>{(by[m.p]=by[m.p]||[]).push(m)});
+const opts=ps.map(p=>'<optgroup label="'+E(p)+'">'+by[p].sort((a,b)=>a.n<b.n?-1:1).map(m=>'<option value="'+E(key(m))+'">'+E(m.n)+'</option>').join('')+'</optgroup>').join('');
+$('pm').innerHTML=opts;$('bm').innerHTML=opts;
+const pick=(n,alt)=>{const m=P.find(x=>x.n==n);return m?key(m):alt};
+$('pm').value=pick('claude-sonnet-5-5',key(P[0]));$('bm').value=pick('gpt-5.4',key(P[P.length-1]));
+const h=location.hash.slice(1);if(h.startsWith('fo~')){try{apply(JSON.parse(ub64(h.slice(3))))}catch(e){}}
+draw()}
+['qi','qo','qr','qh','qs','qn','qc','qa'].forEach(id=>$(id).addEventListener('input',()=>{SHOW=base();draw()}));
+['pm','bm'].forEach(id=>$(id).addEventListener('change',()=>{SHOW=base();draw()}));
+document.querySelectorAll('.chips .c').forEach(b=>b.onclick=()=>{const[h,s]=PRE[b.dataset.p];$('qh').value=h;$('qs').value=s;SHOW=base();draw()});
+$('cpl').onclick=()=>{const u=location.href.split('#')[0]+'#fo~'+b64(JSON.stringify(ST));(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>{$('am').textContent='Link copied.'}).catch(()=>{$('am').textContent='Copy the address from your browser bar.'})};
+$('csv').onclick=()=>{const s=ST,rows=[['Provider','Model','Context K tokens','Input USD per 1M','Output USD per 1M','USD per request','Extra USD per outage'],...OPT.map(r=>[r.m.p,r.m.n,r.m.x,r.m.i,r.m.o,r.per.toFixed(6),r.ex.toFixed(4)]),[],['Assumptions','main='+s.pm,'backup='+s.bm,'input tokens='+s.i,'output tokens='+s.o,'requests per month='+s.r,'outage hours='+s.h,'traffic moved %='+s.s,'cached input %='+s.c,'extra backup tokens %='+s.a]];const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.map(x=>x.map(cs_).join(',')).join('\n')],{type:'text/csv'}));a.download='failover-cost.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+fetch('/prices.json').then(r=>r.json()).then(j=>{P=j.models.map(m=>({p:m.provider||'Other',n:m.name,i:+m.in||0,o:+m.out||0,x:+(m.ctx||128),c:m.cr==null?null:+m.cr}));M=P.map(m=>[m.p,m.n,m.i,m.o,m.x]);VF=j.updated;verified('vf');init()}).catch(()=>{$('vf').textContent='The price file could not be loaded. Reload the page to try again.';$('vf').style.color='var(--er)'});
+</script></body></html>

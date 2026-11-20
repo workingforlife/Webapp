@@ -30,6 +30,16 @@ const provNames = new Set(models.map((m) => m.p));
 const providers = (cfg.providers || []).filter((p) => provNames.has(p.name));
 const glossary = JSON.parse(rd("src/glossary.json"));
 const tips = JSON.parse(rd("src/tips.json"));
+const TTJS = `<style>.tt{border-bottom:1px dotted var(--ac,#60a5fa);cursor:help;white-space:normal}.tt:focus{outline:2px solid var(--ac,#60a5fa);outline-offset:2px;border-radius:3px}.tt-pop{position:fixed;z-index:50;max-width:min(340px,calc(100vw - 16px));background:var(--sf,#111827);color:var(--tx,#e5e7eb);border:1px solid var(--bd,#243049);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;box-shadow:0 8px 24px rgba(0,0,0,.35);text-align:left;pointer-events:none}.tt-pop[hidden]{display:none}.tt-pop code{display:block;margin-top:6px;padding:6px 8px;background:rgba(127,127,127,.15);border-radius:6px;font-size:12px;white-space:pre-wrap;word-break:break-word}.terms dt{font-weight:600;margin-top:10px}.terms dd{margin:2px 0 0;color:var(--mu)}</style><script>(function(){var P=document.createElement("div");P.className="tt-pop";P.setAttribute("role","tooltip");P.hidden=true;document.body.appendChild(P);var C=null;
+var T=0;function show(e){C=e;T=Date.now();P.innerHTML="";var t=document.createElement("div");t.textContent=e.getAttribute("data-tip");P.appendChild(t);var x=e.getAttribute("data-ex");if(x){var c=document.createElement("code");c.textContent=x;P.appendChild(c)}P.hidden=false;var r=e.getBoundingClientRect(),w=P.offsetWidth,h=P.offsetHeight,l=Math.max(8,Math.min(r.left+r.width/2-w/2,innerWidth-w-8)),y=r.top-h-8;if(y<8)y=r.bottom+8;P.style.left=l+"px";P.style.top=y+"px"}
+function hide(){P.hidden=true;C=null}
+document.addEventListener("mouseover",function(ev){var e=ev.target.closest&&ev.target.closest(".tt");if(e)show(e);else if(C&&!P.contains(ev.target))hide()});
+document.addEventListener("focusin",function(ev){var e=ev.target.closest&&ev.target.closest(".tt");if(e)show(e)});
+document.addEventListener("focusout",hide);
+document.addEventListener("click",function(ev){var e=ev.target.closest&&ev.target.closest(".tt");if(e){if(C===e&&!P.hidden&&Date.now()-T>400)hide();else show(e)}else hide()});
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape")hide()});
+addEventListener("scroll",hide,{passive:true});})();</script>`;
+const bterms = JSON.parse(rd("src/blog-terms.json")); const btermMap = new Map(bterms.map((t) => [t.id, t]));
 for (const t of tips) { if (!glossary.some((g) => g.id === t.g)) throw new Error("tips.json: unknown glossary id " + t.g); new RegExp(t.m, "i"); }
 wr("assets/tips.js", "window.TIPS=" + JSON.stringify(tips.map((t) => ({ m: t.m, t: t.t, g: t.g, x: t.x, y: t.y || "" }))) + ";\n");
 const tipsHash = sha(rd("assets/tips.js")).slice(0, 8);
@@ -89,6 +99,7 @@ const inline = (s) => { // code spans are lifted out first so Markdown inside ba
   return inlineText(t).replace(/\u0000(\d+)\u0000/g, (_, n) => keep[+n]);
 };
 const inlineText = (s) => s
+  .replace(/\[\[tip:([a-z0-9-]+)(?:::([^\]]+))?\]\]/g, (_, id, label) => { const t = btermMap.get(id); if (!t) throw new Error("blog-terms.json: unknown term " + id); return `<span class="tt" tabindex="0" role="button" aria-label="Explain ${esc(t.term)}" data-tip="${esc(t.def)}"${t.ex ? ` data-ex="${esc(t.ex)}"` : ""}>${label || esc(t.term)}</span>`; })
   .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, "$1<i>$2</i>")
   .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => {
     if (u.startsWith("tool:") || u.startsWith("page:")) u = hrefFor(u.split(":")[1]);
@@ -121,6 +132,7 @@ function md(src) {
     let m;
     if (/^```/.test(l)) { const code = []; i++; while (i < L.length && !/^```/.test(L[i])) code.push(L[i++]); i++; out.push(`<pre style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;overflow:auto;font-size:.92em;line-height:1.5;white-space:pre-wrap;margin:0 0 14px"><code style="background:none;border:0;padding:0">${esc(code.join("\n"))}</code></pre>`); }
     else if (/^\[\[toc\]\]\s*$/.test(l)) { out.push("<!--toc-->"); i++; }
+    else if (/^\[\[terms\]\]\s*$/.test(l)) { const ids = [...new Set([...src.matchAll(/\[\[tip:([a-z0-9-]+)/g)].map((x) => x[1]))].filter((id) => btermMap.has(id)); if (ids.length) out.push(`<h2 id="terms-used">Terms used in this guide</h2><dl class="terms">${ids.map((id) => { const t = btermMap.get(id); return `<dt>${esc(t.term)}</dt><dd>${esc(t.def)}${t.ex ? ` <code>${esc(t.ex.replace(/\n/g, " "))}</code>` : ""}</dd>`; }).join("")}</dl>`); i++; }
     else if ((m = l.match(/^\[\[api-prices\s+([^\]]+)\]\]\s*$/))) { out.push(apiBlock(m[1].trim())); i++; }
     else if (/^!\[[^\]]*\]\(/.test(l)) { const figs = []; while (i < L.length && (m = L[i].match(/^!\[([^\]]*)\]\((\S+?)(?:\s+"([^"]*)")?\)\s*$/))) { figs.push(figure(m[1], m[2], m[3])); i++; } if (!figs.length) throw new Error("Bad image line: " + l); out.push(figs.length > 1 ? `<div class="shots">${figs.join("")}</div>` : figs[0]); }
     else if ((m = l.match(/^(#{2,3})\s+(.*)$/))) { const id = m[2].toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); out.push(`<h${m[1].length} id="${id}">${inline(m[2])}</h${m[1].length}>`); i++; }
@@ -139,7 +151,7 @@ const posts = fs.existsSync("src/blog") ? fs.readdirSync("src/blog").filter((f) 
   for (const k of ["title", "description", "date"]) if (!meta[k]) throw new Error(f + ": missing " + k);
   const slug = f.replace(/\.md$/, "");
   if (meta.checked && !/^\d{4}-\d{2}-\d{2}$/.test(meta.checked)) throw new Error(f + ": checked must be YYYY-MM-DD");
-  return { slug, ...meta, hasApi: /^\[\[api-prices/m.test(fm[2]), tools: (meta.tools || "").split(",").map((x) => x.trim()).filter(Boolean), body: md(fm[2]).replace("<!--toc-->", () => { const hs = [...md(fm[2].replace(/^\[\[toc\]\].*$/m, "")).matchAll(/<h2 id="([^"]+)">(.*?)<\/h2>/g)]; return hs.length ? `<nav class="toc" aria-label="Contents"><b>In this guide</b><ul>${hs.map((h) => `<li><a href="#${h[1]}">${h[2]}</a></li>`).join("")}</ul></nav>` : ""; }), faq: faqOf(fm[2]), words: fm[2].split(/\s+/).length, path: clean ? POSTDIR + slug : POSTDIR + slug + ".html" };
+  return { slug, ...meta, hasApi: /^\[\[api-prices/m.test(fm[2]), tools: (meta.tools || "").split(",").map((x) => x.trim()).filter(Boolean), body: md(fm[2]).replace("<!--toc-->", () => { const hs = [...md(fm[2].replace(/^\[\[toc\]\].*$/m, "")).matchAll(/<h2 id="([^"]+)">(.*?)<\/h2>/g)]; return hs.length ? `<nav class="toc" aria-label="Contents"><b>In this guide</b><ul>${hs.map((h) => `<li><a href="#${h[1]}">${h[2]}</a></li>`).join("")}</ul></nav>` : ""; }), faq: faqOf(fm[2].replace(/^\[\[terms\]\]\s*$/m, "")), words: fm[2].split(/\s+/).length, path: clean ? POSTDIR + slug : POSTDIR + slug + ".html" };
 }).sort((a, b) => (a.date < b.date ? 1 : -1)) : [];
 function faqOf(src) { // "### Question" + answer paragraphs under a "## Frequently asked questions" heading -> FAQPage structured data
   const i = src.search(/^## Frequently asked questions/m); if (i < 0) return [];
@@ -163,6 +175,7 @@ function render(h, o) {
     .replaceAll("{{TOOL_CSS}}", () => `<style>${rd("src/partials/tool.css")}</style>`)
     .replaceAll("{{PROSE_CSS}}", () => `<style>${rd("src/partials/prose.css")}</style>`)
     .replaceAll("{{PRICES_JS}}", () => rd("src/partials/prices.js"))
+    .replaceAll("{{ESTIMATE_JS}}", () => rd("src/partials/estimate.js"))
     .replaceAll("{{RELATED}}", () => adBlock("bottom") + (guides.length ? `<style>.rel .posts{display:grid;gap:12px}.rel .post{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px;text-decoration:none;color:var(--tx)}.rel .post:hover{border-color:var(--ac)}.rel .post b{display:block;font-size:18px;margin-bottom:4px}.rel .post span{color:var(--mu);font-size:14px}.rel .post time{display:block;color:var(--mu2);font-size:12px;margin-top:6px}</style><div class="rel"><h3>Guides for this tool</h3><div class="posts">${guides.map(postCard).join("")}</div></div>` : "") + `<div class="rel"><h3>Related tools</h3><div class="tg">${rel.map(card).join("")}</div></div>`)
     .replace(/\{\{AD:(\w+)\}\}/g, (_, k) => adBlock(k))
     .replaceAll("{{LATEST_POSTS}}", () => posts.length ? `<h2 class="sec">From the Blog</h2><p class="sub">Plain-English guides to AI costs, tokens and prompts.</p><div class="posts">${posts.slice(0, 3).map(postCard).join("")}</div>` : "")
@@ -292,7 +305,7 @@ if (posts.length) {
       .replaceAll("{{POST_META2}}", () => p.checked ? `<p class="meta dates">Subscription prices checked <time datetime="${p.checked}">${nice(p.checked)}</time>${p.hasApi && PR ? ` &middot; <span class="apiu">API prices updated <time datetime="${PR.updated}">${nice(PR.updated)}</time></span>` : ""}</p>` : "")
       .replaceAll("{{POST_STALE}}", () => p.checked && daysAgo(p.checked) > (Number(p.stale) || 30) ? `<div class="stale" role="note"><b>These prices may be out of date.</b> The subscription prices below were last checked on ${nice(p.checked)}. Check the current price on the official page before you subscribe.</div>` : "")
       .replaceAll("{{POST_HERO}}", () => { if (!p.image) return ""; const [w, h] = imgSize(p.image); return `<figure class="hero-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}" width="${w}" height="${h}" fetchpriority="high" decoding="async"></figure>`; })
-      .replaceAll("{{POST_READ}}", () => Math.max(1, Math.round(p.words / 200))).replaceAll("{{POST_BODY}}", () => p.body)
+      .replaceAll("{{POST_READ}}", () => Math.max(1, Math.round(p.words / 200))).replaceAll("{{POST_BODY}}", () => p.body + (p.body.includes('class="tt"') ? TTJS : ""))
       .replaceAll("{{POST_TOOLS}}", () => `<div class="tg" style="margin-top:6px">${tools.map(card).join("")}</div>`)
       .replaceAll("{{MORE_POSTS}}", () => more.length ? `<div class="prose" style="padding-top:0"><h2>More Guides</h2><div class="posts">${more.map(postCard).join("")}</div></div>` : "");
     emit(`blog/${p.slug}.html`, render(h, { path: p.path, title: `${p.title} | ${S.name}`, desc: p.description, ogType: "article", image: p.image, crumbs: [["Home", "/"], ["Blog", POSTDIR], [p.title, p.path]], narrow: true, ld: [{ "@context": "https://schema.org", "@type": "BlogPosting", headline: p.title, description: p.description, datePublished: p.date, dateModified: [p.hasApi && PR ? PR.updated : p.checked || p.updated || p.date, p.updated || ""].sort().pop(), mainEntityOfPage: origin + p.path, image: origin + (p.image || "/og-image.png"), author: org, publisher: { ...org } }].concat(p.faq.length ? [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: p.faq }] : []) }), p.path);

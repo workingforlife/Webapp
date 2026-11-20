@@ -14,7 +14,7 @@
 {{FOOTER}}
 <script>
 const $=s=>document.getElementById(s);let PG=null,TXT='',FN='';
-const est=t=>t.trim()?Math.ceil((t.length/4+t.trim().split(/\s+/).length/.75)/2):0;
+{{ESTIMATE_JS}}
 function rf(t){return t.replace(/-\n(?=[a-z])/g,'').replace(/([^.!?:\n])\n(?=[a-z(])/g,'$1 ').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim()}
 async function pdf(f){await lazy('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';const d=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,P=[];
 for(let p=1;p<=d.numPages;p++){const c=await(await d.getPage(p)).getTextContent();let y=null,l='';const L=[];for(const it of c.items){const yy=it.transform[5];if(y!==null&&Math.abs(yy-y)>3){L.push(l);l=''}l+=it.str;y=yy}L.push(l);P.push(L.map(x=>x.trim()).filter(Boolean))}return P}

@@ -56,6 +56,13 @@
    "title": "LLM API Price Change Tracker"
   },
   {
+   "slug": "failover-cost-estimator",
+   "name": "Failover Cost Estimator",
+   "group": 0,
+   "desc": "Estimate the extra cost of running on a backup LLM during an outage, and compare backup options by price and context size.",
+   "title": "LLM Failover Cost Estimator"
+  },
+  {
    "slug": "token-counter",
    "name": "Token Counter",
    "group": 0,

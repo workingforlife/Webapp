@@ -2,6 +2,7 @@
 title: PDF to AI Chatbot Without Wasting Tokens
 description: Pasting a PDF into an AI chatbot wastes tokens on headers and page numbers. Extract clean text first and check the size before you send.
 date: 2026-11-19
+updated: 2026-11-20
 image: /assets/blog/pdf-to-ai-chatbot-without-wasting-tokens-hero.jpg
 imageAlt: A PDF page being reduced to a few lines of clean text
 tools: pdf-to-text, token-counter, chunker
@@ -28,6 +29,8 @@ None of that helps the model, and all of it uses part of your [context window](p
 2. Leave **Remove repeated headers, footers and page numbers** on. It drops short lines that repeat on at least 40 percent of the pages. Turn it off if it removes something you need.
 3. Choose **Extract**, then read the result. The tool shows the character count and an estimated token count.
 4. Copy the text, or download it as a .txt file, and paste only the parts you need.
+
+If you are deciding between pasting and attaching the file, see [paste or upload: which uses fewer tokens](post:paste-or-upload-which-uses-fewer-tokens).
 
 ## Check the size
 

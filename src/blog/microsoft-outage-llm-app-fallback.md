@@ -2,12 +2,12 @@
 title: Microsoft Outage: What It Means for LLM Apps
 description: Microsoft's November 2026 outage spread through a cascading failure. See what Microsoft says happened and how to add a fallback model to your LLM app.
 date: 2026-11-13
-updated: 2026-11-19
+updated: 2026-11-20
 image: /assets/blog/microsoft-outage-llm-app-fallback-hero.jpg
 imageAlt: An app routing traffic to a backup provider after the main provider fails
-tools: cost-forecaster, token-counter, model-prices
-guide: no
+tools: failover-cost-estimator, cost-forecaster, token-counter, model-prices
 related: estimate-monthly-cost-of-an-llm-chatbot, compare-llm-api-prices
+guide: no
 ---
 On 12 November 2026, a major Microsoft outage disrupted Outlook, Teams, Copilot and other services in many countries. If you build products on large language models (LLMs), the useful question is not who was at fault but how your own app would cope if a provider or platform it depends on failed for several hours. This guide explains how failures spread, where LLM apps are exposed, how to add a fallback, and what a fallback costs.
 
@@ -76,7 +76,7 @@ Most pay-as-you-go model APIs charge per token, so a standby model usually costs
 
 [[api-prices OpenAI]]
 
-To estimate the bill for a failover period, count your prompt with the [Token Counter](tool:token-counter), then enter the volume in the [Cost Forecaster](tool:cost-forecaster). You can compare more providers on [Model Prices](tool:model-prices). For a fuller method, see [how to estimate the monthly cost of an LLM chatbot](post:estimate-monthly-cost-of-an-llm-chatbot).
+For earlier AI outages and what they cost, see the [outage history](post:llm-outage-history-and-cost). To estimate the bill for a failover period, use the [Failover Cost Estimator](tool:failover-cost-estimator). It prices your outage window on a backup model. To count your prompt first, use the [Token Counter](tool:token-counter), and to forecast a normal month use the [Cost Forecaster](tool:cost-forecaster). You can compare more providers on [Model Prices](tool:model-prices). For a fuller method, see [how to estimate the monthly cost of an LLM chatbot](post:estimate-monthly-cost-of-an-llm-chatbot).
 
 ## A short checklist
 
