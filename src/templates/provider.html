@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}{{PROSE_CSS}}</head><body>
 {{HEADER}}
-<main class="prose"><h1>{{PROV_NAME}} API Pricing</h1><p class="meta">Price per million tokens &middot; {{PROV_COUNT}} models &middot; prices verified {{PRICES_DATE}}</p>
+<main class="prose"><h1>{{PROV_NAME}} API Pricing</h1><p class="meta">Price per million tokens &middot; {{PROV_COUNT}} models &middot; price catalog refreshed {{PRICES_DATE}}</p>
 <p>{{PROV_INTRO}}</p>
 <div class="ov"><table class="pt"><thead><tr><th>Model</th><th>Input $/1M</th><th>Output $/1M</th><th>Context (K tokens)</th></tr></thead><tbody>{{PROV_ROWS}}</tbody></table></div>
 <h2>How to Read These Prices</h2><p>Providers bill input tokens (what you send) and output tokens (what the model writes) separately, per million tokens. Output is usually several times more expensive. Context is the largest request the model accepts, in thousands of tokens. A typical English word is about 1.3 tokens.</p>

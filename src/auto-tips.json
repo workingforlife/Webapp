@@ -1,0 +1,19 @@
+[
+ {"re": "context windows?", "g": "context-window"},
+ {"re": "prompt caching", "g": "prompt-caching"},
+ {"re": "batch discounts?", "g": "batch-discount"},
+ {"re": "system prompts?", "g": "system-prompt"},
+ {"re": "tokenizers?", "g": "tokenizer"},
+ {"re": "RAG", "g": "rag", "cs": true},
+ {"re": "embeddings?", "g": "embedding"},
+ {"re": "rate limits?", "g": "rate-limit"},
+ {"re": "hallucinations?", "g": "hallucination"},
+ {"re": "inference", "g": "inference"},
+ {"re": "JSON schemas?", "g": "json-schema"},
+ {"re": "fine-tuning", "g": "fine-tuning"},
+ {"re": "input tokens?", "g": "input-tokens"},
+ {"re": "output tokens?", "g": "output-tokens"},
+ {"re": "cache hit rate", "g": "cache-hit-rate"},
+ {"re": "chunk overlap", "g": "chunk-overlap"},
+ {"re": "chunk size", "g": "chunk-size"}
+]

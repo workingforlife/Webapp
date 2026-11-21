@@ -48,7 +48,7 @@ const hrefFor = (s) => {
   const t = T.find((x) => x.slug === s); if (t) return t.href;
   if (s === "home") return "/";
   if (s === "blog") return POSTDIR;
-  if (["glossary", "privacy", "terms", "how-it-works", "about"].includes(s)) return U(s);
+  if (["glossary", "privacy", "terms", "how-it-works", "about", "tools"].includes(s)) return U(s);
   const pv = (cfg.providers || []).find((x) => x.slug === s); if (pv) return U(s);
   throw new Error("Unknown link target: " + s);
 };
@@ -56,9 +56,9 @@ const hrefFor = (s) => {
 // ---------- Shared pieces ----------
 const logo = rd("src/partials/logo.svg").trim(), logoIn = logo.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "");
 const siteHtml = esc(S.name).replace(/^(\S+)\s+(.*)$/, "<i>$1</i> $2");
-const link = (t) => `<a href="${t.href}">${esc(t.name)}</a>`;
+const link = (t) => `<a href="${t.href}"><span>${esc(t.name)}</span>${t.tag ? `<small>${esc(t.tag)}</small>` : ""}</a>`;
 const card = (t) => `<a class="tc" href="${t.href}"><b>${esc(t.name)}</b><span>${esc(t.desc)}</span></a>`;
-const menu = cfg.groups.map((g, i) => `<div class="sh-g"><i>${esc(g)}</i>${T.filter((t) => t.group == i).map(link).join("")}</div>`).join("");
+const menu = cfg.groups.map((g, i) => `<div class="sh-g"><i>${esc(g)}</i>${T.filter((t) => t.group == i && t.slug !== "model-prices").map(link).join("")}</div>`).join("") + `<a class="sh-all" href="${U("tools")}">Browse all tools &rarr;</a>`;
 const grid = cfg.groups.map((g, i) => `<h3 class="gt">${esc(g)}</h3><div class="tg">${T.filter((t) => t.group == i).map(card).join("")}</div>`).join("");
 const css = `<style>${rd("src/partials/shared.css")}</style>`;
 const exportsHash = sha(rd("assets/exports.js")).slice(0, 8);
@@ -85,12 +85,12 @@ const shared = (s) => s
   .replaceAll("{{SITE_JSON}}", () => JSON.stringify(S.name)).replaceAll("{{SITE_URL_JSON}}", () => JSON.stringify(S.url || ""))
   .replaceAll("{{EMAIL}}", () => esc(S.email || "")).replaceAll("{{SITE}}", () => esc(S.name))
   .replaceAll("{{MENU}}", () => menu).replaceAll("{{YEAR}}", () => new Date().getFullYear())
-  .replaceAll("{{TIPS_URL}}", () => "/assets/tips.js?v=" + tipsHash).replaceAll("{{GLOSSARY_URL_JSON}}", () => JSON.stringify(U("glossary")))
+  .replaceAll("{{SEARCH_URL}}", () => "/assets/search.json?v=" + searchHash).replaceAll("{{TIPS_URL}}", () => "/assets/tips.js?v=" + tipsHash).replaceAll("{{GLOSSARY_URL_JSON}}", () => JSON.stringify(U("glossary")))
   .replaceAll("{{AD_INIT}}", () => adInit).replaceAll("{{EXPORTS_URL}}", () => "/assets/exports.js?v=" + exportsHash)
   .replaceAll("{{TODAY_NICE}}", () => nice(today)).replaceAll("{{ANALYTICS_NOTE}}", () => esc(anNote)).replaceAll("{{ADS_NOTE}}", () => esc(adsNote))
   .replaceAll("{{PRICES_DATE}}", () => (PR && PR.updated) || "recently");
 const header = rd("src/partials/header.html").trim(), footer = rd("src/partials/footer.html").trim();
-const dataLine = models.length ? `Prices verified ${PR.updated} · ${models.length} models · ${provNames.size} providers` : "Prices come from an open-source catalog and are refreshed daily.";
+const dataLine = models.length ? `Price catalog refreshed ${PR.updated} · ${models.length} models · ${provNames.size} providers · not checked against provider billing` : "Prices come from an open-source catalog and are refreshed daily.";
 
 // ---------- Blog ----------
 const inline = (s) => { // code spans are lifted out first so Markdown inside backticks is shown as typed
@@ -151,8 +151,23 @@ const posts = fs.existsSync("src/blog") ? fs.readdirSync("src/blog").filter((f) 
   for (const k of ["title", "description", "date"]) if (!meta[k]) throw new Error(f + ": missing " + k);
   const slug = f.replace(/\.md$/, "");
   if (meta.checked && !/^\d{4}-\d{2}-\d{2}$/.test(meta.checked)) throw new Error(f + ": checked must be YYYY-MM-DD");
-  return { slug, ...meta, hasApi: /^\[\[api-prices/m.test(fm[2]), tools: (meta.tools || "").split(",").map((x) => x.trim()).filter(Boolean), body: md(fm[2]).replace("<!--toc-->", () => { const hs = [...md(fm[2].replace(/^\[\[toc\]\].*$/m, "")).matchAll(/<h2 id="([^"]+)">(.*?)<\/h2>/g)]; return hs.length ? `<nav class="toc" aria-label="Contents"><b>In this guide</b><ul>${hs.map((h) => `<li><a href="#${h[1]}">${h[2]}</a></li>`).join("")}</ul></nav>` : ""; }), faq: faqOf(fm[2].replace(/^\[\[terms\]\]\s*$/m, "")), words: fm[2].split(/\s+/).length, path: clean ? POSTDIR + slug : POSTDIR + slug + ".html" };
+  return { slug, ...meta, hasApi: /^\[\[api-prices/m.test(fm[2]), tools: (meta.tools || "").split(",").map((x) => x.trim()).filter(Boolean), body: md(fm[2]).replace("<!--toc-->", () => { const hs = [...md(fm[2].replace(/^\[\[toc\]\].*$/m, "")).matchAll(/<h2 id="([^"]+)">(.*?)<\/h2>/g)]; return hs.length ? `<nav class="toc" id="toc" aria-label="Contents"><b>In this guide</b><ul>${hs.map((h) => `<li><a href="#${h[1]}">${h[2]}</a></li>`).join("")}</ul></nav>` : ""; }), faq: faqOf(fm[2].replace(/^\[\[terms\]\]\s*$/m, "")), words: fm[2].split(/\s+/).length, path: clean ? POSTDIR + slug : POSTDIR + slug + ".html" };
 }).sort((a, b) => (a.date < b.date ? 1 : -1)) : [];
+const TX = fs.existsSync("src/tool-extras.json") ? JSON.parse(rd("src/tool-extras.json")) : {};
+const AUTO = fs.existsSync("src/auto-tips.json") ? JSON.parse(rd("src/auto-tips.json")) : [];
+function autoTip(html, p) { // wraps the first plain-text use of a glossary term in a tooltip, at most 5 per guide, never inside links, headings, code or tables
+  const skip = new Set(["a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "button", "summary", "table", "script", "style", "nav", "figure"]), tm = [];
+  for (const a of AUTO) { const g = glossary.find((x) => x.id === a.g); if (!g) throw new Error("auto-tips.json: unknown glossary id " + a.g); if (!new RegExp(a.re, a.cs ? "" : "i").test(p.title)) tm.push({ re: new RegExp("(?<![\\w-])(" + a.re + ")(?![\\w-])", a.cs ? "" : "i"), g }); }
+  let left = Math.max(0, 5 - (html.match(/class="tt"/g) || []).length); const used = new Set(), parts = html.split(/(<[^>]+>)/), stack = [];
+  for (let i = 0; i < parts.length && left > 0; i++) {
+    const s = parts[i];
+    if (s.startsWith("<")) { const m = s.match(/^<(\/?)([a-z0-9]+)/i); if (!m) continue; const n = m[2].toLowerCase(); if (/\/>$/.test(s) || ["br", "img", "hr", "input"].includes(n)) continue; if (m[1]) { const k = stack.lastIndexOf(n); if (k >= 0) stack.length = k; } else stack.push(/class="tt"/.test(s) ? "tt" : n); continue; }
+    if (!s.trim() || stack.some((t) => skip.has(t) || t === "tt") || !stack.some((t) => t === "p" || t === "li")) continue;
+    for (const t of tm) { if (used.has(t.g.id)) continue; const m = s.match(t.re); if (!m) continue; used.add(t.g.id); left--; parts[i] = s.slice(0, m.index) + `<span class="tt" tabindex="0" role="button" aria-label="Explain ${esc(t.g.term)}" data-tip="${esc(t.g.short)}">${m[1]}</span>` + s.slice(m.index + m[0].length); break; }
+  }
+  return parts.join("");
+}
+posts.forEach((p) => { p.body = autoTip(p.body, p); });
 function faqOf(src) { // "### Question" + answer paragraphs under a "## Frequently asked questions" heading -> FAQPage structured data
   const i = src.search(/^## Frequently asked questions/m); if (i < 0) return [];
   const sec = src.slice(i).split(/\n(?=## )/)[0], qs = [];
@@ -161,6 +176,49 @@ function faqOf(src) { // "### Question" + answer paragraphs under a "## Frequent
 }
 const daysAgo = (d) => Math.floor((Date.parse(today) - Date.parse(d)) / 864e5);
 const postCard = (p) => `<a class="post" href="${p.path}"><b>${esc(p.title)}</b><span>${esc(p.description)}</span><time datetime="${p.date}">${nice(p.date)}</time></a>`;
+
+// ---------- Blog index: topics, start-here, cards ----------
+const BT = fs.existsSync("src/blog-topics.json") ? JSON.parse(rd("src/blog-topics.json")) : { topics: [], startHere: [], readIf: {} };
+const postBy = new Map(posts.map((p) => [p.slug, p]));
+const touch = (p) => (p.updated && p.updated > p.date ? p.updated : p.date);
+const byNew = (a, b) => (touch(a) < touch(b) ? 1 : touch(a) > touch(b) ? -1 : a.title < b.title ? -1 : 1);
+const byDate = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.title < b.title ? -1 : 1);
+const thumbOf = (p) => (fs.existsSync(`assets/blog/${p.slug}-thumb.jpg`) ? `/assets/blog/${p.slug}-thumb.jpg` : "");
+const readMin = (p) => Math.max(1, Math.round(p.words / 200));
+const topicOf = new Map(); // slug -> [id, name]; filled after the topic list is built (see below)
+const bCard = (p, more, num) => { const th = thumbOf(p), ri = (BT.readIf || {})[p.slug], tp = topicOf.get(p.slug) || ["more", "More guides"];
+  return `<a class="bc${more ? " more" : ""}" href="${p.path}" data-t="${tp[0]}" data-d="${p.date}" data-u="${touch(p)}" data-m="${readMin(p)}" data-n="${esc(p.title.toLowerCase())}" data-k="${esc((p.title + " " + p.description + " " + tp[1]).toLowerCase())}">${th ? `<img src="${th}" width="640" height="360" alt="" loading="lazy" decoding="async">` : ""}<span class="bx">${num ? `<span class="nb" aria-hidden="true">${num}</span>` : ""}<span class="btg">${esc(tp[1])}</span><b>${esc(p.title)}</b><span class="bd">${esc(p.description)}</span>${ri ? `<span class="ri"><em>Read this if</em> ${esc(ri)}</span>` : ""}<span class="bm">${readMin(p)} min read<span class="bmd"> &middot; ${p.updated && p.updated > p.date ? "Updated " + nice(p.updated) : nice(p.date)}</span></span></span></a>`; };
+const startPosts = (BT.startHere || []).map((s) => postBy.get(s)).filter(Boolean).slice(0, 5);
+const blogTopics = (BT.topics || []).map((t) => ({ ...t, ord: t.slugs.map((s) => postBy.get(s)).filter(Boolean), ps: t.slugs.map((s) => postBy.get(s)).filter(Boolean).sort(byNew) })).filter((t) => t.ps.length);
+{ const placed = new Set(blogTopics.flatMap((t) => t.ps.map((p) => p.slug))), rest = posts.filter((p) => !placed.has(p.slug));
+  if (rest.length) { console.warn("blog-topics.json: no topic for " + rest.map((p) => p.slug).join(", ")); blogTopics.push({ id: "more", name: "More guides", ord: rest.slice(), ps: rest.sort(byNew) }); }
+  for (const t of blogTopics) for (const p of t.ps) topicOf.set(p.slug, [t.id, t.name]); }
+const LIM = 6, FLAT = 12;
+const blogIndexBody = () => `<div class="bf" id="bfw" hidden><input id="bf" type="search" placeholder="Filter guides, e.g. JSON or price" aria-label="Filter guides" autocomplete="off"><label class="bsel">Sort by <select id="bso"><option value="new">Newest first</option><option value="upd">Recently updated</option><option value="topic">By topic</option><option value="old">Oldest first</option><option value="az">A to Z</option><option value="short">Shortest read first</option></select></label><span id="bc" aria-live="polite"></span></div>
+<div class="bchips" id="bch" role="group" aria-label="Topics" hidden><a href="#" data-t="all" class="on">All</a>${blogTopics.map((t) => `<a href="#t-${t.id}" data-t="${t.id}" data-name="${esc(t.name)}">${esc(t.name)}<i>${t.ps.length}</i></a>`).join("")}</div>
+${startPosts.length ? `<section class="bs0" id="bst" aria-label="Start here"><div class="bsh"><h2>Start here</h2><p class="bsub">Five guides that cover the basics, in the order most people need them.</p></div><div class="sg">${startPosts.map((p, i) => bCard(p, false, i + 1)).join("")}</div></section>` : ""}
+<div class="bh"><h2>All guides</h2><span id="bsl">Newest first</span></div>
+<div class="bl" id="bl">${[...posts].sort(byDate).map((p, i) => bCard(p, i >= FLAT)).join("")}</div>
+<p class="bn" id="bn" hidden>No guide matches that. Try a shorter word, or <a href="${U("tools")}">browse the tools</a>.</p>
+<noscript><style>.bc.more{display:flex}.bmore{display:none}</style></noscript>
+<script>(function(){var LIM=${LIM},FL=${FLAT},root=document.body,box=document.getElementById("bl"),f=document.getElementById("bf"),so=document.getElementById("bso"),ch=[].slice.call(document.querySelectorAll("#bch a")),st=document.getElementById("bst"),n=document.getElementById("bn"),c=document.getElementById("bc"),tp="all",open={};
+var sl=document.getElementById("bsl");document.getElementById("bfw").hidden=false;document.getElementById("bch").hidden=false;
+var TO=ch.filter(function(a){return a.dataset.t!=="all"}).map(function(a){return{id:a.dataset.t,name:a.dataset.name}});
+var it=[].slice.call(box.querySelectorAll(".bc")).map(function(e){return{e:e,d:e.dataset.d,u:e.dataset.u,m:+e.dataset.m,n:e.dataset.n,t:e.dataset.t,k:e.dataset.k}});
+var C={"new":function(a,b){return b.d.localeCompare(a.d)||a.n.localeCompare(b.n)},upd:function(a,b){return b.u.localeCompare(a.u)||b.d.localeCompare(a.d)||a.n.localeCompare(b.n)},old:function(a,b){return a.d.localeCompare(b.d)||a.n.localeCompare(b.n)},az:function(a,b){return a.n.localeCompare(b.n)},"short":function(a,b){return a.m-b.m||a.n.localeCompare(b.n)}};
+function btn(label,fn){var b=document.createElement("button");b.type="button";b.className="bmore";b.textContent=label;b.addEventListener("click",fn);return b}
+function run(){var q=f.value.trim().toLowerCase().split(" ").filter(Boolean),fl=tp!=="all"||q.length>0,sort=so.value,nodes=[];
+var L=it.filter(function(x){return(tp==="all"||x.t===tp)&&q.every(function(t){return x.k.indexOf(t)>-1})});
+root.classList.toggle("bytopic",sort==="topic");it.forEach(function(x){x.e.classList.remove("more")});
+if(sort==="topic"){TO.forEach(function(g){var G=L.filter(function(x){return x.t===g.id}).sort(C.upd);if(!G.length)return;var h=document.createElement("h2");h.className="bth";h.id="t-"+g.id;h.appendChild(document.createTextNode(g.name));var s=document.createElement("span");s.textContent=G.length;h.appendChild(s);nodes.push(h);G.forEach(function(x,i){if(!fl&&!open[g.id]&&i>=LIM)x.e.classList.add("more");nodes.push(x.e)});if(!fl&&G.length>LIM)nodes.push(btn(open[g.id]?"Show fewer":"Show "+(G.length-LIM)+" more",function(){open[g.id]=!open[g.id];run()}))})}
+else{L.sort(C[sort]);L.forEach(function(x,i){if(!fl&&!open.flat&&i>=FL)x.e.classList.add("more");nodes.push(x.e)});if(!fl&&L.length>FL)nodes.push(btn(open.flat?"Show fewer":"Show "+(L.length-FL)+" more",function(){open.flat=!open.flat;run()}))}
+box.innerHTML="";nodes.forEach(function(x){box.appendChild(x)});
+if(st)st.hidden=fl||sort!=="new";sl.textContent=fl?L.length+" of "+it.length+" guides, "+so.options[so.selectedIndex].text.toLowerCase():so.options[so.selectedIndex].text;n.hidden=L.length>0;c.textContent=fl?L.length+" of "+it.length+" guides":"";ch.forEach(function(a){a.classList.toggle("on",a.dataset.t===tp)})}
+ch.forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();tp=a.dataset.t;try{history.replaceState(null,"",tp==="all"?location.pathname:"#t-"+tp)}catch(x){}run()})});
+f.addEventListener("input",run);so.addEventListener("change",run);
+if(location.hash.indexOf("#t-")===0){var id=location.hash.slice(3);if(ch.some(function(a){return a.dataset.t===id}))tp=id}run()})();</script>`;
+const landGuides = () => { const lat = [...posts].sort(byDate).slice(0, 3);
+  return posts.length ? `<h2 class="sec">Guides</h2><p class="sub">Plain-English guides to AI costs, tokens and prompts.</p><div class="gdw">${startPosts.length ? `<div><h3>Start here</h3><ul>${startPosts.map((p) => `<li><a href="${p.path}">${esc(p.title)}</a><small>${readMin(p)} min read</small></li>`).join("")}</ul></div>` : ""}<div><h3>Latest</h3><ul>${lat.map((p) => `<li><a href="${p.path}">${esc(p.title)}</a><small>${nice(p.date)}</small></li>`).join("")}</ul></div></div><p class="sub" style="margin-top:14px"><a href="${POSTDIR}" style="color:var(--ac2)">Browse all ${posts.length} guides by topic &rarr;</a></p>` : ""; };
 
 // ---------- Render ----------
 function render(h, o) {
@@ -176,9 +234,9 @@ function render(h, o) {
     .replaceAll("{{PROSE_CSS}}", () => `<style>${rd("src/partials/prose.css")}</style>`)
     .replaceAll("{{PRICES_JS}}", () => rd("src/partials/prices.js"))
     .replaceAll("{{ESTIMATE_JS}}", () => rd("src/partials/estimate.js"))
-    .replaceAll("{{RELATED}}", () => adBlock("bottom") + (guides.length ? `<style>.rel .posts{display:grid;gap:12px}.rel .post{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px;text-decoration:none;color:var(--tx)}.rel .post:hover{border-color:var(--ac)}.rel .post b{display:block;font-size:18px;margin-bottom:4px}.rel .post span{color:var(--mu);font-size:14px}.rel .post time{display:block;color:var(--mu2);font-size:12px;margin-top:6px}</style><div class="rel"><h3>Guides for this tool</h3><div class="posts">${guides.map(postCard).join("")}</div></div>` : "") + `<div class="rel"><h3>Related tools</h3><div class="tg">${rel.map(card).join("")}</div></div>`)
+    .replaceAll("{{RELATED}}", () => adBlock("bottom") + (guides.length ? `<style>.rel .posts{display:grid;gap:12px}.rel .post{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px;text-decoration:none;color:var(--tx)}.rel .post:hover{border-color:var(--ac)}.rel .post b{display:block;font-size:18px;margin-bottom:4px}.rel .post span{color:var(--mu);font-size:14px}.rel .post time{display:block;color:var(--mu2);font-size:12px;margin-top:6px}</style><div class="rel"><h3>Learn more: guides for this tool</h3><div class="posts">${guides.map(postCard).join("")}</div></div>` : "") + `<div class="rel"><h3>Related tools</h3><div class="tg">${rel.map(card).join("")}</div></div>`)
     .replace(/\{\{AD:(\w+)\}\}/g, (_, k) => adBlock(k))
-    .replaceAll("{{LATEST_POSTS}}", () => posts.length ? `<h2 class="sec">From the Blog</h2><p class="sub">Plain-English guides to AI costs, tokens and prompts.</p><div class="posts">${posts.slice(0, 3).map(postCard).join("")}</div>` : "")
+    .replaceAll("{{LATEST_POSTS}}", () => landGuides())
     .replaceAll("{{DATA_LINE}}", () => esc(dataLine))
     .replaceAll("{{TITLE}}", () => esc(o.title || (t.name ? `${t.title || t.name} | ${S.name}` : S.name)))
     .replaceAll("{{DESC}}", () => esc(o.desc || t.desc || S.description || S.tagline));
@@ -232,7 +290,7 @@ function pickerDefault() {
     .map((m) => { const per = (qi * m.in + qo * m.out) / 1e6; return { m, per, mo: per * qr }; })
     .sort((a, b) => a.mo - b.mo || ((a.m.provider || "Other") + a.m.name < (b.m.provider || "Other") + b.m.name ? -1 : 1));
   const rows = R.slice(0, 10).map((r, k) => `<tr><td>${k + 1}</td><td>${esc(r.m.provider || "Other")}</td><td class="mdl">${esc(r.m.name)}</td><td class="n">${Math.round(r.m.ctx || 128).toLocaleString("en-US")}</td><td class="n">${r.m.in}</td><td class="n">${r.m.out}</td><td class="n">${mo(r.per)}</td><td class="n"><b>${mo(r.mo)}</b></td></tr>`).join("");
-  return rows ? `<div class="card"><h2>Cheapest ten for the example workload</h2><p class="note">2,000 input and 500 output tokens per request, 10,000 requests a month. Change the numbers above to see your own. Prices verified ${PR.updated}.</p><div class="ov tw"><table><thead><tr><th>#</th><th>Provider</th><th>Model</th><th class="n">Context (K)</th><th class="n">Input $/1M</th><th class="n">Output $/1M</th><th class="n">Per request</th><th class="n">Per month</th></tr></thead><tbody>${rows}</tbody></table></div></div>` : "";
+  return rows ? `<div class="card"><h2>Cheapest ten for the example workload</h2><p class="note">2,000 input and 500 output tokens per request, 10,000 requests a month. Change the numbers above to see your own. Price catalog refreshed ${PR.updated}, not checked against provider billing.</p><div class="ov tw"><table><thead><tr><th>#</th><th>Provider</th><th>Model</th><th class="n">Context (K)</th><th class="n">Input $/1M</th><th class="n">Output $/1M</th><th class="n">Per request</th><th class="n">Per month</th></tr></thead><tbody>${rows}</tbody></table></div></div>` : "";
 }
 
 // Static view for the Price Change Tracker (last 30 days of the log, newest first), so the page has real content before its script runs.
@@ -266,6 +324,22 @@ function chgStatic() {
   return `<div class="card"><h2>Changes in the last 30 days, newest first</h2><div class="ov tw"><table><thead><tr><th>Date</th><th>Provider</th><th>Model</th><th>Change</th><th>Details</th></tr></thead><tbody>${R.map((e) => { const K = CHG_KIND[chgKind(e)]; return `<tr><td class="dt" data-label="Date">${chgNice(e.d)}</td><td data-label="Provider">${esc(e.p)}</td><td class="mdl" data-label="Model">${e.n.map(esc).join(", ")}</td><td data-label="Change"><span class="tg ${K[1]}">${K[0]}</span></td><td class="dtl" data-label="Details">${esc(chgDetail(e))}</td></tr>`; }).join("")}</tbody></table></div></div>`;
 }
 
+// ---------- Search index and All Tools page ----------
+const searchIdx = [
+  ...T.map((t) => ["Tool", t.name, t.href, t.desc, t.tag || ""]),
+  ...posts.map((p) => ["Guide", p.title, p.path, p.description]),
+  ...(cfg.providers || []).filter((x) => provNames.has(x.name)).map((x) => ["Prices", `${x.label || x.name} API pricing`, U(x.slug), `Price per million input and output tokens for ${x.models || x.name + " models"}.`]),
+  ...glossary.map((g) => ["Glossary", g.term, U("glossary") + "#" + g.id, g.short]),
+];
+wr("assets/search.json", JSON.stringify(searchIdx));
+const searchHash = sha(JSON.stringify(searchIdx)).slice(0, 8);
+const toolsPage = () => {
+  const jump = `<p class="jp">${cfg.groups.map((g, i) => T.some((t) => t.group == i) ? `<a href="#g${i}">${esc(g)}</a>` : "").join("")}</p>`;
+  const cardHtml = (t) => { const gd = posts.filter((p) => p.tools.includes(t.slug)).slice(0, 2);
+    return `<article class="tcd" data-k="${esc((t.name + " " + t.desc + " " + (t.when || "") + " " + (t.tag || "")).toLowerCase())}"><h3><a href="${t.href}">${esc(t.name)}</a></h3><p>${esc(t.desc)}</p>${t.when ? `<p class="wh"><b>Use it when</b> ${esc(t.when.charAt(0).toLowerCase() + t.when.slice(1))}</p>` : ""}${gd.length ? `<p class="gd"><b>Guides</b> ${gd.map((p) => `<a href="${p.path}">${esc(p.title)}</a>`).join("")}</p>` : ""}</article>`; };
+  return jump + cfg.groups.map((g, i) => { const ts = T.filter((t) => t.group == i); return ts.length ? `<section class="tgp" id="g${i}"><h2>${esc(g)}</h2><div class="tcl">${ts.map(cardHtml).join("")}</div></section>` : ""; }).join("");
+};
+
 // ---------- Pages ----------
 const org = { "@type": "Organization", name: S.name, url: origin + "/", logo: origin + "/logo.svg" };
 for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) {
@@ -273,6 +347,17 @@ for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) 
   const m = h.match(/^<!--slug:([\w-]*)-->\r?\n/), slug = m ? m[1] : "", t = T.find((x) => x.slug == slug);
   const isHome = name === "index", p = isHome ? "/" : U(name), ld = [];
   const rows = models.map((x) => `<tr><td data-label="Compare"><input type="checkbox" data-k="${esc(x.p + "|" + x.n)}" aria-label="Compare ${esc(x.n)}"></td><td data-label="Provider">${esc(x.p)}</td><td data-label="Model">${esc(x.n)}</td><td data-label="Input $/1M">${x.i}</td><td data-label="Output $/1M">${x.o}</td><td data-label="Context (K)">${x.c}</td></tr>`).join("");
+  if (t && name !== "tools") { // shared tool-page extras: privacy badge, example and share buttons, how-to steps, next step, FAQ heading
+    const x = TX[slug] || {}, nx = x.next && T.find((s) => s.slug === x.next[0]);
+    const row = (x.private === false ? "" : '<span class="pv">Runs in your browser. Nothing you enter is uploaded.</span>') + (x.sample ? '<button type="button" class="b s" data-ex>Try an example</button>' : "") + (x.share ? '<button type="button" class="b s" data-sl>Copy link with my input</button>' : "");
+    if (row) h = h.replace(/(<p class="lead">[\s\S]*?<\/p>)/, (m) => m + `<div class="tp">${row}<span class="tn" role="status" aria-live="polite"></span></div>`);
+    if (x.steps) h = h.replace('<div class="about">', () => `<div class="about"><h2>How to Use</h2><ol>${x.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>`);
+    if (nx) h = h.replace('<div class="about">', () => `<p class="nx"><b>Next:</b> <a href="${nx.href}">${esc(x.next[1])}</a> <span>${esc(nx.name)}</span></p><div class="about">`);
+    h = h.replace("<h2>Questions</h2>", '<h2 id="faq">Frequently Asked Questions</h2>');
+    if (x.sample || x.share) h = h.replace("</body>", () => `<script>window.TOOLX=${JSON.stringify({ sample: x.sample, share: x.share })}</script><script>${rd("src/partials/toolx.js")}</script></body>`);
+    h = h.replace("</head>", () => `<style>.tp{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-4px 0 14px}.tp .b{margin:0;padding:6px 12px;font-size:13px}.pv{font-size:13px;color:var(--mu)}.pv:before{content:"\\1F512\\00a0"}.tn{font-size:13px;color:var(--mu)}.nx{margin:18px 0 6px;padding:10px 14px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);font-size:15px}.nx a{color:var(--ac2);font-weight:600}.nx span{color:var(--mu2);font-size:13px;margin-left:6px}.about ol{padding-left:22px}</style></head>`);
+  }
+  if (name === "tools") h = h.replaceAll("{{TOOLS_PAGE}}", () => toolsPage()).replaceAll("{{TOOL_COUNT}}", () => String(T.length));
   h = h.replaceAll("{{PRICE_ROWS}}", () => rows || '<tr><td colspan="6">Prices load in a moment.</td></tr>')
     .replaceAll("{{PRICES_META}}", () => models.length ? `Last updated ${PR.updated} · ${models.length} models from ${provNames.size} providers · refreshed daily` : "Prices are refreshed daily from an open-source catalog.")
     .replaceAll("{{PRICE_HIGHLIGHTS}}", () => highlights())
@@ -281,11 +366,13 @@ for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) 
     .replaceAll("{{PRICE_COUNT}}", () => models.length ? `${models.length} of ${models.length} models` : "")
     .replaceAll("{{PROVIDER_LINKS}}", () => providers.map((x) => `<a href="${U(x.slug)}">${esc(x.name)} API Pricing</a>`).join(" &middot; "));
   if (isHome) ld.push({ "@context": "https://schema.org", "@type": "WebSite", name: S.name, url: origin + "/", description: S.description }, { "@context": "https://schema.org", ...org });
+  else if (name === "tools") ld.push({ "@context": "https://schema.org", "@type": "CollectionPage", name: "All Tools", url: origin + p, isPartOf: { "@type": "WebSite", name: S.name, url: origin + "/" }, mainEntity: { "@type": "ItemList", itemListElement: T.map((x, i) => ({ "@type": "ListItem", position: i + 1, name: x.name, url: origin + x.href })) } });
   else if (name === "about") ld.push({ "@context": "https://schema.org", "@type": "AboutPage", name: "About " + S.name, url: origin + p, publisher: org });
   else if (t) ld.push({ "@context": "https://schema.org", "@type": "WebApplication", name: t.name, url: origin + p, description: t.desc, applicationCategory: "UtilitiesApplication", operatingSystem: "Any", isAccessibleForFree: true, offers: { "@type": "Offer", price: "0", priceCurrency: "USD" }, publisher: org });
-  const crumbs = isHome || name === "404" ? null : [["Home", "/"], [t ? t.name : (name === "privacy" ? "Privacy Policy" : name === "terms" ? "Terms of Use" : name === "how-it-works" ? "How It Works" : name === "about" ? "About" : name), p]];
-  const title = !t && name === "privacy" ? `Privacy Policy | ${S.name}` : !t && name === "terms" ? `Terms of Use | ${S.name}` : !t && name === "404" ? `Page Not Found | ${S.name}` : !t && name === "about" ? `About ${S.name}` : undefined;
-  emit(f, render(h, { path: p, crumbs, ld, title, narrow: !t, noindex: name === "404" }), p, name !== "404");
+  { const un = (s) => s.replace(/<[^>]+>/g, " ").replace(/&middot;/g, "·").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, " ").trim(); const qs = []; for (const m of h.matchAll(/<details class="q"[^>]*><summary>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)) { const q = un(m[1]), a = un(m[2]); if (q && a && !/\{\{|\[\[/.test(q + a)) qs.push({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } }); } if (qs.length && name !== "404") ld.push({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: qs }); }
+  const crumbs = isHome || name === "404" ? null : [["Home", "/"], [t ? t.name : (name === "privacy" ? "Privacy Policy" : name === "terms" ? "Terms of Use" : name === "how-it-works" ? "How It Works" : name === "about" ? "About" : name === "tools" ? "All Tools" : name), p]];
+  const title = !t && name === "tools" ? `All Tools | ${S.name}` : !t && name === "privacy" ? `Privacy Policy | ${S.name}` : !t && name === "terms" ? `Terms of Use | ${S.name}` : !t && name === "404" ? `Page Not Found | ${S.name}` : !t && name === "about" ? `About ${S.name}` : undefined;
+  emit(f, render(h, { path: p, crumbs, ld, title, desc: name === "tools" ? "Every free AI Utility Belt tool in one place: costs, tokens, prompts, documents and JSON, with what each is for and the guides that go with it." : undefined, narrow: !t && name !== "tools", noindex: name === "404" }), p, name !== "404");
 }
 
 // ---------- Glossary ----------
@@ -297,11 +384,19 @@ for (const f of fs.readdirSync("src/pages").filter((f) => f.endsWith(".html"))) 
 
 // ---------- Blog ----------
 if (posts.length) {
-  emit("blog/index.html", render(rd("src/templates/blog-index.html").replaceAll("{{POST_CARDS}}", () => posts.map(postCard).join("")), { path: POSTDIR, title: `Blog | ${S.name}`, desc: "Plain-English guides to LLM pricing, tokens, context windows and cutting AI costs.", crumbs: [["Home", "/"], ["Blog", POSTDIR]], narrow: true }), POSTDIR);
+  emit("blog/index.html", render(rd("src/templates/blog-index.html").replaceAll("{{BLOG_BODY}}", () => blogIndexBody()).replaceAll("{{BLOG_COUNT}}", () => String(posts.length)), { path: POSTDIR, title: `Blog: AI Cost, Token and Prompt Guides | ${S.name}`, desc: "Plain-English guides to LLM pricing, tokens, context windows, prompts and cutting AI costs, grouped by topic with a start-here list.", crumbs: [["Home", "/"], ["Blog", POSTDIR]], narrow: false, ld: [{ "@context": "https://schema.org", "@type": "CollectionPage", name: "Blog", url: origin + POSTDIR, isPartOf: { "@type": "WebSite", name: S.name, url: origin + "/" }, mainEntity: { "@type": "ItemList", itemListElement: posts.slice().sort(byDate).map((x, i) => ({ "@type": "ListItem", position: i + 1, name: x.title, url: origin + x.path })) } }] }), POSTDIR);
   for (const p of posts) {
     const tools = p.tools.map((s) => T.find((t) => t.slug === s)).filter(Boolean), more = (() => { const use = {}; posts.forEach((x) => x.tools.forEach((k) => (use[k] = (use[k] || 0) + 1))); const cur = (p.related || "").split(",").map((k) => k.trim()).map((k) => posts.find((x) => x.slug === k)).filter((x) => x && x.slug !== p.slug); const rest = posts.filter((x) => x.slug !== p.slug && !cur.includes(x)).map((x, i) => ({ x, i, n: x.tools.filter((k) => p.tools.includes(k)).reduce((m, k) => m + 1 / use[k], 0) })).sort((a, b) => b.n - a.n || a.i - b.i).map((r) => r.x); return cur.concat(rest).slice(0, 2); })();
+    const tp = topicOf.get(p.slug), tord = (blogTopics.find((x) => x.id === (tp || [])[0]) || { ord: [] }).ord, ti = tord.findIndex((x) => x.slug === p.slug);
+    const krc = (q, lab) => `<a class="kr" href="${q.path}"><small>${lab}</small><b>${esc(q.title)}</b><span>${readMin(q)} min read</span></a>`;
+    const keep = tord.length > 1 && ti >= 0 ? `<nav class="krw" aria-label="Keep reading"><h2>Keep reading: ${esc(tp[1])}</h2><div class="krg">${ti > 0 ? krc(tord[ti - 1], "Previous in this topic") : ""}${ti < tord.length - 1 ? krc(tord[ti + 1], "Next in this topic") : ""}</div></nav>` : "";
+    const topBtn = tools.length ? `<p class="tb"><span>Try it</span>${tools.slice(0, 2).map((t) => `<a href="${t.href}">${esc(t.name)}</a>`).join("")}</p>` : "";
+    const trust = `<aside class="trust"><b>How we check our numbers</b><p>Numbers in this guide come from our own tests and calculations, from the price catalog described on <a href="${U("how-it-works")}">How It Works</a>, or from sources linked in the text. Spotted a mistake? <a href="mailto:${esc(S.email || "")}?subject=${encodeURIComponent("Correction: " + p.title)}">Email us</a> and we will correct it and update the date.</p></aside>`;
     let h = rd("src/templates/article.html")
-      .replaceAll("{{POST_TITLE}}", () => esc(p.title)).replaceAll("{{POST_DATE}}", () => p.date).replaceAll("{{POST_DATE_NICE}}", () => nice(p.date))
+      .replaceAll("{{POST_TITLE}}", () => esc(p.title))
+      .replaceAll("{{POST_UPDATED}}", () => p.updated && p.updated > p.date ? ` &middot; Updated <time datetime="${p.updated}">${nice(p.updated)}</time>` : "")
+      .replaceAll("{{POST_TOPIC}}", () => tp ? ` &middot; <a href="${POSTDIR}#t-${tp[0]}">${esc(tp[1])}</a>` : "")
+      .replaceAll("{{POST_TOPBTN}}", () => topBtn).replaceAll("{{POST_TRUST}}", () => trust).replaceAll("{{POST_NAV}}", () => keep).replaceAll("{{POST_DATE}}", () => p.date).replaceAll("{{POST_DATE_NICE}}", () => nice(p.date))
       .replaceAll("{{POST_META2}}", () => p.checked ? `<p class="meta dates">Subscription prices checked <time datetime="${p.checked}">${nice(p.checked)}</time>${p.hasApi && PR ? ` &middot; <span class="apiu">API prices updated <time datetime="${PR.updated}">${nice(PR.updated)}</time></span>` : ""}</p>` : "")
       .replaceAll("{{POST_STALE}}", () => p.checked && daysAgo(p.checked) > (Number(p.stale) || 30) ? `<div class="stale" role="note"><b>These prices may be out of date.</b> The subscription prices below were last checked on ${nice(p.checked)}. Check the current price on the official page before you subscribe.</div>` : "")
       .replaceAll("{{POST_HERO}}", () => { if (!p.image) return ""; const [w, h] = imgSize(p.image); return `<figure class="hero-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}" width="${w}" height="${h}" fetchpriority="high" decoding="async"></figure>`; })
@@ -328,7 +423,7 @@ for (const pv of providers) {
 const stateFile = "scripts/lastmod.json";
 let state = {}; try { state = JSON.parse(rd(stateFile)); } catch { /* first run */ }
 const nextState = {};
-for (const [, html, p, inMap] of outputs) { if (!inMap) continue; const h = sha(html.replace(/prices verified[^<]*/gi, "").replace(/api prices updated\s*<time[^>]*>[^<]*/gi, "").replace(/"dateModified":"[^"]*"/g, "")); const prev = state[p]; nextState[p] = prev && prev.h === h ? prev : { h, d: today }; }
+for (const [, html, p, inMap] of outputs) { if (!inMap) continue; const h = sha(html.replace(/(prices verified|price catalog refreshed)[^<]*/gi, "").replace(/api prices updated\s*<time[^>]*>[^<]*/gi, "").replace(/"dateModified":"[^"]*"/g, "")); const prev = state[p]; nextState[p] = prev && prev.h === h ? prev : { h, d: today }; }
 wr("robots.txt", "User-agent: *\nAllow: /\n" + (origin ? `\nSitemap: ${origin}/sitemap.xml\n` : ""));
 if (origin) {
   wr("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + outputs.filter((o) => o[3]).map((o) => `<url><loc>${origin}${o[2]}</loc><lastmod>${nextState[o[2]].d}</lastmod></url>`).join("\n") + "\n</urlset>\n");

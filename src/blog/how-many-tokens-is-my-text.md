@@ -2,13 +2,15 @@
 title: How Many Tokens Is My Text?
 description: A plain-English guide to counting tokens: what a token is, the rules of thumb for English and code, and how to get an exact count.
 date: 2026-11-10
-updated: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/how-many-tokens-is-my-text-hero.jpg
 imageAlt: The phrase "How many tokens is my text?" split into tokens
 tools: token-counter, text-cleaner, cost-forecaster
 related: context-windows-explained, cut-your-llm-bill
 ---
 Every AI model reads and writes **tokens**, not words. Providers bill by the token and limit requests by the token, so knowing roughly how many tokens your text uses is the first step to controlling cost and avoiding errors.
+
+[[toc]]
 
 ## What a token is
 
@@ -61,3 +63,21 @@ The [Token Counter](tool:token-counter) shows the exact count for OpenAI tokeniz
 Strip formatting you do not need, remove repeated boilerplate and trim long system prompts. The [AI Text Cleaner](tool:text-cleaner) removes Markdown symbols and invisible characters, and the [Prompt Token Optimizer](tool:prompt-token-optimizer) shows every cut before you accept it. For PDFs, see [how to send a PDF to an AI chatbot without wasting tokens](post:pdf-to-ai-chatbot-without-wasting-tokens).
 
 Once you know your count, the [Cost Forecaster](tool:cost-forecaster) turns it into a monthly budget.
+
+## Frequently asked questions
+
+### How many tokens is 1,000 words?
+
+For ordinary English, 1,000 tokens is about 750 words, so a 750-word text is roughly 1,000 tokens. Code, numbers, JSON and non-English text usually use more, so measure those instead of guessing.
+
+### Is the token count the same on every model?
+
+No. Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so those counts can be exact. For Anthropic and Google models a tool can only estimate, and Anthropic says its newer Claude models count about 30 percent more tokens than earlier ones for the same text.
+
+### Why does my code or JSON use more tokens than its length suggests?
+
+Symbols, indentation, brackets, quotes and keys all count, and numbers are split into short pieces. If your workload is mostly code, JSON or IDs, count a real sample.
+
+### Is my text uploaded when I count it?
+
+No. The Token Counter runs in your browser and nothing is uploaded.

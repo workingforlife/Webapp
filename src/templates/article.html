@@ -1,12 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}{{PROSE_CSS}}</head><body>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}{{PROSE_CSS}}<style>
+.tb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 18px;font:14px system-ui,sans-serif}.tb span{color:var(--mu)}.tb a{border:1px solid var(--bd);border-radius:999px;padding:5px 14px;color:var(--ac2);text-decoration:none;background:var(--sf)}.tb a:hover{border-color:var(--ac)}
+.trust{margin:34px 0 0;padding:14px 16px;border:1px solid var(--bd);border-radius:12px;background:var(--sf);font:14px/1.55 system-ui,sans-serif;color:var(--mu)}.trust b{display:block;color:var(--tx);margin-bottom:4px}.trust p{margin:0}.trust a{color:var(--ac2)}
+.krw{max-width:760px;margin:26px auto 0;padding:0 20px}.krw h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ac2);margin:0 0 10px}
+.krg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.kr{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;text-decoration:none;color:var(--tx);font-family:system-ui,sans-serif}.kr:hover{border-color:var(--ac)}.kr small{display:block;color:var(--mu2);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}.kr b{display:block;font-size:16px;line-height:1.3;color:var(--ac2)}.kr span{display:block;color:var(--mu);font-size:13px;margin-top:4px}
+.toc{scroll-margin-top:70px}.toc a.on{color:var(--ac2);font-weight:600}
+.ctoc{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;display:none;padding:9px 14px;border:1px solid var(--bd);border-radius:999px;background:var(--sf);color:var(--tx);font:14px system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 14px var(--shadow)}.ctoc.on{display:inline-block}
+@media(min-width:1280px){.toc{float:right;width:210px;margin:0 -250px 16px 20px;position:sticky;top:84px;max-height:calc(100vh - 110px);overflow:auto;font-size:13px}.toc ul{columns:1}.ctoc,.ctoc.on{display:none}}
+</style></head><body>
 {{HEADER}}
-<main class="prose"><article><h1>{{POST_TITLE}}</h1><p class="meta">By {{SITE}} &middot; Published <time datetime="{{POST_DATE}}">{{POST_DATE_NICE}}</time> &middot; {{POST_READ}} min read</p>{{POST_META2}}
+<main class="prose"><article><h1>{{POST_TITLE}}</h1><p class="meta">By {{SITE}} &middot; Published <time datetime="{{POST_DATE}}">{{POST_DATE_NICE}}</time>{{POST_UPDATED}} &middot; {{POST_READ}} min read{{POST_TOPIC}}</p>{{POST_META2}}
 {{POST_HERO}}{{POST_STALE}}
+{{POST_TOPBTN}}
 {{AD:article}}
 {{POST_BODY}}
+{{POST_TRUST}}
 </article>
+{{POST_NAV}}
 <div class="callout"><b>Try it yourself</b>{{POST_TOOLS}}</div></main>
 {{AD:bottom}}
 {{MORE_POSTS}}
 {{FOOTER}}
+<script>(function(){var t=document.querySelector(".toc");if(!t)return;var as=[].slice.call(t.querySelectorAll("a[href^='#']")),hs=as.map(function(a){return document.getElementById(a.getAttribute("href").slice(1))}).filter(Boolean);
+if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)as.forEach(function(a){a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id)})})},{rootMargin:"-80px 0px -70% 0px"});hs.forEach(function(h){io.observe(h)})}
+var p=document.createElement("a");p.className="ctoc";p.href="#toc";p.textContent="Contents";document.body.appendChild(p);var sc=function(){p.classList.toggle("on",t.getBoundingClientRect().bottom<0)};addEventListener("scroll",sc,{passive:true});sc()})();</script>
 </body></html>

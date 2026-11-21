@@ -2,12 +2,15 @@
 title: How to Compare LLM API Prices Fairly
 description: Price per million tokens is only the start. Learn what else to compare across LLM providers: input vs output, context size, caching, batch discounts and real workload cost.
 date: 2026-11-10
+updated: 2026-11-21
 image: /assets/blog/compare-llm-api-prices-hero.jpg
 imageAlt: Comparing LLM API prices: input, output and context
 tools: model-prices, cost-forecaster, token-counter
 related: cut-your-llm-bill, estimate-monthly-cost-of-an-llm-chatbot
 ---
 Comparing LLM prices sounds simple: find the cheapest number. In practice, two models with the same headline price can cost very different amounts for your workload. Here is how to compare fairly. It is part of our cost series, and the main guide is [Seven Ways to Cut Your LLM Bill](post:cut-your-llm-bill).
+
+[[toc]]
 
 ## Start with price per million tokens
 
@@ -44,3 +47,21 @@ Price lists change often, and aggregated catalogs can lag or contain mistakes. T
 ## From comparison to budget
 
 Once you have shortlisted models, the [Cost Forecaster](tool:cost-forecaster) projects the monthly cost for a chatbot, an agent or a batch job, including growing history and caching, and lets you export the result. To see what each way of cutting the bill saves, read [Seven Ways to Cut Your LLM Bill](post:cut-your-llm-bill).
+
+## Frequently asked questions
+
+### Is the model with the lowest price per million tokens the cheapest?
+
+Not necessarily. Two models with the same headline price can cost very different amounts for your workload, depending on the input and output mix, the context window and the discounts you can use.
+
+### Why compare input and output prices separately?
+
+Output is typically several times pricier than input. A model with cheap input but expensive output can be a bad deal for a chatbot that writes long answers, and a good deal for a classifier that reads a lot and answers in one word.
+
+### Where do the prices on this site come from?
+
+From an open-source catalog that is refreshed daily. They are not verified against provider billing, so confirm on the provider's own pricing page before committing to a budget.
+
+### Should I factor in answer quality?
+
+Yes. The cheapest model that gives poor answers costs more in retries, fixes and unhappy users, so test two or three candidates on real examples.

@@ -1,0 +1,37 @@
+{
+ "startHere": [
+  "how-many-tokens-is-my-text",
+  "context-windows-explained",
+  "cut-your-llm-bill",
+  "estimate-monthly-cost-of-an-llm-chatbot",
+  "reliable-json-from-llm"
+ ],
+ "topics": [
+  {"id": "costs", "name": "Estimating and cutting costs", "slugs": ["cut-your-llm-bill", "estimate-monthly-cost-of-an-llm-chatbot", "estimate-prompt-cost-before-you-send-it", "how-much-does-a-prompt-cost-on-every-model", "what-few-shot-examples-cost-in-tokens", "llm-cost-by-workload-chatbot-rag-classification", "ai-agent-vs-chatbot-vs-batch-cost", "input-vs-output-tokens-why-output-costs-more", "prompt-caching-and-batch-discounts-explained"]},
+  {"id": "prices", "name": "Comparing prices and models", "slugs": ["compare-llm-api-prices", "choose-an-llm-for-your-budget", "cheapest-llm-vs-best-value-test-before-you-switch", "how-often-do-llm-api-prices-change", "why-llm-price-list-changes-and-when-to-trust-them", "track-llm-price-changes-protect-your-budget"]},
+  {"id": "tokens", "name": "Tokens and context limits", "slugs": ["how-many-tokens-is-my-text", "how-many-tokens-by-input-type", "how-many-tokens-do-code-json-and-hindi-use", "why-token-counts-differ-between-models", "context-windows-explained", "why-ai-answers-get-cut-off-max-output-tokens", "paste-or-upload-which-uses-fewer-tokens"]},
+  {"id": "prompts", "name": "Writing and testing prompts", "slugs": ["reusable-prompt-templates", "shorten-a-prompt-without-losing-quality", "how-to-save-tokens-in-a-prompt-myths-tested", "compare-two-prompts-diff-tokens-and-cost", "how-to-test-a-prompt-change-before-shipping", "remove-markdown-and-hidden-characters-from-ai-text"]},
+  {"id": "json", "name": "JSON and developer output", "slugs": ["reliable-json-from-llm", "fix-broken-json-from-chatgpt-and-claude", "recover-truncated-json-from-an-llm", "when-not-to-auto-repair-llm-json"]},
+  {"id": "documents", "name": "Documents, chats and RAG", "slugs": ["pdf-to-ai-chatbot-without-wasting-tokens", "chunk-size-and-overlap-for-rag", "export-chatgpt-claude-chats"]},
+  {"id": "outages", "name": "Outages and backups", "slugs": ["llm-outage-history-and-cost", "real-cost-of-an-llm-outage", "what-does-an-llm-failover-cost", "choose-a-backup-llm-for-outages"]},
+  {"id": "india", "name": "AI subscription prices in India", "slugs": ["chatgpt-vs-claude-vs-gemini-price-in-india", "chatgpt-price-in-india", "claude-pro-price-india", "gemini-price-in-india"]},
+  {"id": "news", "name": "News and analysis", "slugs": ["nvidia-ceo-exit-ai-api-prices", "microsoft-outage-llm-app-fallback", "claude-projects-one-chat-threads-explained"]}
+ ],
+ "readIf": {
+  "how-many-tokens-is-my-text": "you are new to tokens or want a rule of thumb.",
+  "how-many-tokens-by-input-type": "you send images, PDFs, audio or tables.",
+  "how-many-tokens-do-code-json-and-hindi-use": "you work with code, JSON or Hindi and want measured counts.",
+  "chatgpt-vs-claude-vs-gemini-price-in-india": "you want all three side by side.",
+  "chatgpt-price-in-india": "you want the ChatGPT plan prices in rupees.",
+  "claude-pro-price-india": "you want Claude plan prices in rupees, app against website.",
+  "gemini-price-in-india": "you want the Google AI plan prices in rupees.",
+  "llm-outage-history-and-cost": "you want dates and durations of past outages.",
+  "real-cost-of-an-llm-outage": "you need to decide how much backup is worth paying for.",
+  "what-does-an-llm-failover-cost": "you want the token cost of running on a backup model.",
+  "how-often-do-llm-api-prices-change": "you want to know how often prices actually move.",
+  "why-llm-price-list-changes-and-when-to-trust-them": "a price changed and you are not sure it is real.",
+  "track-llm-price-changes-protect-your-budget": "you want a routine to catch price changes early.",
+  "estimate-monthly-cost-of-an-llm-chatbot": "you are budgeting a chatbot for a month.",
+  "estimate-prompt-cost-before-you-send-it": "you want the price of one prompt before you send it."
+ }
+}

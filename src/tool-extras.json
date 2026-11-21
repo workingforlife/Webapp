@@ -1,0 +1,187 @@
+{
+ "token-counter": {
+  "sample": {
+   "tt": "You are a helpful support assistant for an online bookshop. Answer in two short paragraphs, cite the order number when one is given, and never promise a delivery date you cannot check.\n\nCustomer: Hi, my order 48213 has not arrived yet and it was meant to come on Tuesday. Can you tell me where it is and whether I can get a refund for the postage?"
+  },
+  "share": [
+   "tt"
+  ],
+  "steps": [
+   "Paste your prompt or document into the box, or tap Try an example.",
+   "Pick a tokenizer: the OpenAI ones are exact, the estimate covers any other model.",
+   "Read the count and the models whose context window your text fits, then see the cheapest way to send it."
+  ],
+  "next": [
+   "cost-forecaster",
+   "Turn this count into a monthly budget"
+  ]
+ },
+ "text-cleaner": {
+  "sample": {
+   "ci": "## Summary\n\n**Here is the plan** — it’s short:\n\n- Check the *draft*​ before sending\n- Use `plain text` for the email\n\n“Thanks” – and see [our guide](https://example.com) for more."
+  },
+  "share": [
+   "ci"
+  ],
+  "steps": [
+   "Paste the AI-generated text into the first box, or tap Try an example.",
+   "Tick the clean-ups you want. The result updates as you type.",
+   "Press Copy Result and paste it where you need it."
+  ],
+  "next": [
+   "token-counter",
+   "Count the tokens in the cleaned text"
+  ]
+ },
+ "json-repair": {
+  "share": [
+   "ji"
+  ],
+  "steps": [
+   "Paste the broken JSON, or pick one of the example problems.",
+   "Read the list of changes, and check any that were guesses.",
+   "Choose a layout, then copy or download the repaired JSON."
+  ],
+  "next": [
+   "json-validator",
+   "Validate the result against a schema"
+  ]
+ },
+ "json-validator": {
+  "sample": {
+   "ji": "{\"name\": \"Asha\", \"tags\": [\"ai\", \"tools\",], \"active\": true}",
+   "jsc": "{\"type\": \"object\", \"required\": [\"name\", \"age\"]}"
+  },
+  "share": [
+   "ji",
+   "jsc"
+  ],
+  "steps": [
+   "Paste the JSON and, if you have one, a schema, or tap Try an example.",
+   "Press Validate to see whether it parses and where the first error is.",
+   "Use Fix Common Issues, Prettify, Minify or Sort Keys as needed."
+  ],
+  "next": [
+   "json-repair",
+   "Broken beyond a quick fix? Try JSON Repair"
+  ]
+ },
+ "pdf-to-text": {
+  "private": true,
+  "steps": [
+   "Choose a PDF, a saved web page (.html) or a .txt file, or paste page HTML.",
+   "Wait a moment while the text is read in your browser.",
+   "Copy the text or download it as a .txt file."
+  ],
+  "next": [
+   "token-counter",
+   "Check how many tokens the extracted text uses"
+  ]
+ },
+ "prompt-builder": {
+  "steps": [
+   "Pick a ready-made template, or write your own and put {{variables}} where the details go.",
+   "Fill in the variable fields to see the final prompt.",
+   "Copy the prompt, or save the template and copy a share link."
+  ],
+  "next": [
+   "prompt-cost-compare",
+   "See what this prompt costs on every model"
+  ]
+ },
+ "prompt-cost-compare": {
+  "sample": {
+   "pt": "You are a careful contract reviewer. Read the clause below and list any risks for the buyer in three bullet points, then suggest one safer wording.\n\nClause: The supplier may change the delivery date at any time without notice and is not liable for any resulting loss."
+  },
+  "steps": [
+   "Paste your prompt, or enter the input tokens yourself.",
+   "Set the reply length and how many requests you send each month.",
+   "Compare the cost on every model, then copy the link or download a CSV."
+  ],
+  "next": [
+   "cost-forecaster",
+   "Forecast the full monthly bill"
+  ]
+ },
+ "prompt-diff": {
+  "share": [
+   "pa",
+   "pb"
+  ],
+  "steps": [
+   "Paste the original prompt on the left and the revised one on the right, or load an example.",
+   "Choose how to compare: by words or by lines.",
+   "Read the token change, the cost, and the tokens added or saved by each edit."
+  ],
+  "next": [
+   "prompt-token-optimizer",
+   "Trim the revised prompt further"
+  ]
+ },
+ "prompt-token-optimizer": {
+  "share": [
+   "pi"
+  ],
+  "steps": [
+   "Paste a long prompt, or tap Load an Example.",
+   "Review each suggested trim and keep only the ones that are safe.",
+   "Copy the shorter prompt and see the monthly saving."
+  ],
+  "next": [
+   "prompt-diff",
+   "Compare the original and shorter prompt"
+  ]
+ },
+ "chunker": {
+  "share": [
+   "ki"
+  ],
+  "steps": [
+   "Paste a long text, or tap Load an Example.",
+   "Set the chunk size and overlap in tokens, then press Split Into Chunks.",
+   "Test a question to see which chunk answers it, then copy or download the chunks as JSON."
+  ],
+  "next": [
+   "cost-forecaster",
+   "Model the monthly cost of a retrieval workload"
+  ]
+ },
+ "cost-forecaster": {
+  "next": [
+   "prompt-token-optimizer",
+   "Cut the prompt part of your bill"
+  ]
+ },
+ "chat-export": {
+  "next": [
+   "text-cleaner",
+   "Clean up the exported text"
+  ]
+ },
+ "model-prices": {
+  "private": false,
+  "next": [
+   "cost-forecaster",
+   "Forecast your monthly bill on these models"
+  ]
+ },
+ "model-picker": {
+  "next": [
+   "cost-forecaster",
+   "Forecast the bill for your shortlist"
+  ]
+ },
+ "price-changes": {
+  "private": false,
+  "next": [
+   "model-prices",
+   "Compare today’s prices side by side"
+  ]
+ },
+ "failover-cost-estimator": {
+  "next": [
+   "cost-forecaster",
+   "Forecast your normal monthly bill"
+  ]
+ }
+}

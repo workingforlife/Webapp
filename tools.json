@@ -24,7 +24,7 @@
  "groups": [
   "Costs and Models",
   "Documents and Text",
-  "Chats and Prompts",
+  "Prompts",
   "Developer"
  ],
  "tools": [
@@ -32,83 +32,109 @@
    "slug": "cost-forecaster",
    "name": "Cost Forecaster",
    "group": 0,
-   "desc": "Forecast monthly LLM costs for chatbots, agents and batch jobs."
+   "desc": "Forecast monthly LLM costs for chatbots, agents and batch jobs.",
+   "tag": "Monthly cost of chatbots and agents",
+   "when": "You are planning a chatbot, agent or batch job and need a monthly budget."
   },
   {
    "slug": "model-prices",
    "name": "Model Prices",
    "group": 0,
    "desc": "Compare LLM API prices per million tokens and context windows across providers, updated daily.",
-   "title": "LLM API Pricing Comparison: Prices & Context Windows"
+   "title": "LLM API Pricing Comparison: Prices & Context Windows",
+   "tag": "Per-million-token prices, every model",
+   "when": "You want to look up or compare what a model costs per million tokens."
   },
   {
    "slug": "model-picker",
    "name": "Model Picker",
    "group": 0,
    "desc": "Shortlist LLMs by monthly cost, context size and provider for your own workload. Enter a typical request and compare live prices.",
-   "title": "LLM Model Picker: Shortlist by Monthly Cost"
+   "title": "LLM Model Picker: Shortlist by Monthly Cost",
+   "tag": "Rank models for your workload",
+   "when": "You know a typical request size and volume and need a shortlist of models."
   },
   {
    "slug": "price-changes",
    "name": "Price Change Tracker",
    "group": 0,
    "desc": "See which LLM API prices were cut or raised, and which models were added or removed, from our daily price snapshots.",
-   "title": "LLM API Price Change Tracker"
+   "title": "LLM API Price Change Tracker",
+   "tag": "What got cheaper or dearer",
+   "when": "You want to see which prices were cut or raised and which models were added or removed."
   },
   {
    "slug": "failover-cost-estimator",
    "name": "Failover Cost Estimator",
    "group": 0,
    "desc": "Estimate the extra cost of running on a backup LLM during an outage, and compare backup options by price and context size.",
-   "title": "LLM Failover Cost Estimator"
+   "title": "LLM Failover Cost Estimator",
+   "tag": "Cost of running on a backup model",
+   "when": "You are planning for an outage and want to know what a backup model would cost."
   },
   {
    "slug": "token-counter",
    "name": "Token Counter",
    "group": 0,
-   "desc": "Count tokens and check whether your text fits a model's context window."
+   "desc": "Count tokens and check whether your text fits a model's context window.",
+   "tag": "Count tokens, check the limit",
+   "when": "You have a prompt or document and need its size and whether it fits a context window."
   },
   {
    "slug": "pdf-to-text",
    "name": "PDF & Web to Text",
    "group": 1,
-   "desc": "Turn PDFs and web pages into clean, LLM-ready text."
+   "desc": "Turn PDFs and web pages into clean, LLM-ready text.",
+   "tag": "PDF or web page to clean text",
+   "when": "You want to paste a document into a chatbot without headers, page numbers and broken lines."
   },
   {
    "slug": "text-cleaner",
    "name": "AI Text Cleaner",
    "group": 1,
-   "desc": "Strip Markdown, invisible characters and em dashes."
+   "desc": "Strip Markdown, invisible characters and em dashes.",
+   "tag": "Strip Markdown and hidden characters",
+   "when": "Text copied from an AI chat has Markdown symbols, invisible characters or em dashes you want gone."
   },
   {
    "slug": "chunker",
    "name": "Text Chunker",
    "group": 1,
-   "desc": "Split long documents into overlapping, token-sized chunks and test which chunk answers a question."
+   "desc": "Split long documents into overlapping, token-sized chunks and test which chunk answers a question.",
+   "tag": "Split long text for search (RAG)",
+   "when": "You are building document search and need token-sized chunks with overlap."
   },
   {
    "slug": "chat-export",
    "name": "Chat Export",
-   "group": 2,
-   "desc": "Convert ChatGPT and Claude chats to Markdown, Word or PDF."
+   "group": 1,
+   "desc": "Convert ChatGPT and Claude chats to Markdown, Word or PDF.",
+   "tag": "Save chats as Markdown, Word, PDF",
+   "when": "You want to keep a ChatGPT or Claude conversation as a document."
   },
   {
    "slug": "prompt-builder",
    "name": "Prompt Builder",
    "group": 2,
-   "desc": "Reusable prompt templates with variables, saving and share links."
+   "desc": "Reusable prompt templates with variables, saving and share links.",
+   "tag": "Reusable templates with variables",
+   "when": "You send the same kind of prompt again and again and want a template to fill in."
   },
   {
    "slug": "prompt-token-optimizer",
    "name": "Prompt Token Optimizer",
    "group": 2,
-   "desc": "Cut filler and repeats from long prompts, review every change, and see what it saves."
+   "desc": "Cut filler and repeats from long prompts, review every change, and see what it saves.",
+   "tag": "Trim filler, review every cut",
+   "when": "A long prompt costs too much and you want to cut wording safely."
   },
   {
    "slug": "json-validator",
    "name": "JSON Validator",
    "group": 3,
-   "desc": "Validate model output against a simple schema."
+   "desc": "Validate model output against a simple schema.",
+   "tag": "Check JSON against a schema",
+   "when": "A model returned JSON and you need to know whether it is valid and has the right fields."
   }
  ],
  "providers": [

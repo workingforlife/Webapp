@@ -1,0 +1,31 @@
+<!--slug:-->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}
+<style>
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1000px;margin:auto;padding:0 20px 20px}
+h1{font-size:clamp(28px,4.5vw,40px);line-height:1.15;margin:18px 0 8px}.lead{color:var(--mu);margin:0 0 18px;max-width:680px}
+.tf{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 6px}.tf input{flex:1 1 260px;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:11px 12px;font:inherit}.tf input:focus{outline:2px solid var(--ac);outline-offset:1px}.tf span{color:var(--mu);font-size:14px}
+.tgp h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ac2);margin:28px 0 10px}
+.tcl{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.tcd{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px}.tcd h3{margin:0 0 6px;font-size:18px}.tcd h3 a{color:var(--tx);text-decoration:none}.tcd h3 a:hover{color:var(--ac2)}
+.tcd p{margin:0 0 8px;color:var(--mu);font-size:14px}.tcd .wh b,.tcd .gd b{display:block;color:var(--tx2);font-size:12px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}.tcd .gd a{display:block;color:var(--ac2);text-decoration:none;margin-top:3px}.tcd .gd a:hover{text-decoration:underline}
+.crumbs{max-width:1000px}.jp{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.jp a{border:1px solid var(--bd);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--mu);text-decoration:none}.jp a:hover{border-color:var(--ac);color:var(--ac2)}.tgp{scroll-margin-top:70px}
+.tn{color:var(--mu);margin:24px 0 0}.tn[hidden]{display:none}
+.nx{margin:34px 0 0;padding:16px;border:1px solid var(--bd);border-radius:12px;background:var(--sf);color:var(--mu)}.nx a{color:var(--ac2)}
+</style></head><body>
+{{HEADER}}
+<main>
+<h1>All Tools</h1>
+<p class="lead">{{TOOL_COUNT}} free tools for AI costs, tokens, prompts, documents and JSON. Everything runs in your browser, with no sign-up. Each one shows what it is for and the guides that go with it.</p>
+<div class="tf"><input id="tf" type="search" placeholder="Filter tools, for example JSON, cost or PDF" aria-label="Filter tools" autocomplete="off"><span id="tc" aria-live="polite"></span></div>
+<div id="tl">{{TOOLS_PAGE}}</div>
+<p class="tn" id="tn" hidden>No tool matches that. Try a shorter word, or <a href="{{HREF:blog}}">browse the guides</a>.</p>
+<p class="nx">Not sure where to start? Try the <a href="{{HREF:home}}#quick">Quick Check</a> on the home page, or read the <a href="{{HREF:how-it-works}}">How It Works</a> page to see how the tools fit together and where the numbers come from.</p>
+</main>
+{{FOOTER}}
+<script>
+(function(){var f=document.getElementById("tf"),cs=[].slice.call(document.querySelectorAll(".tcd")),gs=[].slice.call(document.querySelectorAll(".tgp")),n=document.getElementById("tn"),c=document.getElementById("tc");
+function run(){var q=f.value.trim().toLowerCase().split(/\s+/).filter(Boolean),k=0;cs.forEach(function(e){var ok=q.every(function(t){return e.dataset.k.indexOf(t)>-1});e.hidden=!ok;if(ok)k++});gs.forEach(function(g){g.hidden=!g.querySelector(".tcd:not([hidden])")});n.hidden=k>0;c.textContent=q.length?k+" of "+cs.length+" tools":""}
+f.addEventListener("input",run)})();
+</script>
+</body></html>

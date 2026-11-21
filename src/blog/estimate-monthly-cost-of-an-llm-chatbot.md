@@ -2,12 +2,15 @@
 title: How to Estimate the Monthly Cost of an LLM Chatbot
 description: A step-by-step method for forecasting what a chatbot will cost each month, including why conversation history makes bills grow faster than expected.
 date: 2026-11-10
+updated: 2026-11-21
 image: /assets/blog/estimate-monthly-cost-of-an-llm-chatbot-hero.jpg
 imageAlt: Chat messages growing longer as a conversation continues
 tools: cost-forecaster, token-counter, model-prices
 related: cut-your-llm-bill, compare-llm-api-prices
 ---
 A chatbot looks cheap per message, then the first invoice arrives and it is several times your estimate. The reason is almost always the same: the model has no memory, so every turn re-sends the whole conversation. Here is a method that accounts for it. It is part of our cost series, and the main guide is [Seven Ways to Cut Your LLM Bill](post:cut-your-llm-bill). Building an agent instead? See [what agents, chatbots and batch jobs cost](post:ai-agent-vs-chatbot-vs-batch-cost).
+
+[[toc]]
 
 ## The inputs you need
 
@@ -60,3 +63,21 @@ Real traffic includes retries, longer conversations than average and tool calls.
 ## Skip the spreadsheet
 
 The [Cost Forecaster](tool:cost-forecaster) does all of this for you. Enter the six inputs, pick a model, and it models growing history, prompt caching and the context window, then shows which inputs move the bill most. You can export the result as Excel, PDF or an image to share with your team. Once you have the number, [seven ways to cut your LLM bill](post:cut-your-llm-bill) shows where to trim it, and [comparing API prices fairly](post:compare-llm-api-prices) helps you choose the model.
+
+## Frequently asked questions
+
+### Why is my chatbot bill several times my estimate?
+
+The model has no memory, so every turn re-sends the whole conversation. Input grows with each turn, which is why costs grow faster than the number of messages. In the worked example above, five turns send 7,000 input tokens even though the user typed only 500.
+
+### What numbers do I need for an estimate?
+
+Six inputs: the system prompt size, the average user message, the average reply, the turns per conversation, the conversations per month, and the model's input and output prices per million tokens.
+
+### What should I add on top of the estimate?
+
+A margin. Real traffic includes retries, longer conversations than average and tool calls, so treat the estimate as a range and plan for the upper end.
+
+### What lowers a chatbot's bill?
+
+Prompt caching for the repeated start of the prompt, history limits that cap or summarize old turns, the context window, which drops older turns once it is full, and shorter replies, since output is the pricier side.

@@ -20,7 +20,7 @@ tr.dim{opacity:.45}input[type=checkbox]{width:18px;height:18px;accent-color:var(
 </style></head><body>
 {{HEADER}}
 <main><h1>LLM Prices &amp; Context Windows</h1><p class="lead">Compare per-million-token prices and context sizes across providers, then tick up to four models to compare them side by side.</p><p class="note" style="margin:-8px 0 14px">{{PRICES_META}}</p>
-<div class="card"><p class="note" id="vf" style="margin:0 0 6px">Prices come from an open-source catalog, refreshed daily. Last verified {{PRICES_DATE}}.</p>
+<div class="card"><p class="note" id="vf" style="margin:0 0 6px">Prices come from an open-source catalog, refreshed daily and not checked against provider billing. Price catalog refreshed {{PRICES_DATE}}.</p>
 <label for="fq">Search models</label><div class="sw"><input id="fq" type="search" placeholder="Try gpt, claude or gemini" autocomplete="off"><button class="b s" id="fx" hidden>Clear</button></div>
 <p class="rc" id="cn" role="status" aria-live="polite">{{PRICE_COUNT}}</p>
 <div class="g"><div><label for="fp">Provider</label><select id="fp"><option value="">All providers</option></select></div><div class="mo"><label for="fs">Sort by</label><select id="fs"><option value="0,1">Provider (A to Z)</option><option value="1,1">Model (A to Z)</option><option value="2,1">Input price (low to high)</option><option value="3,1">Output price (low to high)</option><option value="4,-1">Context (largest first)</option></select></div></div>

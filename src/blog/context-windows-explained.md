@@ -2,12 +2,15 @@
 title: Context Windows Explained
 description: What a context window is, what counts toward it, why a bigger window costs more to use, and what happens when you go over.
 date: 2026-11-10
+updated: 2026-11-21
 image: /assets/blog/context-windows-explained-hero.jpg
 imageAlt: A context window filling with tokens
 tools: token-counter, chunker, cost-forecaster
 related: how-many-tokens-is-my-text, cut-your-llm-bill
 ---
 A model's **context window** is the maximum number of tokens it can handle in a single request. Think of it as the size of the desk the model works on: everything it needs has to fit on the desk at once.
+
+[[toc]]
 
 ## What counts toward the window
 
@@ -51,3 +54,21 @@ You pay for every token you send, so filling a very large window on every reques
 ## Context and cost over a long conversation
 
 As a chat grows, the input grows with it, until it hits the window and older turns are dropped. The [Cost Forecaster](tool:cost-forecaster) models that curve, so you can see how cost rises with conversation length and where the window caps it. To count the tokens in your own text, see [how many tokens is my text](post:how-many-tokens-is-my-text).
+
+## Frequently asked questions
+
+### What counts toward the context window?
+
+Everything in the request and the reply: the system prompt, the conversation so far, any documents, search results or tool outputs, your new question and the model's answer. Some models also count hidden reasoning tokens, so check the provider's documentation for the exact rule.
+
+### Does a bigger context window mean the model remembers more?
+
+No. Window size is not memory. Each request starts fresh, and in a chat the application re-sends earlier messages so the model can see them. If it stops sending them, the model forgets them.
+
+### What happens if my text is too long for the window?
+
+The API may reject the request with an error, or the application may silently drop the oldest messages. Quality can also drop when a window is very full, and the reply can be cut off because less room is left for the output.
+
+### Should I fill the whole window?
+
+No. You pay for every token you send, so a very large request on every call is expensive. A big window is a capacity, not a target.

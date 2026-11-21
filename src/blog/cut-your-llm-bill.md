@@ -2,6 +2,7 @@
 title: Seven Ways to Cut Your LLM Bill
 description: Practical ways to reduce LLM API spend: shorter prompts, caching, cheaper models, history limits and batch pricing, with how to judge each trade-off.
 date: 2026-11-10
+updated: 2026-11-21
 image: /assets/blog/cut-your-llm-bill-hero.jpg
 imageAlt: Bars falling to show a lower LLM bill
 tools: prompt-token-optimizer, cost-forecaster, model-prices
@@ -10,6 +11,8 @@ related: estimate-monthly-cost-of-an-llm-chatbot, compare-llm-api-prices
 Most LLM bills are driven by a few things: how many tokens you send, how many the model writes, and which model you use. These seven changes tackle each, in roughly the order worth trying.
 
 > **Start here for LLM costs.** This is the main guide in our cost series. First work out your numbers with [how to estimate the monthly cost of an LLM chatbot](post:estimate-monthly-cost-of-an-llm-chatbot), then choose a model with [how to compare LLM API prices fairly](post:compare-llm-api-prices), then use the seven changes below to bring the bill down.
+
+[[toc]]
 
 ## 1. Trim your prompts
 
@@ -44,3 +47,21 @@ Several providers discount asynchronous batch jobs by around half in exchange fo
 A change is only a saving if you can see it. Enter your workload into the [Cost Forecaster](tool:cost-forecaster) before and after the change, and compare the monthly totals. The forecaster also shows which inputs the bill is most sensitive to, so you know where to look first. For a worked monthly example, see [how to estimate the monthly cost of an LLM chatbot](post:estimate-monthly-cost-of-an-llm-chatbot), and to choose between models, see [how to compare LLM API prices fairly](post:compare-llm-api-prices).
 
 > Quality matters more than the last percent of savings. Test any cheaper model or shorter prompt on real examples before rolling it out.
+
+## Frequently asked questions
+
+### Which change should I try first?
+
+The guide lists the seven changes in roughly the order worth trying: trim your prompts, use prompt caching, then pick the right model for the job. The other four are capping the output, limiting conversation history, sending less context with retrieval, and using batch pricing for work that can wait.
+
+### Why cap the output?
+
+Output tokens usually cost several times more than input tokens, so concise answers, a maximum length and structured output instead of prose can cut the bill.
+
+### Is switching to a cheaper model always a saving?
+
+Not if the answers get worse. Quality matters more than the last percent of savings, so test any cheaper model or shorter prompt on real examples before rolling it out.
+
+### How do I know a change actually saved money?
+
+Enter your workload into the Cost Forecaster before and after the change and compare the monthly totals. It also shows which inputs the bill is most sensitive to.

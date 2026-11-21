@@ -1,7 +1,32 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}{{PROSE_CSS}}</head><body>
 {{HEADER}}
-<main class="prose"><h1>Blog</h1><p class="meta">Plain-English guides to AI costs, tokens and prompts.</p>
-<div class="posts">{{POST_CARDS}}</div></main>
+<style>
+.prose{max-width:960px}.crumbs{max-width:960px}
+.bf{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0 8px}.bf input{flex:1 1 260px;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:11px 12px;font:inherit}.bf input:focus{outline:2px solid var(--ac);outline-offset:1px}.bf span{color:var(--mu);font-size:14px}
+.bsel{white-space:nowrap;display:inline-flex;align-items:center;gap:8px;color:var(--mu);font-size:14px}.bsel select{background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:10px;font:inherit;font-size:14px}
+.bchips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.bchips a{border:1px solid var(--bd);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mu);text-decoration:none}.bchips a i{font-style:normal;margin-left:6px;color:var(--mu2)}.bchips a:hover{border-color:var(--ac);color:var(--ac2)}.bchips a.on{background:var(--ac);border-color:var(--ac);color:#fff}.bchips a.on i{color:#fff}
+.bf[hidden],.bchips[hidden]{display:none}
+/* Start here panel */
+.bs0{margin:18px 0 8px;padding:20px;border:1px solid var(--ac);border-radius:18px;background:linear-gradient(135deg,var(--fl),var(--sf))}.bs0[hidden]{display:none}
+.bsh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:14px}.prose .bs0 h2{margin:0;font-size:20px;line-height:1.2;color:var(--tx)}.bsub{margin:0;color:var(--mu);font-size:14px}
+.sg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.sg .bc{flex-direction:column;background:var(--bg)}.sg .bx{padding:12px}.sg .bx b{font-size:15px;margin:0 0 4px}.sg .bd,.sg .ri,.sg .btg{display:none}.sg .bm{margin-top:auto}
+.nb{display:block;width:24px;height:24px;border-radius:50%;background:var(--ac);color:#fff;font:700 13px/24px system-ui,sans-serif;text-align:center;margin-bottom:8px}.sg .bmd{display:none}
+/* All guides list */
+.bh{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--bd)}.prose .bh h2{margin:0;font-size:20px;line-height:1.2}.bh span{color:var(--mu);font-size:14px}
+.bl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.bc{display:flex;flex-direction:column;background:var(--sf);border:1px solid var(--bd);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--tx);transition:border-color .12s,transform .12s}.bc:hover{border-color:var(--ac)}.bc[hidden]{display:none!important}.bc.more{display:none}
+.bc img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:var(--hv)}
+.bx{display:flex;flex-direction:column;flex:1;min-width:0;padding:14px 16px 14px}.btg{display:block;color:var(--ac2);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}.bx b{display:block;font-size:18px;line-height:1.3;margin-bottom:6px}
+.bd{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--mu);font-size:14px}.ri{display:block;color:var(--tx2);font-size:13px;margin-top:8px}.ri em{font-style:normal;font-weight:600;color:var(--ac2)}.bm{display:block;color:var(--mu2);font-size:12px;margin-top:auto;padding-top:10px}
+.bytopic .btg{display:none}.bth{grid-column:1/-1;margin:22px 0 0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ac2);scroll-margin-top:70px}.prose .bth{margin:22px 0 0;font-size:13px;line-height:1.3;font-weight:600}.bth span{margin-left:8px;color:var(--mu2);font-weight:400}
+.bmore{grid-column:1/-1;justify-self:start;background:transparent;color:var(--ac2);border:1px solid var(--bd);border-radius:10px;padding:9px 16px;font:inherit;font-size:14px;cursor:pointer}.bmore:hover{border-color:var(--ac)}
+.bn{color:var(--mu);margin:24px 0 0}.bn[hidden]{display:none}
+@media(max-width:760px){.sg{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -20px;padding:2px 20px 6px;scrollbar-width:none}.sg .bc{flex:0 0 72%;scroll-snap-align:start}.bs0{padding:16px}.bs0{margin-left:0;margin-right:0}.bchips{flex-wrap:nowrap;overflow-x:auto;margin-right:-20px;padding-right:20px;scrollbar-width:none}.bchips a{white-space:nowrap;flex:none}}
+@media(max-width:620px){.bl{grid-template-columns:1fr}.bx b{font-size:17px}}
+</style>
+<main class="prose"><h1>Blog</h1><p class="meta">Plain-English guides to LLM pricing, tokens, context windows, prompts and cutting AI costs. {{BLOG_COUNT}} guides. Filter by topic, or sort them your way.</p>
+{{BLOG_BODY}}</main>
 {{AD:bottom}}
 {{FOOTER}}
 </body></html>
