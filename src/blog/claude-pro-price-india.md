@@ -2,6 +2,7 @@
 title: Claude Pro Price in India: Cheaper in the App?
 description: Claude Pro costs ₹2,399 a month on the website and ₹1,999 in the Android app. See Pro, Max and Ultra prices in India, the GST caveat and when the API is cheaper.
 date: 2026-11-12
+updated: 2026-11-21
 checked: 2026-11-12
 image: /assets/blog/claude-pro-price-india-hero.jpg
 imageAlt: Claude Pro in India costs 1,999 rupees a month in the Android app and 2,399 rupees a month on the website
@@ -93,3 +94,7 @@ We could not confirm it. The website says its price includes GST. The Google Pla
 ### Do prices change?
 
 Yes. Anthropic says prices and plans are subject to change. The date at the top of this page shows when we last checked the subscription prices, and the API table above refreshes automatically.
+
+## Sources
+
+- Prices and plan details: our own on-screen checks of claude.ai and the Claude Android app in India on 12 November 2026. No official page confirmed them, so check the price at checkout before you subscribe.

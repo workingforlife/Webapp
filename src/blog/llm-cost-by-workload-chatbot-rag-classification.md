@@ -2,6 +2,7 @@
 title: What LLM Workloads Cost: Four Examples
 description: What a chatbot, document Q&A, summarising and classification job cost each month across 190+ models, and why the spread is so wide.
 date: 2026-11-19
+updated: 2026-11-21
 image: /assets/blog/llm-cost-by-workload-chatbot-rag-classification-hero.jpg
 imageAlt: Four workload types shown with a wide range of monthly costs
 tools: model-picker, cost-forecaster, model-prices
@@ -63,3 +64,9 @@ They are from 18 November 2026. Prices change, so open the links to see today's 
 ### Do these figures include caching or batch discounts?
 
 No. They use plain input and output prices. You can add a cache share and a batch discount in the Model Picker.
+
+## Sources
+
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- [OpenAI Help: What are tokens and how to count them](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them) (rules of thumb for English, input, output and cached tokens, tokens billed per use)
+- Prices and spreads: calculated from our own price list dated 18 November 2026, which comes from the LiteLLM community price list and is not verified against provider billing.

@@ -65,3 +65,13 @@ Not if the answers get worse. Quality matters more than the last percent of savi
 ### How do I know a change actually saved money?
 
 Enter your workload into the Cost Forecaster before and after the change and compare the monthly totals. It also shows which inputs the bill is most sensitive to.
+
+## Sources
+
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Anthropic: Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)
+- [OpenAI: Prompt caching](https://developers.openai.com/api/docs/guides/prompt-caching) (automatic for prompts of 1,024 tokens or more, cached input billed at a reduced rate)
+- [Anthropic: Batch processing](https://platform.claude.com/docs/en/build-with-claude/batch-processing)
+- [OpenAI: Batch API guide](https://developers.openai.com/api/docs/guides/batch)
+- [Google: Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) (input and output prices, context caching, 50% batch reduction)
+- [Anthropic: Optimizing for cost and intelligence](https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence)

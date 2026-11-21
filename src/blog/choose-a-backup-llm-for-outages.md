@@ -2,6 +2,7 @@
 title: How to Choose a Backup LLM for Outages
 description: Five checks for picking a fallback model: a different provider, enough context, similar output, enough rate limit and a bill you can predict.
 date: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/choose-a-backup-llm-for-outages-hero.jpg
 imageAlt: A checklist beside a main model and a backup model
 tools: failover-cost-estimator, model-picker, model-prices
@@ -52,3 +53,13 @@ That depends on the product. Some teams accept lower quality for a few hours, ot
 ### Can I use a cheaper model as the backup?
 
 Yes, if its answers are good enough. It lowers the token bill during the outage, but the quality drop is a cost of its own.
+
+## Sources
+
+- [Anthropic Help: Our approach to rate limits for the Claude API](https://support.claude.com/en/articles/8243635-our-approach-to-rate-limits) (new organizations may start in an Evaluation tier with lower limits)
+- [OpenAI: Rate limits](https://developers.openai.com/api/docs/guides/rate-limits) (limits depend on your usage tier and rise as spend grows)
+- [Claude status](https://status.claude.com/) (incident history)
+- [OpenAI status](https://status.openai.com/) (incident history)
+- [OpenAI status page write-up, 26 December 2024](https://status.openai.com/incidents/6bwlxnvdncnm/write-up)
+- [Search Engine Journal: OpenAI blames cloud provider for ChatGPT outage](https://searchenginejournal.com/openai-blames-cloud-provider-for-chatgpt-outage/536650)
+- [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows) (each turn accumulates in the window, input and output both count toward it)

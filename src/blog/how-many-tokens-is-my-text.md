@@ -40,7 +40,7 @@ If your workload is mostly one of these, measure it instead of guessing. For sam
 
 ## Exact counts and estimates
 
-Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so counts for OpenAI models can be exact. Anthropic and Google do not offer one that runs offline, so for those models any tool can only estimate. An estimate is fine for planning but not for hitting a hard limit exactly, and the gap can be large: Anthropic says its newer Claude models count about 30 percent more tokens than earlier ones for the same text. See [why token counts differ between models](post:why-token-counts-differ-between-models).
+Each model family has its own tokenizer, so the same text can have a different count in different models. OpenAI publishes its tokenizers, so counts for OpenAI models can be exact. As far as we can tell, neither Anthropic nor Google publishes a tokenizer that can run in your browser, so for those models our tools can only estimate. An estimate is fine for planning but not for hitting a hard limit exactly, and the gap can be large: Anthropic says its newer Claude models count about 30 percent more tokens than earlier ones for the same text. See [why token counts differ between models](post:why-token-counts-differ-between-models).
 
 For images, PDFs and audio, see [how many tokens each input type uses](post:how-many-tokens-by-input-type).
 
@@ -81,3 +81,9 @@ Symbols, indentation, brackets, quotes and keys all count, and numbers are split
 ### Is my text uploaded when I count it?
 
 No. The Token Counter runs in your browser and nothing is uploaded.
+
+## Sources
+
+- [OpenAI Help: What are tokens and how to count them](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them) (rules of thumb for English, input, output and cached tokens, tokens billed per use)
+- [Anthropic: Token counting](https://platform.claude.com/docs/en/build-with-claude/token-counting)
+- [Google: Understand and count tokens](https://ai.google.dev/gemini-api/docs/interactions/tokens)

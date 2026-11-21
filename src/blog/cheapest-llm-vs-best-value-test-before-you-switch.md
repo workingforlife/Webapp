@@ -2,6 +2,7 @@
 title: Cheapest LLM vs Best Value: How to Test
 description: The cheapest model is not always the cheapest to run. Learn a simple test using your own examples and a cost-per-good-answer figure to compare models.
 date: 2026-11-19
+updated: 2026-11-21
 image: /assets/blog/cheapest-llm-vs-best-value-test-before-you-switch-hero.jpg
 imageAlt: Two models compared on cost per good answer
 tools: model-picker, cost-forecaster, token-counter
@@ -83,3 +84,10 @@ If people correct rejected answers, yes. Add an estimate of their time per fix t
 ### How often should I retest?
 
 When you change the prompt, when a model is updated or replaced, and when prices change enough to matter.
+
+## Sources
+
+- [Anthropic: Optimizing for cost and intelligence](https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence)
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- The testing method: our own recommendation, not a published standard.

@@ -2,6 +2,7 @@
 title: Why LLM Price Lists Change: What to Trust
 description: Price list changes can be real cuts, corrections, renamed models or catalog glitches. Here is how to tell them apart before you change anything.
 date: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/why-llm-price-list-changes-and-when-to-trust-them-hero.jpg
 imageAlt: A magnifying glass over a price change marker with question marks
 tools: price-changes, model-prices
@@ -44,3 +45,10 @@ Providers often publish a dated version and a short alias. When they change in e
 ### Can the catalog be wrong?
 
 Yes. It is community maintained and not checked against provider billing, so confirm any figure that matters.
+
+## Sources
+
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Google: Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) (input and output prices, context caching, 50% batch reduction)
+- Price movements described: from our own daily snapshots of the catalog, not from provider announcements.

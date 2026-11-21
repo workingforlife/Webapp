@@ -2,6 +2,7 @@
 title: The Real Cost of an LLM Outage
 description: The token bill is the smallest part of an outage. Here is a checklist of what else it costs and a simple way to decide how much backup is worth it.
 date: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/real-cost-of-an-llm-outage-hero.jpg
 imageAlt: A small token cost beside larger blocks for lost sales, support and engineering time
 tools: failover-cost-estimator, cost-forecaster
@@ -47,3 +48,10 @@ Compare what an hour of downtime costs you with what a ready backup costs to kee
 ### Should I retry failed requests?
 
 A few retries with a delay can help, but repeated retries against a failing provider can add load. Use a circuit breaker to switch instead.
+
+## Sources
+
+- [Claude status](https://status.claude.com/) (incident history)
+- [OpenAI status](https://status.openai.com/) (incident history)
+- [OpenAI status page write-up, 26 December 2024](https://status.openai.com/incidents/6bwlxnvdncnm/write-up)
+- Cost components: our own reasoning and the worked example in our outage guides, not a published industry figure.

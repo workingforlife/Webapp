@@ -2,6 +2,7 @@
 title: How to Choose an LLM for Your Budget
 description: A five-step way to shortlist AI models by what your workload costs, then test the shortlist on your own examples before you commit to one.
 date: 2026-11-19
+updated: 2026-11-21
 image: /assets/blog/choose-an-llm-for-your-budget-hero.jpg
 imageAlt: A long list of models narrowed to a short list by cost and context
 tools: model-picker, model-prices, cost-forecaster, token-counter
@@ -73,3 +74,11 @@ Three to five is usually enough: one or two cheap ones, a mid-priced one and a s
 ### Does the Model Picker rank by quality?
 
 No. It ranks by cost for your workload and filters by context size. It has no quality scores.
+
+## Sources
+
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows) (each turn accumulates in the window, input and output both count toward it)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Google: Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) (input and output prices, context caching, 50% batch reduction)
+- Prices and spreads: calculated from our own price list dated 18 November 2026, which comes from the LiteLLM community price list and is not verified against provider billing.

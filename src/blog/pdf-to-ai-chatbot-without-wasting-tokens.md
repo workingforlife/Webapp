@@ -2,7 +2,7 @@
 title: PDF to AI Chatbot Without Wasting Tokens
 description: Pasting a PDF into an AI chatbot wastes tokens on headers and page numbers. Extract clean text first and check the size before you send.
 date: 2026-11-19
-updated: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/pdf-to-ai-chatbot-without-wasting-tokens-hero.jpg
 imageAlt: A PDF page being reduced to a few lines of clean text
 tools: pdf-to-text, token-counter, chunker
@@ -71,3 +71,11 @@ It removes short lines that repeat on at least 40 percent of the pages, such as 
 ### How many tokens will my PDF use?
 
 The tool shows an estimate. For a specific model, check the text in the Token Counter, because different models count tokens differently.
+
+## Sources
+
+- [Anthropic: PDF support](https://platform.claude.com/docs/en/build-with-claude/pdf-support) (page converted to an image plus extracted text)
+- [OpenAI: File inputs](https://developers.openai.com/api/docs/guides/file-inputs) (PDF parsing includes text and page images)
+- [OpenAI help: ChatGPT Enterprise file uploads](https://help.openai.com/en/articles/10029836) (110,000-token limit and retrieval for long PDFs)
+- [Anthropic help: Upload files to Claude](https://support.claude.com/en/articles/8241126-upload-files-to-claude) (content must fit the context window)
+- The 40 percent repeated-line rule: how our PDF & Web to Text tool works.

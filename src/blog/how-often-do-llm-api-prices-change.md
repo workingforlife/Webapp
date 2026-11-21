@@ -2,6 +2,7 @@
 title: How Often Do LLM API Prices Change?
 description: What three weeks of daily price snapshots show: new models arrive often, list price changes are rare, and some changes reverse within days.
 date: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/how-often-do-llm-api-prices-change-hero.jpg
 imageAlt: A timeline of dated markers showing a few price changes among many new models
 tools: price-changes, model-prices, model-picker
@@ -47,3 +48,10 @@ Prices are not guaranteed to fall, and our short log does not show a trend. Comp
 ### Where does the data come from?
 
 From an open-source price catalog that we download daily. It is not verified against provider billing, so confirm on the provider's pricing page.
+
+## Sources
+
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Google: Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) (input and output prices, context caching, 50% batch reduction)
+- All counts and dates: from our own daily snapshots of the price catalog between 27 October and 19 November 2026.

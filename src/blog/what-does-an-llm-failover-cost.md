@@ -2,6 +2,7 @@
 title: What Does an LLM Failover Cost?
 description: A worked example of the extra token bill when traffic moves to a backup model during an outage, for 1, 12 and 48 hours, with the method to run your own.
 date: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/what-does-an-llm-failover-cost-hero.jpg
 imageAlt: Traffic switching from a main model to a backup model with a small cost marker
 tools: failover-cost-estimator, cost-forecaster, model-prices
@@ -34,7 +35,7 @@ The numbers below use prices from our list dated 18 November 2026. Prices change
 | 12 hours | about 1,644 | about $5.75 |
 | 48 hours | about 6,575 | about $23.01 |
 
-These are estimates under a simple assumption: traffic is even, and requests that fail on the main model are not billed. Even the 48-hour case adds about 2.6% to a month's bill in this example.
+These are estimates under a simple assumption: traffic is even, and requests that fail on the main model are not billed. We did not find the providers' documentation stating how failed requests are billed, so confirm this with your provider. Even the 48-hour case adds about 2.6% to a month's bill in this example.
 
 ## What changes the answer
 
@@ -62,3 +63,11 @@ With most pay-as-you-go APIs, you pay only for tokens used, but check your provi
 ### Is the token bill the main cost of an outage?
 
 Usually not. Lost sales, support load and engineering time are often larger. The token bill is the part you can estimate precisely.
+
+## Sources
+
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Claude status](https://status.claude.com/) (incident history)
+- [OpenAI status](https://status.openai.com/) (incident history)
+- Worked example: calculated from our own price list dated 18 November 2026 under the stated assumptions.

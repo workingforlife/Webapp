@@ -2,6 +2,7 @@
 title: Reusable Prompt Templates With Variables
 description: Write a prompt once and fill in the blanks each time. Build reusable AI prompt templates with variables, with three examples and sharing tips.
 date: 2026-11-19
+updated: 2026-11-21
 image: /assets/blog/reusable-prompt-templates-hero.jpg
 imageAlt: A prompt template with highlighted variable blanks
 tools: prompt-builder, prompt-token-optimizer, token-counter
@@ -86,3 +87,9 @@ No. Everything runs in your browser.
 ### How many variables should a template have?
 
 As few as you need. Use variables for the details that really change each time, and keep the rest as fixed wording.
+
+## Sources
+
+- [Anthropic: Prompt templates and variables](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompt-templates-and-variables) (fixed content and variable content)
+- [Anthropic: Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)
+- [OpenAI: Prompt caching](https://developers.openai.com/api/docs/guides/prompt-caching) (automatic for prompts of 1,024 tokens or more, cached input billed at a reduced rate)

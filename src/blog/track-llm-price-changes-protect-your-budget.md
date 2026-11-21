@@ -2,6 +2,7 @@
 title: How to Track LLM Price Changes
 description: A simple routine for catching price rises, context cuts and removed models before they hit your AI bill, with what to do when something changes.
 date: 2026-11-20
+updated: 2026-11-21
 image: /assets/blog/track-llm-price-changes-protect-your-budget-hero.jpg
 imageAlt: A budget line with markers for price, context and model changes
 tools: price-changes, model-picker, cost-forecaster
@@ -46,3 +47,10 @@ No. It shows the date we first saw the change, which can be later than the provi
 ### What should I do if a model I use disappears from the list?
 
 Check the provider's own pages to see whether it was retired or renamed, then compare alternatives in the [Model Picker](tool:model-picker).
+
+## Sources
+
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Google: Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) (input and output prices, context caching, 50% batch reduction)
+- Change dates: the date we first saw the change in our daily snapshots, which can be later than the provider's announcement.

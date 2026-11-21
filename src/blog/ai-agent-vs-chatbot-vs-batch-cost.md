@@ -2,6 +2,7 @@
 title: AI Agent vs Chatbot vs Batch Job Costs
 description: Agents, chatbots and batch jobs use tokens differently. See why an agent can cost far more than one call, with a worked token example and a forecast.
 date: 2026-11-19
+updated: 2026-11-21
 image: /assets/blog/ai-agent-vs-chatbot-vs-batch-cost-hero.jpg
 imageAlt: Bars showing input tokens growing from a batch call to a chatbot to an agent
 tools: cost-forecaster, token-counter, model-prices
@@ -77,3 +78,12 @@ Limit the number of steps, keep tool results short, and use caching where it app
 ### Does a batch job cost less?
 
 A batch job avoids the growing history, so its cost is a straight line. Some providers also discount batch work, so check their current terms.
+
+## Sources
+
+- [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows) (each turn accumulates in the window, input and output both count toward it)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [OpenAI Help: What are tokens and how to count them](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them) (rules of thumb for English, input, output and cached tokens, tokens billed per use)
+- [Anthropic: Batch processing](https://platform.claude.com/docs/en/build-with-claude/batch-processing)
+- [OpenAI: Batch API guide](https://developers.openai.com/api/docs/guides/batch)
+- Token totals: worked example with the stated assumptions. Prices: our price list, which comes from the LiteLLM community price list.

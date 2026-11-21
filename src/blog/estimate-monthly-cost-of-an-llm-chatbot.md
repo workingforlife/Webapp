@@ -81,3 +81,11 @@ A margin. Real traffic includes retries, longer conversations than average and t
 ### What lowers a chatbot's bill?
 
 Prompt caching for the repeated start of the prompt, history limits that cap or summarize old turns, the context window, which drops older turns once it is full, and shorter replies, since output is the pricier side.
+
+## Sources
+
+- [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows) (each turn accumulates in the window, input and output both count toward it)
+- [OpenAI Help: What are tokens and how to count them](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them) (rules of thumb for English, input, output and cached tokens, tokens billed per use)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Anthropic: Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)
+- Worked example: made-up round numbers and hypothetical prices, shown only to demonstrate the arithmetic.

@@ -65,3 +65,11 @@ From an open-source catalog that is refreshed daily. They are not verified again
 ### Should I factor in answer quality?
 
 Yes. The cheapest model that gives poor answers costs more in retries, fixes and unhappy users, so test two or three candidates on real examples.
+
+## Sources
+
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
+- [Google: Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) (input and output prices, context caching, 50% batch reduction)
+- [OpenAI Help: What are tokens and how to count them](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them) (rules of thumb for English, input, output and cached tokens, tokens billed per use)
+- [LiteLLM: model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) (the community price list our catalog comes from)
+- Prices on this site: from the LiteLLM community price list, not verified against provider billing.

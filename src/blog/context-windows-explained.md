@@ -72,3 +72,11 @@ The API may reject the request with an error, or the application may silently dr
 ### Should I fill the whole window?
 
 No. You pay for every token you send, so a very large request on every call is expensive. A big window is a capacity, not a target.
+
+## Sources
+
+- [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows) (each turn accumulates in the window, input and output both count toward it, and more context is not automatically better)
+- [Chroma Research: Context Rot](https://research.trychroma.com/context-rot) (in tests of 18 models, performance became less reliable as input length grew)
+- [OpenAI Help: What are tokens and how to count them](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them) (rules of thumb for English, input, output and cached tokens, tokens billed per use)
+- [Google: Understand and count tokens](https://ai.google.dev/gemini-api/docs/interactions/tokens)
+- [Anthropic: Pricing](https://platform.claude.com/docs/en/about-claude/pricing) (separate input and output prices, prompt caching multipliers, 50% Batch API discount)
