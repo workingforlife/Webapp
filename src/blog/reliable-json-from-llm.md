@@ -2,6 +2,7 @@
 title: Get Reliable JSON From an LLM
 description: Why LLM output sometimes breaks as JSON, how structured outputs and schemas help, and a simple validate-and-retry routine you can use in your own app.
 date: 2026-11-19
+updated: 2026-11-22
 image: /assets/blog/reliable-json-from-llm-hero.jpg
 imageAlt: A JSON object passing a schema check
 tools: json-validator, prompt-builder, token-counter
@@ -19,7 +20,7 @@ When you ask for structured output, the reply can arrive:
 - **With extra words**, such as "Here is your JSON:" before it.
 - **With a trailing comma** after the last item.
 - **With a missing field** or a number written as text.
-- **Cut off**, if the reply hit the output limit before it finished.
+- **Cut off**, if the reply hit the output limit before it finished. See [why AI answers get cut off](post:why-ai-answers-get-cut-off-max-output-tokens).
 
 The first three are syntax problems. The last two are structure problems, and they need a schema to catch.
 

@@ -2,7 +2,7 @@
 title: Seven Ways to Cut Your LLM Bill
 description: Practical ways to reduce LLM API spend: shorter prompts, caching, cheaper models, history limits and batch pricing, with how to judge each trade-off.
 date: 2026-11-10
-updated: 2026-11-21
+updated: 2026-11-22
 image: /assets/blog/cut-your-llm-bill-hero.jpg
 imageAlt: Bars falling to show a lower LLM bill
 tools: prompt-token-optimizer, cost-forecaster, model-prices
@@ -16,7 +16,7 @@ Most LLM bills are driven by a few things: how many tokens you send, how many th
 
 ## 1. Trim your prompts
 
-Prompts collect filler: repeated instructions, polite padding, examples nobody needs. Because the same prompt is sent on every request, a few hundred wasted tokens multiplies fast. The [Prompt Token Optimizer](tool:prompt-token-optimizer) finds filler and repeats and shows every change, so you accept only what is safe.
+Prompts collect filler: repeated instructions, polite padding, examples nobody needs. Because the same prompt is sent on every request, a few hundred wasted tokens multiplies fast. The [Prompt Token Optimizer](tool:prompt-token-optimizer) finds filler and repeats and shows every change, so you accept only what is safe. For a step-by-step method, see [how to shorten a prompt without losing quality](post:shorten-a-prompt-without-losing-quality).
 
 ## 2. Use prompt caching
 

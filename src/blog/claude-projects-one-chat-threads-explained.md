@@ -2,6 +2,7 @@
 title: Claude Projects Is Now One Chat With Threads
 description: Claude Projects is now one long chat that starts parallel threads. What changed, what is confirmed about buttons and reactions, and the usage catch.
 date: 2026-11-20
+updated: 2026-11-22
 image: /assets/blog/claude-projects-one-chat-threads-explained-hero.jpg
 imageAlt: One project chat in the middle starting several parallel threads
 tools: cost-forecaster, token-counter
@@ -53,6 +54,18 @@ Separately, on 16 September 2026 Anthropic merged Cowork and chat into one Claud
 
 Each thread is a full session, and several can run at once, so a project can use your plan's limits faster than a single chat. A thread that reaches a limit waits and continues when the limit resets. The docs also set a daily cap on new threads; the figure differs between sources, so check the current docs. For the cost logic behind this, see [why agents cost more than a chatbot](post:ai-agent-vs-chatbot-vs-batch-cost) and [how context windows work](post:context-windows-explained). If you build on the API, use the [Cost Forecaster](tool:cost-forecaster) to model an agent-style workload.
 
+## Do new chats in a project cost more?
+
+This part applies to projects that still work the older way, where a project is a folder and every chat starts with its instructions and files.
+
+Anthropic's usage guidance says that content in projects is cached and counts less against your limits when it is reused. The cache expires after a period of inactivity, so if you come back to a project after a long break, your first message counts that content in full again.
+
+A new chat is not free, though. Anthropic lists message length, file attachment size, current conversation length, tool use, model choice and artifact use as factors that affect your limits. Long conversations are one of them, so starting a fresh chat for a new task can help.
+
+When project knowledge gets close to the context window limit, Claude switches to a retrieval mode that searches your files instead of loading all of them. Chats inside a project do not see each other, but on paid plans you can ask Claude to search your previous conversations.
+
+This is the app's own usage accounting. API prompt caching, which is billed per token, is a separate feature that we explain in [prompt caching and batch discounts](post:prompt-caching-and-batch-discounts-explained). For why long histories cost more, see [how context windows work](post:context-windows-explained).
+
 ## Tips for the new layout
 
 1. Put standing rules in the project instructions, not in individual messages.
@@ -78,6 +91,18 @@ Anthropic's documentation does not describe emoji reactions. One independent wri
 
 Yes, they can. Each thread is a full session, so several running at once use limits faster than one chat.
 
+### Does a new chat in a project use more of my limit?
+
+Not necessarily. Anthropic says content in projects is cached and counts less against your limits when reused. A long conversation, large attachments and heavy tool use still add to your usage.
+
+### Why did my first message after a break use more?
+
+Anthropic says caches expire after a period of inactivity. When you return after a long break, your first message counts the project content in full again.
+
+### What happens when project knowledge gets large?
+
+When it approaches the context window limit, Claude automatically switches to a retrieval mode that searches your files for relevant parts, which Anthropic says expands capacity by up to 10 times.
+
 ### Can I share a project?
 
 The docs we read say a project belongs to one user. A 13 November update reportedly added read-only sharing of a single thread; verify in the docs.
@@ -86,6 +111,8 @@ Sources:
 - [Projects redesigned: from folder to conversation (Anthropic, 17 Sept 2026)](https://claude.com/blog/projects-redesigned)
 - [Let Claude coordinate ongoing work with Projects (Claude Code docs)](https://code.claude.com/docs/en/claude-projects)
 - [What are projects? (Claude Help Center)](https://support.claude.com/en/articles/9517075-what-are-projects)
+- [Usage limit best practices (Claude Help Center)](https://support.claude.com/en/articles/9797557-usage-limit-best-practices)
+- [Retrieval augmented generation (RAG) for projects (Claude Help Center)](https://support.claude.com/en/articles/11473015-retrieval-augmented-generation-rag-for-projects)
 - [Claude release notes (Help Center)](https://support.claude.com/en/articles/12138966-release-notes)
 - [Claude Code Projects update, 13 Nov 2026 (explainx, third-party)](https://explainx.ai/blog/claude-code-projects-proactive-coordinator-november-2026)
 - [Claude Projects decoded (independent author)](https://akshaychugh.xyz/writings/png/claude-projects-hearthbot)

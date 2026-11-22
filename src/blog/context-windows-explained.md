@@ -2,7 +2,7 @@
 title: Context Windows Explained
 description: What a context window is, what counts toward it, why a bigger window costs more to use, and what happens when you go over.
 date: 2026-11-10
-updated: 2026-11-21
+updated: 2026-11-22
 image: /assets/blog/context-windows-explained-hero.jpg
 imageAlt: A context window filling with tokens
 tools: token-counter, chunker, cost-forecaster
@@ -37,6 +37,7 @@ You pay for every token you send, so filling a very large window on every reques
 - The API may reject the request with an error.
 - Some applications silently drop the oldest messages to make room.
 - Quality can drop when a window is very full, because relevant details are harder to pick out of a huge input.
+- The reply can be cut off, because less room is left for the output. See [why AI answers get cut off](post:why-ai-answers-get-cut-off-max-output-tokens).
 
 ## How to check whether your text fits
 
@@ -47,7 +48,7 @@ You pay for every token you send, so filling a very large window on every reques
 ## When your text is too long
 
 - **Split it.** Break the document into overlapping chunks with the [Text Chunker](tool:chunker) and process them separately. For PDFs, [extract clean text first](post:pdf-to-ai-chatbot-without-wasting-tokens).
-- **Retrieve.** Send only the passages relevant to each question rather than the whole document.
+- **Retrieve.** Send only the passages relevant to each question rather than the whole document. [Choosing chunk size and overlap](post:chunk-size-and-overlap-for-rag) matters here.
 - **Summarize.** Replace old history with a short summary.
 - **Trim.** Remove boilerplate and repeated content.
 

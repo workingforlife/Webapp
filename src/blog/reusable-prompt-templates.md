@@ -2,7 +2,7 @@
 title: Reusable Prompt Templates With Variables
 description: Write a prompt once and fill in the blanks each time. Build reusable AI prompt templates with variables, with three examples and sharing tips.
 date: 2026-11-19
-updated: 2026-11-21
+updated: 2026-11-22
 image: /assets/blog/reusable-prompt-templates-hero.jpg
 imageAlt: A prompt template with highlighted variable blanks
 tools: prompt-builder, prompt-token-optimizer, token-counter
@@ -56,7 +56,7 @@ The last one pairs well with [getting reliable JSON from an LLM](post:reliable-j
 
 - **Name variables for what they hold.** `{{customer_message}}` is clearer than `{{input1}}`.
 - **Keep the fixed part stable.** Put what never changes in the template and what changes in variables, so results stay consistent.
-- **Say the output format in the template**, such as the length or "return only JSON", so you do not forget it.
+- **Say the output format in the template**, such as the length or "return only JSON", so you do not forget it. Adding "reply in plain text, with no Markdown" avoids stray symbols; for text that already has them, see [how to remove Markdown and hidden characters](post:remove-markdown-and-hidden-characters-from-ai-text).
 - **Do not add a variable for everything.** A few well-chosen blanks beat ten.
 - **Test with a real example** before you save it, and keep the best version.
 
