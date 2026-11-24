@@ -135,6 +135,15 @@
    "desc": "Validate model output against a simple schema.",
    "tag": "Check JSON against a schema",
    "when": "A model returned JSON and you need to know whether it is valid and has the right fields."
+  },
+  {
+   "slug": "json-repair",
+   "name": "JSON Repair",
+   "group": 3,
+   "desc": "Fix broken JSON from AI models: trailing commas, single quotes, code fences and cut-off output, with every change listed.",
+   "title": "JSON Repair and Formatter for AI Output",
+   "tag": "Fix broken JSON from models",
+   "when": "A model's JSON will not parse: it has trailing commas, code fences or single quotes, or was cut off."
   }
  ],
  "providers": [

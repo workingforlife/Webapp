@@ -1,0 +1,172 @@
+<!--slug:json-repair-->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}<style>
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}.chips .c{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--bg);color:var(--ac2);border-radius:999px;padding:6px 12px;margin:0}
+.io{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.io textarea{min-height:300px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;overflow:auto;tab-size:2}
+.ob{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:end;margin:10px 0 0}.ob>div{min-width:150px}.ob label{margin:0 0 4px}.ob .ck{margin:0 0 8px}
+.ck{display:flex;gap:8px;align-items:center;color:var(--tx)}.ck input{width:18px;height:18px;accent-color:var(--ac)}
+.stt{border-radius:10px;padding:10px 14px;margin:0 0 12px;border:1px solid var(--bd);font-weight:600}.stt.ok{border-color:var(--ok);color:var(--ok)}.stt.er{border-color:var(--er);color:var(--er)}.stt.fx{border-color:var(--ac2);color:var(--ac2)}
+.fx h3{font-size:16px;margin:14px 0 6px}.fx ul{margin:0;padding-left:20px}.fx li{margin:4px 0}.fx .w{color:#f59e0b}
+.eb{white-space:pre-wrap;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;margin:8px 0 0;overflow:auto}
+</style></head><body>
+{{HEADER}}
+<main><h1>JSON Repair and Formatter</h1><p class="lead">Paste broken JSON from ChatGPT, Claude or any model. Fix trailing commas, single quotes, unquoted keys, comments, code fences and cut-off output, and see every change made.</p>
+<div class="card"><div class="chips" aria-label="Examples"><button class="c" data-e="fence">Wrapped in text and code fence</button><button class="c" data-e="py">Single quotes and True/None</button><button class="c" data-e="cut">Cut off mid-way</button><button class="c" data-e="mess">Comments, unquoted keys, trailing commas</button></div>
+<div class="io"><div><label for="ji">Broken or messy JSON</label><textarea id="ji" spellcheck="false" placeholder="Paste JSON here. Nothing is uploaded."></textarea></div><div><label for="jo">Repaired JSON</label><textarea id="jo" spellcheck="false" readonly></textarea></div></div>
+<div class="ob"><div><label for="ind">Layout</label><select id="ind"><option value="2">Indent 2 spaces</option><option value="4">Indent 4 spaces</option><option value="t">Indent with tabs</option><option value="m">Minified</option></select></div><label class="ck"><input type="checkbox" id="srt">Sort keys A to Z</label><div><button class="b" id="cp">Copy Result</button><button class="b s" id="dl">Download .json</button><button class="b s" id="sw">Use Result as Input</button></div></div>
+<p class="note" id="am" role="status" style="margin:8px 0 0"></p></div>
+<div class="card fx" id="rp" role="region" aria-live="polite" aria-label="Repair report"></div>
+<div class="about"><h2>What It Is For</h2><p>Models asked for JSON often return something that almost parses: wrapped in a Markdown code fence, introduced by a sentence, ended with a trailing comma, written with Python-style quotes, or cut off when the reply hit its length limit. This tool repairs those cases in your browser and lists each change, so you can see exactly what was touched. It also formats valid JSON, with the indent you choose and optional key sorting.</p>
+<h2>What It Fixes</h2><ul><li>Markdown code fences and text before or after the JSON</li><li>Comments (<code>//</code> and <code>/* */</code>)</li><li>Single quotes, curly quotes and unquoted keys</li><li>Trailing commas and missing commas between items</li><li><code>True</code>, <code>False</code> and <code>None</code> from Python</li><li>Line breaks and tabs typed inside strings, and invalid escapes</li><li>Number formats such as a leading plus sign, <code>.5</code> or leading zeros</li></ul>
+<h2>When It Has To Guess</h2><p>Some repairs are guesses, and the tool lists them in a separate "Check these" section. Closing the brackets of cut-off output, dropping an unfinished last item, and replacing <code>NaN</code>, <code>Infinity</code> or <code>undefined</code> with <code>null</code> all change what the data means or how much of it there is. Cut-off output is missing whatever the model never wrote, so check any repaired result before you rely on it.</p>
+<h2>What It Does Not Do</h2><ul><li>It does not check your data against a schema. Use the <a href="{{HREF:json-validator}}">JSON Validator</a> for that.</li><li>It does not fix unescaped double quotes inside a string, because the right fix is ambiguous. It reports an error instead.</li><li>It cannot recover content that was never produced. See <a href="/blog/reliable-json-from-llm">how to get reliable JSON from an LLM</a>.</li></ul>
+<h2>Questions</h2>
+<details class="q"><summary>Is my JSON uploaded?</summary><p>No. Repair and formatting run in your browser, and the page does not send your text anywhere.</p></details>
+<details class="q"><summary>Does it change my data?</summary><p>Formatting and the safe fixes keep every value as written, including long numbers and duplicate keys. The guesses listed under "Check these" can change data, so they are called out.</p></details>
+<details class="q"><summary>Why did it say it could not repair my JSON?</summary><p>It stops when it cannot tell what you meant, for example a stray character where a key or value should be. The message gives the line and column.</p></details>
+<details class="q"><summary>Can it fix JSON with unescaped quotes inside a string?</summary><p>No. A quote inside a string can be the end of the string or part of the text, and guessing wrong silently corrupts the data. Escape it as <code>\"</code> in the source, or ask the model to escape quotes.</p></details></div>
+{{RELATED}}
+{{FOOTER}}
+<script>
+const $=s=>document.getElementById(s);
+const EXS={
+fence:'Sure! Here is the data you asked for:\n\n```json\n{\n  "name": "Ada",\n  "tags": ["math", "code"],\n  "active": true\n}\n```\n\nLet me know if you need anything else.',
+py:"{'name': 'Ada', 'age': 36, 'admin': True, 'manager': None, 'scores': [1, 2, 3,]}",
+cut:'{"orders": [{"id": 1, "items": ["pen", "ink"], "total": 12.5}, {"id": 2, "items": ["paper", "cl',
+mess:'{\n  // customer record\n  name: "Ada",\n  "city": "London", /* home */\n  "notes": "line one\nline two",\n  "ids": [1, 2, 3,],\n}'};
+const ESC={'"':1,'\\':1,'/':1,b:1,f:1,n:1,r:1,t:1,u:1};
+const KIND={
+fence:['Removed Markdown code fences',0],pre:['Removed text before the JSON',0],post:['Ignored text after the JSON',0],postdata:['Ignored extra content after the JSON that looked like more data',1],comment:['Removed comments',0],sq:['Changed single quotes to double quotes',0],smart:['Changed curly quotes to straight quotes',0],unq:['Put unquoted keys in double quotes',0],tc:['Removed trailing commas',0],mc:['Added missing commas',0],py:['Changed True, False and None to true, false and null',0],nl:['Escaped line breaks, tabs and control characters inside strings',0],esc:['Fixed invalid escape sequences',0],num:['Fixed number formatting',0],
+nan:['Replaced NaN, Infinity or undefined with null',1],trunc:['Closed unfinished strings, arrays or objects (output looked cut off)',1],dangling:['Dropped an unfinished last item',1],dots:['Removed ... placeholders',1],partial:['Completed a cut-off true, false or null',1]};
+function RepairError(m,p){this.m=m;this.p=p}
+function parseLenient(s,i0){
+let i=i0;const log={};const add=(k,p)=>{(log[k]=log[k]||{n:0,p:p}).n++};const notes=[];
+const fail=(m,p)=>{throw new RepairError(m,p==null?i:p)};
+const isWs=c=>c===' '||c==='\n'||c==='\t'||c==='\r'||c==='\u00a0'||c==='\ufeff'||c==='\u2028'||c==='\u2029';
+function ws(){for(;;){const c=s[i];if(c!==undefined&&isWs(c)){i++;continue}
+if(c==='/'&&s[i+1]==='/'){add('comment',i);while(i<s.length&&s[i]!=='\n')i++;continue}
+if(c==='/'&&s[i+1]==='*'){add('comment',i);const e=s.indexOf('*/',i+2);i=e<0?s.length:e+2;continue}
+break}}
+const DQ='"\u201c\u201d\u201e',SQ="'\u2018\u2019";
+function str(){const q=s[i],start=i;let raw='',changed=false;const single=SQ.includes(q),smart=q!=='"'&&q!=="'";i++;
+const closer=c=>single?SQ.includes(c):DQ.includes(c)&&(q==='"'?c==='"':true);
+for(;;){if(i>=s.length){add('trunc',start);if(raw.endsWith('\\')&&!raw.endsWith('\\\\'))raw=raw.slice(0,-1);raw=raw.replace(/\\u[0-9a-fA-F]{0,3}$/,'');return{t:'s',raw:'"'+raw+'"',cut:true}}
+const c=s[i];
+if(c==='\\'){const n=s[i+1];if(n===undefined){i++;continue}
+if(ESC[n]){if(n==='u'&&!/^[0-9a-fA-F]{4}/.test(s.slice(i+2,i+6))){if(i+6>s.length){i=s.length;continue}add('esc',i);raw+='\\\\';i++;continue}raw+=c+n;i+=2;continue}
+if(n==="'"){raw+="'";i+=2;add('esc',i-2);continue}
+add('esc',i);raw+='\\\\'+(n==='\n'||n==='\r'?'':'');i++;continue}
+if(closer(c)){i++;if(single)add('sq',start);else if(smart)add('smart',start);return{t:'s',raw:'"'+raw+'"'}}
+if(c==='"'){if(single){raw+='\\"';i++;continue}
+fail('Found a double quote inside a string. Escape it as \\" or fix the text before it',i)}
+if(c==='\n'){add('nl',i);raw+='\\n';i++;continue}
+if(c==='\r'){add('nl',i);raw+='\\r';i++;continue}
+if(c==='\t'){add('nl',i);raw+='\\t';i++;continue}
+if(c<' '){add('nl',i);raw+='\\u'+c.charCodeAt(0).toString(16).padStart(4,'0');i++;continue}
+raw+=c;i++}}
+function num(){const m=/^([+-]?)(\d*)(\.?)(\d*)([eE][+-]?\d*)?/.exec(s.slice(i));if(!m||(!m[2]&&!m[4]))fail('Unexpected character "'+s[i]+'"');
+const start=i;i+=m[0].length;let sign=m[1],ip=m[2],dot=m[3],fp=m[4],ex=m[5]||'',fixed=false,cutn=false;
+if(sign==='+'){sign='';fixed=true}
+if(ip===''){ip='0';fixed=true}
+if(ip.length>1&&ip[0]==='0'){ip=ip.replace(/^0+(?=\d)/,'');fixed=true}
+if(dot&&fp===''){dot='';fixed=true}
+if(ex&&!/\d$/.test(ex)){ex='';fixed=true;if(i>=s.length){cutn=true;add('trunc',start)}}
+if(fixed&&!cutn)add('num',start);
+return{t:'n',raw:sign+ip+dot+fp+ex}}
+function ident(){const m=/^[A-Za-z_$][\w$\-]*/.exec(s.slice(i));return m?m[0]:null}
+const LIT={true:'true',false:'false',null:'null',True:'true',False:'false',None:'null',TRUE:'true',FALSE:'false',NULL:'null',undefined:'null',NaN:'null',Infinity:'null'};
+function lit(){const w=ident();if(w===null)fail(i>=s.length?'Unexpected end of input':'Unexpected character "'+s[i]+'"');
+if(w==='-Infinity')fail('Unexpected -Infinity');
+if(Object.prototype.hasOwnProperty.call(LIT,w)){const start=i;i+=w.length;if(w==='undefined'||w==='NaN'||w==='Infinity')add('nan',start);else if(w!==LIT[w])add('py',start);return{t:'l',raw:LIT[w]}}
+if(i+w.length>=s.length){for(const f of['true','false','null'])if(f.startsWith(w.toLowerCase())&&w.length>=2){add('partial',i);i+=w.length;return{t:'l',raw:f}}}
+fail('Unexpected text "'+w.slice(0,20)+'" where a value should be')}
+function keyOf(){const c=s[i];if(DQ.includes(c)||SQ.includes(c))return str();const w=/^[A-Za-z_$][\w$\-]*/.exec(s.slice(i));if(w){add('unq',i);i+=w[0].length;return{t:'s',raw:'"'+w[0]+'"'}}
+const n=/^-?\d+(\.\d+)?/.exec(s.slice(i));if(n){add('unq',i);i+=n[0].length;return{t:'s',raw:'"'+n[0]+'"'}}return null}
+function dots(){if(s.startsWith('...',i)||s[i]==='\u2026'){add('dots',i);i+=s[i]==='\u2026'?1:3;return true}return false}
+function val(){ws();if(i>=s.length)return null;const c=s[i];
+if(c==='{')return obj();if(c==='[')return arr();
+if(DQ.includes(c)||SQ.includes(c))return str();
+if(c==='-'||c==='+'||c==='.'||(c>='0'&&c<='9')){if(s.startsWith('-Infinity',i)){add('nan',i);i+=9;return{t:'l',raw:'null'}}return num()}
+return lit()}
+function obj(){const open=i;i++;const p=[],seen=new Set();let tc=false;
+for(;;){ws();if(i>=s.length){add('trunc',open);return{t:'o',p}}
+let c=s[i];
+if(c==='}'){i++;return{t:'o',p}}
+if(c===','){tc=false;i++;ws();if(s[i]==='}'){add('tc',i-1)}continue}
+if(dots()){continue}
+const ks=i,k=keyOf();if(!k)fail('Expected a property name but found "'+c+'"');
+ws();if(i>=s.length){add('trunc',open);add('dangling',ks);return{t:'o',p}}
+if(s[i]!==':')fail('Expected ":" after the property name',i);i++;
+const v=val();if(v===null){add('trunc',open);add('dangling',ks);return{t:'o',p}}
+let dk=null;try{dk=JSON.parse(k.raw)}catch(e){dk=k.raw}
+if(seen.has(dk))notes.push('Duplicate key "'+dk+'" at line {L}. Both copies are kept; most parsers use the last one.:'+ks);seen.add(dk);
+p.push([k,v]);
+ws();c=s[i];
+if(c===','){i++;ws();if(s[i]==='}')add('tc',i-1);continue}
+if(c==='}'){i++;return{t:'o',p}}
+if(i>=s.length){add('trunc',open);return{t:'o',p}}
+if(c==='"'||c==="'"||DQ.includes(c)||SQ.includes(c)||/[A-Za-z_$]/.test(c)){add('mc',i);continue}
+fail('Expected "," or "}" but found "'+c+'"',i)}}
+function arr(){const open=i;i++;const v=[];
+for(;;){ws();if(i>=s.length){add('trunc',open);return{t:'a',v}}
+let c=s[i];
+if(c===']'){i++;return{t:'a',v}}
+if(c===','){i++;ws();if(s[i]===']')add('tc',i-1);continue}
+if(dots()){continue}
+const x=val();if(x===null){add('trunc',open);return{t:'a',v}}
+v.push(x);ws();c=s[i];
+if(c===','){i++;ws();if(s[i]===']')add('tc',i-1);continue}
+if(c===']'){i++;return{t:'a',v}}
+if(i>=s.length){add('trunc',open);return{t:'a',v}}
+if(c==='{'||c==='['||c==='"'||c==="'"||DQ.includes(c)||SQ.includes(c)||c==='-'||(c>='0'&&c<='9')||/[A-Za-z]/.test(c)){add('mc',i);continue}
+fail('Expected "," or "]" but found "'+c+'"',i)}}
+const root=val();if(root===null)fail('Unexpected end of input',i);
+return{root,end:i,log,notes}}
+function ser(n,ind,sort,lv){const nl=ind?'\n'+ind.repeat(lv+1):'',cl=ind?'\n'+ind.repeat(lv):'';
+if(n.t==='o'){if(!n.p.length)return'{}';let p=n.p;if(sort)p=p.slice().sort((a,b)=>{let x,y;try{x=JSON.parse(a[0].raw)}catch(e){x=a[0].raw}try{y=JSON.parse(b[0].raw)}catch(e){y=b[0].raw}return x<y?-1:x>y?1:0});return'{'+nl+p.map(([k,v])=>k.raw+(ind?': ':':')+ser(v,ind,sort,lv+1)).join(','+nl)+cl+'}'}
+if(n.t==='a'){if(!n.v.length)return'[]';return'['+nl+n.v.map(x=>ser(x,ind,sort,lv+1)).join(','+nl)+cl+']'}
+return n.raw}
+function repairJSON(src,o){o=o||{};const s=String(src);const lc=p=>{const pre=s.slice(0,p).split('\n');return{line:pre.length,col:pre[pre.length-1].length+1}};
+const t0=s.replace(/^\ufeff/,'');if(!t0.trim())return{empty:true};
+const starts=[];for(let k=0;k<s.length;k++){const c=s[k];if(c==='{'||c==='[')starts.push(k)}
+let res=null,err=null,from=0;
+const tryAt=k=>{try{const r=parseLenient(s,k);return{r,k}}catch(e){if(e instanceof RepairError)return{e};throw e}};
+let reach=-1;for(const k of starts){if(k<=reach)continue;const x=tryAt(k);if(x.r){res=x.r;from=k;break}if(!err)err=x.e;reach=Math.max(reach,x.e.p)}
+if(!res){const m=/^\s*(?:"(?:[^"\\\n]|\\.)*"|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|true|false|null)\s*$/.exec(s);
+if(m){try{const v=JSON.parse(s);return{ok:true,out:JSON.stringify(v),fixes:[],guesses:[],notes:[],valid:true}}catch(e){}}
+if(!starts.length)return{ok:false,msg:'No JSON object or array found in this text.'};
+const p=lc(err.p);return{ok:false,msg:err.m,line:p.line,col:p.col,ctx:s.split('\n')[p.line-1]||''}}
+const log=Object.assign({},res.log);const L=(k,p)=>{log[k]=log[k]||{n:0,p:p};if(!log[k].n)log[k].n=1};
+const before=s.slice(0,from);if(before.trim()){const f=/```/.test(before),rest=before.replace(/```[A-Za-z]*/g,'').trim();if(f)L('fence',before.indexOf('```'));if(rest)L('pre',0)}
+const after=s.slice(res.end);if(after.trim()){const f=/```/.test(after),rest=after.replace(/```[A-Za-z]*/g,'').trim();if(f)L('fence',res.end+after.indexOf('```'));if(rest)L(/[{\["]/.test(rest)?'postdata':'post',res.end)}
+const ind=o.ind==='m'?'':o.ind==='t'?'\t':' '.repeat(+o.ind||2);
+const out=ser(res.root,ind,!!o.sort,0);
+let ok=true,pm='';try{JSON.parse(out)}catch(e){ok=false;pm=e.message}
+if(!ok)return{ok:false,msg:'The repaired text still is not valid JSON ('+pm+'). Please report this input.',line:1,col:1,ctx:''};
+const fixes=[],guesses=[];for(const k of Object.keys(log)){const d=KIND[k],pos=lc(log[k].p),e={k,t:d[0],n:log[k].n,line:pos.line,col:pos.col};(d[1]?guesses:fixes).push(e)}
+const order=Object.keys(KIND);fixes.sort((a,b)=>order.indexOf(a.k)-order.indexOf(b.k));guesses.sort((a,b)=>order.indexOf(a.k)-order.indexOf(b.k));
+const notes=res.notes.map(x=>{const j=x.lastIndexOf(':'),p=lc(+x.slice(j+1));return x.slice(0,j).replace('{L}',p.line)});
+let valid=false;try{JSON.parse(s);valid=true}catch(e){}
+return{ok:true,out,fixes,guesses,notes,valid}}
+let last=null;
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function run(){const src=$('ji').value,r=repairJSON(src,{ind:$('ind').value,sort:$('srt').checked});last=r;$('am').textContent='';
+const rp=$('rp');
+if(r.empty){$('jo').value='';rp.innerHTML='<p class="note" style="margin:0">Paste JSON on the left, or pick an example above. The result and a list of every change appear here.</p>';return}
+if(!r.ok){$('jo').value='';let h='<div class="stt er">Could not repair this JSON</div><p style="margin:0">'+esc(r.msg)+(r.line?' (line '+r.line+', column '+r.col+')':'')+'</p>';if(r.line&&r.ctx)h+='<pre class="eb">'+esc(r.ctx.slice(0,200))+'\n'+' '.repeat(Math.min(r.col-1,200))+'^</pre>';rp.innerHTML=h;return}
+$('jo').value=r.out;
+const nf=r.fixes.length,ng=r.guesses.length;
+let h=!nf&&!ng?'<div class="stt ok">'+(r.valid?'Already valid JSON. Formatted as chosen.':'Formatted as chosen.')+'</div>':'<div class="stt '+(ng?'fx':'ok')+'">Repaired. '+(nf+ng)+' kind'+(nf+ng==1?'':'s')+' of fix'+(nf+ng==1?'':'es')+' applied.'+(ng?' Please check the guesses below.':'')+'</div>';
+const li=a=>a.map(e=>'<li>'+esc(e.t)+(e.n>1?' ('+e.n+' times)':'')+', first at line '+e.line+', column '+e.col+'</li>').join('');
+if(ng)h+='<h3 class="w">Check these (the tool had to guess)</h3><ul>'+li(r.guesses)+'</ul>';
+if(nf)h+='<h3>Safe fixes</h3><ul>'+li(r.fixes)+'</ul>';
+if(r.notes.length)h+='<h3>Notes</h3><ul>'+r.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul>';
+if(nf||ng||r.notes.length)h+='<p class="note" style="margin:10px 0 0">The repaired text parses as JSON. To check it against a schema, use the <a href="{{HREF:json-validator}}">JSON Validator</a>.</p>';
+rp.innerHTML=h}
+let tm=0;$('ji').addEventListener('input',()=>{clearTimeout(tm);tm=setTimeout(run,150)});$('ind').onchange=run;$('srt').onchange=run;
+document.querySelectorAll('.chips .c').forEach(b=>b.onclick=()=>{$('ji').value=EXS[b.dataset.e];run()});
+$('cp').onclick=()=>{const t=$('jo').value;if(!t){$('am').textContent='Nothing to copy yet.';return}(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$('am').textContent='Copied.'}).catch(()=>{$('jo').select();$('am').textContent='Press Ctrl+C or Cmd+C to copy.'})};
+$('dl').onclick=()=>{const t=$('jo').value;if(!t){$('am').textContent='Nothing to download yet.';return}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t+'\n'],{type:'application/json'}));a.download='repaired.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('sw').onclick=()=>{if(!$('jo').value)return;$('ji').value=$('jo').value;run();$('am').textContent='Result moved to the input.'};
+run();
+</script></body></html>

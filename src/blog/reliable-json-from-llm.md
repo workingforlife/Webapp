@@ -2,13 +2,15 @@
 title: Get Reliable JSON From an LLM
 description: Why LLM output sometimes breaks as JSON, how structured outputs and schemas help, and a simple validate-and-retry routine you can use in your own app.
 date: 2026-11-19
-updated: 2026-11-22
+updated: 2026-11-24
 image: /assets/blog/reliable-json-from-llm-hero.jpg
 imageAlt: A JSON object passing a schema check
-tools: json-validator, prompt-builder, token-counter
+tools: json-validator, json-repair, prompt-builder, token-counter
 related: microsoft-outage-llm-app-fallback, reusable-prompt-templates
 ---
 If your app asks a model for JSON, sooner or later it will get something that does not parse. This guide explains why that happens, what providers offer to prevent it, and what to do in your own code when it still goes wrong.
+
+If the reply is already broken, the [JSON Repair](tool:json-repair) tool fixes common problems and lists every change, and [fix broken JSON from ChatGPT and Claude](post:fix-broken-json-from-chatgpt-and-claude) explains each one.
 
 [[toc]]
 
