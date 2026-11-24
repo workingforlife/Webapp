@@ -2,7 +2,7 @@
 title: How Often Do LLM API Prices Change?
 description: What three weeks of daily price snapshots show: new models arrive often, list price changes are rare, and some changes reverse within days.
 date: 2026-11-20
-updated: 2026-11-21
+updated: 2026-11-24
 image: /assets/blog/how-often-do-llm-api-prices-change-hero.jpg
 imageAlt: A timeline of dated markers showing a few price changes among many new models
 tools: price-changes, model-prices, model-picker
@@ -28,6 +28,8 @@ Since 27 October 2026 we have saved a copy of the open-source price catalog ever
 In this window, the price you saw for an existing model mostly stayed put, while the list of models you could choose from kept changing. Two of the four price changes were increases and two were cuts, and one of the cuts came on a model that had been listed for only 19 days. That points to a simple habit: do not rebuild your budget every week, but do check again when you pick a model, when a new one launches, and before you sign anything with a long commitment.
 
 Three weeks is too short to say how prices behave over a year, and four changes are not a pattern. If a model you rely on shows a surprising change, confirm it on the provider's own pricing page before you act. The post on [why catalog prices change and when to trust a change](post:why-llm-price-list-changes-and-when-to-trust-them) explains what to look for.
+
+Some changes are announced in advance. Google's introductory price for Gemini 4 Argon and Carbon ends on 30 November (see [Gemini 4 prices double on 1 December](post:gemini-4-price-doubles-on-1-december)), and Anthropic launched Claude Fable 5.2 at a lower price than Fable 5.1 (see [Claude Fable 5.2 costs 20% less](post:claude-fable-5-2-price-cut-should-you-upgrade)).
 
 ## A quick routine
 

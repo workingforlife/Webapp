@@ -2,7 +2,7 @@
 title: How to Track LLM Price Changes
 description: A simple routine for catching price rises, context cuts and removed models before they hit your AI bill, with what to do when something changes.
 date: 2026-11-20
-updated: 2026-11-21
+updated: 2026-11-24
 image: /assets/blog/track-llm-price-changes-protect-your-budget-hero.jpg
 imageAlt: A budget line with markers for price, context and model changes
 tools: price-changes, model-picker, cost-forecaster
@@ -18,6 +18,8 @@ Your AI bill is the product of your usage and a price list that someone else con
 - **Context window changes.** A model can hold less text than before, which can break prompts that used to fit.
 - **New models.** A newer model may do the job for less, or replace the one you use.
 - **Removed models.** A model you depend on stops appearing in the price list. It may be retired, renamed or dropped from the catalog, so find out which before you panic.
+
+Some changes are announced before they happen. Two recent examples are [Gemini 4 prices double on 1 December](post:gemini-4-price-doubles-on-1-december) and [Claude Fable 5.2 costs 20% less](post:claude-fable-5-2-price-cut-should-you-upgrade).
 
 ## What to do when something changes
 
