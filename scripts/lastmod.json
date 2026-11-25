@@ -44,7 +44,7 @@
   "d": "2026-11-25"
  },
  "/model-prices": {
-  "h": "5372c65e09adae8c5a49e8bce3a7a9f37dcaba1b",
+  "h": "aa00bf65a48fdc8fa3af4d182c90fa50fbbcf827",
   "d": "2026-11-25"
  },
  "/pdf-to-text": {
@@ -52,7 +52,7 @@
   "d": "2026-11-25"
  },
  "/price-changes": {
-  "h": "85cd862613587a2e8bdd0b2e2920b291ee474782",
+  "h": "9b752aec5ec616995feee00be7eb5edb4b2b70ef",
   "d": "2026-11-25"
  },
  "/privacy": {
@@ -192,7 +192,7 @@
   "d": "2026-11-25"
  },
  "/blog/chatgpt-price-in-india": {
-  "h": "d912e04c12f4561392e0aca2b3e867b91752bc0c",
+  "h": "b82e26ebab57ad5cf31e4eda32f43929ed67372c",
   "d": "2026-11-25"
  },
  "/blog/why-token-counts-differ-between-models": {
@@ -220,7 +220,7 @@
   "d": "2026-11-25"
  },
  "/blog/input-vs-output-tokens-why-output-costs-more": {
-  "h": "39c37cc8c2a77a144a33d78e1e760fb802a85d2b",
+  "h": "07a51ef2c131372ad6b15f52964de670ce755f2b",
   "d": "2026-11-25"
  },
  "/blog/how-many-tokens-do-code-json-and-hindi-use": {
@@ -240,15 +240,15 @@
   "d": "2026-11-25"
  },
  "/blog/ai-agent-vs-chatbot-vs-batch-cost": {
-  "h": "3eed7aa75804342a08f0eff8ea8dbcc370a303be",
+  "h": "09172b0b5ed40b52bda791df13b66d87edd9308b",
   "d": "2026-11-25"
  },
  "/blog/nvidia-ceo-exit-ai-api-prices": {
-  "h": "2269f78f3812348371f892f9c9adbae226b4c6dd",
+  "h": "c92b49be3e67135d1dc4a93eee7cf9ea79312dd6",
   "d": "2026-11-25"
  },
  "/blog/microsoft-outage-llm-app-fallback": {
-  "h": "0b2e0a2291750ee9db06021ddd90dc587b72eac4",
+  "h": "2cbb82d1622cb61d99b1be72f080395c6ffdacf7",
   "d": "2026-11-25"
  },
  "/blog/claude-pro-price-india": {
@@ -276,7 +276,7 @@
   "d": "2026-11-25"
  },
  "/openai-api-pricing": {
-  "h": "6052a577f1066f640c112e2e6402bed9a5f7f9ee",
+  "h": "642a336142f1ea789b91fa0141943fb53d4f74b5",
   "d": "2026-11-25"
  },
  "/claude-api-pricing": {

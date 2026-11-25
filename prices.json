@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-24",
+ "updated": "2026-11-25",
  "source": "LiteLLM community price list",
- "count": 213,
+ "count": 217,
  "models": [
   {"provider":"Anthropic","name":"claude-fable-5","in":10,"out":50,"ctx":1000,"cr":1},
   {"provider":"Anthropic","name":"claude-fable-5-1","in":10,"out":50,"ctx":1000,"cr":0.25},
@@ -112,7 +112,7 @@
   {"provider":"Mistral","name":"zai-glm-5-3","in":1.4,"out":4.4,"ctx":1049,"cr":0.14},
   {"provider":"Mistral","name":"zai-glm-5-3-flash","in":0.15,"out":0.5,"ctx":1049,"cr":0.03},
   {"provider":"Mistral","name":"zai-glm-latest","in":1.4,"out":4.4,"ctx":1049,"cr":0.14},
-  {"provider":"OpenAI","name":"chat-latest","in":5,"out":30,"ctx":400,"cr":0.5},
+  {"provider":"OpenAI","name":"chat-latest","in":5,"out":30,"ctx":272,"cr":0.5},
   {"provider":"OpenAI","name":"daybreak-blue-latest","in":4,"out":20,"ctx":922,"cr":0.4},
   {"provider":"OpenAI","name":"daybreak-red-latest","in":12.5,"out":75,"ctx":272,"cr":1.25},
   {"provider":"OpenAI","name":"gpt-4.1","in":2,"out":8,"ctx":1048,"cr":0.5},
@@ -144,16 +144,20 @@
   {"provider":"OpenAI","name":"gpt-5.6-sol","in":4,"out":20,"ctx":922,"cr":0.4},
   {"provider":"OpenAI","name":"gpt-5.6-terra","in":2,"out":12,"ctx":922,"cr":0.2},
   {"provider":"OpenAI","name":"gpt-6-astra","in":10,"out":50,"ctx":922,"cr":1},
+  {"provider":"OpenAI","name":"gpt-6-astra-healthcare","in":10,"out":50,"ctx":922,"cr":1},
   {"provider":"OpenAI","name":"gpt-6-astra-law","in":10,"out":50,"ctx":922,"cr":1},
   {"provider":"OpenAI","name":"gpt-6-cyber","in":20,"out":100,"ctx":922,"cr":2},
   {"provider":"OpenAI","name":"gpt-6-luna","in":0.1,"out":0.5,"ctx":922,"cr":0.01},
   {"provider":"OpenAI","name":"gpt-6-rosalind","in":10,"out":50,"ctx":922,"cr":1},
   {"provider":"OpenAI","name":"gpt-6-sol","in":2,"out":10,"ctx":922,"cr":0.2},
   {"provider":"OpenAI","name":"gpt-6.1-sol","in":2,"out":10,"ctx":922,"cr":0.1},
+  {"provider":"OpenAI","name":"gpt-6.1-sol-healthcare","in":2,"out":10,"ctx":922,"cr":0.1},
   {"provider":"OpenAI","name":"gpt-6.1-terra","in":1,"out":5,"ctx":922,"cr":0.05},
   {"provider":"OpenAI","name":"gpt-6.2-astra","in":8,"out":40,"ctx":922,"cr":0.4},
+  {"provider":"OpenAI","name":"gpt-6.2-astra-healthcare","in":8,"out":40,"ctx":922,"cr":0.4},
   {"provider":"OpenAI","name":"gpt-6.2-astra-law","in":8,"out":40,"ctx":922,"cr":0.4},
   {"provider":"OpenAI","name":"gpt-6.2-sol","in":2,"out":10,"ctx":922,"cr":0.1},
+  {"provider":"OpenAI","name":"gpt-6.2-sol-healthcare","in":2,"out":10,"ctx":922,"cr":0.1},
   {"provider":"OpenAI","name":"gpt-audio","in":2.5,"out":10,"ctx":128},
   {"provider":"OpenAI","name":"gpt-audio-1.5","in":2.5,"out":10,"ctx":128},
   {"provider":"OpenAI","name":"gpt-audio-mini","in":0.6,"out":2.4,"ctx":128},
@@ -242,6 +246,10 @@
   {"d":"2026-11-19","p":"Mistral","n":["mistral-large-latest"],"t":"price","in":[0.5,0.7],"out":[1.5,2.1],"cr":[0.05,0.07],"ctx":[262,1049]},
   {"d":"2026-11-19","p":"OpenAI","n":["gpt-6-rosalind"],"t":"price","in":[15,10],"out":[75,50],"cr":[1.5,1]},
   {"d":"2026-11-20","p":"Google","n":["genie-4"],"t":"added","in":1.5,"out":9,"ctx":1049},
-  {"d":"2026-11-21","p":"xAI","n":["grok-build-0.1"],"t":"removed","in":1,"out":2,"cr":0.2,"ctx":256}
+  {"d":"2026-11-21","p":"xAI","n":["grok-build-0.1"],"t":"removed","in":1,"out":2,"cr":0.2,"ctx":256},
+  {"d":"2026-11-25","p":"OpenAI","n":["chat-latest"],"t":"context","ctx":[400,272]},
+  {"d":"2026-11-25","p":"OpenAI","n":["gpt-6-astra-healthcare"],"t":"added","in":10,"out":50,"cr":1,"ctx":922},
+  {"d":"2026-11-25","p":"OpenAI","n":["gpt-6.1-sol-healthcare","gpt-6.2-sol-healthcare"],"t":"added","in":2,"out":10,"cr":0.1,"ctx":922},
+  {"d":"2026-11-25","p":"OpenAI","n":["gpt-6.2-astra-healthcare"],"t":"added","in":8,"out":40,"cr":0.4,"ctx":922}
  ]
 }
