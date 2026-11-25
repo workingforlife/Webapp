@@ -32,6 +32,8 @@ The [Price Change Tracker](tool:price-changes) records what our daily copy of th
 
 For the bigger picture of how often changes occur, see [how often LLM API prices change](post:how-often-do-llm-api-prices-change). To compare current prices, use [Model Prices](tool:model-prices).
 
+A live example is the [GPT-5.6 Sol promotional price](post:gpt-5-6-sol-promo-price-ends-30-november), which OpenAI says ends on 30 November with no new price published. The [Deadline Checker](tool:deadline-checker) lists dates like this for the models you paste in.
+
 ## Frequently asked questions
 
 ### Why did a model's price change in the list?

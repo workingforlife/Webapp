@@ -36,6 +36,8 @@ Instead of budgeting to the cent, add headroom to your estimate, for example by 
 
 The [Price Change Tracker](tool:price-changes) lists changes by date, with filters for provider, type of change and model name. Search for the models you use, and use Copy Link to bookmark a filtered view. It does not send alerts, so a short, regular look is the way to use it.
 
+For dated events such as promotion endings and model removals, paste your model names into the [Deadline Checker](tool:deadline-checker). See the [30 November checklist](post:ai-api-deadlines-30-november-checklist) for current examples.
+
 ## Frequently asked questions
 
 ### How do I know if an AI model's price has changed?

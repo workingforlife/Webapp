@@ -183,5 +183,19 @@
    "cost-forecaster",
    "Forecast your normal monthly bill"
   ]
+ },
+ "deadline-checker": {
+  "share": [
+   "ti"
+  ],
+  "steps": [
+   "Paste your code, config or model names, or pick an example.",
+   "Read the deadlines that match, with days left and whether we checked the date on the provider page.",
+   "Compare the monthly cost of staying put with the replacement, then check your own prompts before switching."
+  ],
+  "next": [
+   "model-picker",
+   "Shortlist a replacement model"
+  ]
  }
 }

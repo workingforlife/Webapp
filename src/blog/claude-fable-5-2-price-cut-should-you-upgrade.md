@@ -50,6 +50,8 @@ The saving is $90 a month, or $1,080 a year. Because both prices fall by the sam
 3. **Re-forecast** in the [Cost Forecaster](tool:cost-forecaster) with $8 and $40.
 4. **Compare cheaper tiers.** Anthropic's overview lists Opus 5.5 at $4 / $20 and Sonnet 5.5 at $2 / $10. If they pass your tests, they cost much less. Use the [Model Picker](tool:model-picker).
 
+Using fast mode on Opus 4.8 instead? That feature is removed on 30 November. See [Opus 4.8 fast mode ends 30 November](post:opus-4-8-fast-mode-ends-30-november) and check your models with the [Deadline Checker](tool:deadline-checker).
+
 ## Frequently asked questions
 
 ### How much cheaper is Claude Fable 5.2?

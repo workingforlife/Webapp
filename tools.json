@@ -64,6 +64,15 @@
    "when": "You want to see which prices were cut or raised and which models were added or removed."
   },
   {
+   "slug": "deadline-checker",
+   "name": "Deadline Checker",
+   "group": 0,
+   "desc": "Paste your code or model names and see which promo price endings, retirements and removals affect you, with days left and the monthly cost.",
+   "title": "AI Model Deprecation and Deadline Checker",
+   "tag": "Which deadlines hit your models",
+   "when": "You want to know which model retirements, promo endings or removals affect the models you use."
+  },
+  {
    "slug": "failover-cost-estimator",
    "name": "Failover Cost Estimator",
    "group": 0,

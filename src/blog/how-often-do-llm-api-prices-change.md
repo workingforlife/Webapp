@@ -31,6 +31,8 @@ Three weeks is too short to say how prices behave over a year, and four changes 
 
 Some changes are announced in advance. Google's introductory price for Gemini 4 Argon and Carbon ends on 30 November (see [Gemini 4 prices double on 1 December](post:gemini-4-price-doubles-on-1-december)), and Anthropic launched Claude Fable 5.2 at a lower price than Fable 5.1 (see [Claude Fable 5.2 costs 20% less](post:claude-fable-5-2-price-cut-should-you-upgrade)).
 
+Not every change is a list-price edit. Promotions end and features are removed on fixed dates, as in the [30 November checklist](post:ai-api-deadlines-30-november-checklist). The [Deadline Checker](tool:deadline-checker) shows which of those dates apply to the models you use.
+
 ## A quick routine
 
 1. Pick the models you use or might use.

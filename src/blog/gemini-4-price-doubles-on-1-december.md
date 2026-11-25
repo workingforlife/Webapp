@@ -49,7 +49,8 @@ You can compare current prices in the [Model Picker](tool:model-picker) and re-r
 2. **Check your cache share.** Cached input is 95 percent cheaper than normal input before and after the change, so a higher cache hit rate softens the rise. See [Prompt caching and batch discounts](post:prompt-caching-and-batch-discounts-explained).
 3. **Shorten what you can.** Output costs five times input here, so cap the reply length first. See [Input vs output tokens](post:input-vs-output-tokens-why-output-costs-more).
 4. **Test a cheaper model** on your own prompts before you decide to move.
-5. **Watch the list.** The [Price Change Tracker](tool:price-changes) will show the change when it appears in the daily price file. See [How to track LLM price changes](post:track-llm-price-changes-protect-your-budget).
+5. **Check all your models.** Other changes land on the same day. Paste your model names into the [Deadline Checker](tool:deadline-checker) and read the [30 November checklist](post:ai-api-deadlines-30-november-checklist), which also covers the [GPT-5.6 Sol promo ending](post:gpt-5-6-sol-promo-price-ends-30-november) and the [Opus 4.8 fast mode removal](post:opus-4-8-fast-mode-ends-30-november).
+6. **Watch the list.** The [Price Change Tracker](tool:price-changes) will show the change when it appears in the daily price file. See [How to track LLM price changes](post:track-llm-price-changes-protect-your-budget).
 
 ## Frequently asked questions
 

@@ -1,0 +1,81 @@
+<!--slug:deadline-checker-->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}<style>
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}.chips .c{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--bg);color:var(--ac2);border-radius:999px;padding:6px 12px;margin:0}
+#ti{min-height:150px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;overflow:auto}
+.tg{display:inline-block;border:1px solid var(--bd);border-radius:999px;padding:0 9px;font-size:12px;font-weight:600;white-space:nowrap;margin-right:6px}
+.tg.v{color:var(--ok);border-color:var(--ok)}.tg.u{color:#f59e0b;border-color:#f59e0b}.tg.x{color:var(--er);border-color:var(--er)}.tg.m{color:var(--mu)}
+.dl{border:1px solid var(--bd);border-radius:12px;padding:14px;margin:10px 0;background:var(--bg)}
+.dl h3{font-size:17px;margin:0 0 4px;overflow-wrap:anywhere}.dl p{margin:6px 0}.dl .when{color:var(--tx2);font-size:14px}
+.dl.dim{opacity:.75}.dl .cost{font-weight:600}
+.sm{display:flex;flex-wrap:wrap;gap:12px 20px;margin:0 0 10px}.sm div{min-width:110px}.sm b{display:block;font-size:22px}
+</style></head><body>
+{{HEADER}}
+<main><h1>Deprecation and Deadline Checker</h1><p class="lead">Paste your code, config or a list of model names. See which promo prices, retirements and removals affect you, how many days are left, and what each change does to your monthly bill.</p>
+<div class="card"><div class="chips" aria-label="Examples"><button class="c" data-e="a">Claude fast mode in code</button><button class="c" data-e="b">OpenAI model list</button><button class="c" data-e="c">Mixed config file</button></div>
+<label for="ti">Your code, config or model names</label><textarea id="ti" spellcheck="false" placeholder="Paste anything that contains model IDs, for example: model: claude-opus-4-8. Nothing is uploaded."></textarea>
+<div class="g" style="margin-top:10px"><div><label for="mi">Input tokens a month (millions)</label><input id="mi" type="number" min="0" step="any" value="20" inputmode="decimal"></div><div><label for="mo">Output tokens a month (millions)</label><input id="mo" type="number" min="0" step="any" value="5" inputmode="decimal"></div></div>
+<p class="note" id="vf" style="margin:8px 0 0">Deadline list last reviewed 25 November 2026. The monthly figures use your numbers and the list prices shown. They are illustrations, not a quote.</p></div>
+<div class="card" id="rp" role="region" aria-live="polite" aria-label="Deadlines that affect you"></div>
+<div class="about"><h2>What It Is For</h2><p>Providers remove models, end promotional prices and retire features on fixed dates, often with only a few weeks of notice. A removed feature returns an error, and an ended promotion raises your bill without any change on your side. This tool keeps a short, dated list of those events. You paste the model names you use, and it shows only the ones that apply to you.</p>
+<h2>How to Read the Results</h2><ul><li><b>Checked on the provider page</b> means we read the date and the price on the provider's own documentation, and the source link is shown.</li><li><b>Reported, not checked</b> means the date or price comes from a third-party site only. Confirm it on the provider page before you act.</li><li>The monthly figure compares the price you pay now with the option listed, using the token volumes you enter. A promotion's price after it ends is often not published in advance. In that case the tool says so and compares against the named alternative instead.</li></ul>
+<h2>What It Does Not Do</h2><ul><li>It does not read your account or your bill. It only matches text you paste against its list.</li><li>It does not cover every model or every provider. The list is short on purpose, and each entry is checked by hand. See the <a href="{{HREF:price-changes}}">Price Change Tracker</a> for daily list-price movements across many models.</li><li>It cannot tell whether a replacement model is good enough for your task. Test it on your own prompts before you switch.</li></ul>
+<h2>Where To Go Next</h2><p>Compare replacements in the <a href="{{HREF:model-picker}}">Model Picker</a>, look up exact prices in <a href="{{HREF:model-prices}}">Model Prices</a>, or rebuild your forecast in the <a href="{{HREF:cost-forecaster}}">Cost Forecaster</a>. For the background, read <a href="/blog/ai-api-deadlines-30-november-checklist">the 30 November checklist</a>.</p>
+<h2>Questions</h2>
+<details class="q"><summary>Is my code uploaded?</summary><p>No. The matching runs in your browser and the page does not send your text anywhere.</p></details>
+<details class="q"><summary>How often is the list updated?</summary><p>We review it by hand when a provider announces a change. The review date is shown above the results. If a provider changes a date, trust the provider page over this list.</p></details>
+<details class="q"><summary>Why does a model show "applies only if you use fast mode"?</summary><p>Some removals affect one feature, not the whole model. If the model name is present but the feature is not, your calls should keep working. Check your request settings to be sure.</p></details>
+<details class="q"><summary>What if my model is not listed?</summary><p>Then nothing on this list affects it. That does not mean no change is coming. Check the provider's deprecation page for your model.</p></details></div>
+{{RELATED}}
+{{FOOTER}}
+<script>
+const $=s=>document.getElementById(s);
+const TODAY=new Date();const REVIEWED='2026-11-25';
+/* cur/opt prices are USD per 1M tokens: [input, output]. ok=true means date and price were read on the provider page. */
+const D=[
+{id:'opus48fast',name:'Claude Opus 4.8 fast mode removed',m:/claude-opus-4-8/i,cond:/fast/i,condNote:'Applies only if you send speed: "fast". Standard Opus 4.8 requests are not affected by this removal.',date:'2026-11-30',kind:'Removal',ok:true,
+what:'After this date, requests to claude-opus-4-8 with speed "fast" return an error.',cur:[10,50],curL:'Opus 4.8 fast mode',opt:[8,40],optL:'Opus 5.5 fast mode',opt2:[4,20],opt2L:'Opus 5.5 standard (no fast mode)',
+src:'https://platform.claude.com/docs/en/build-with-claude/fast-mode',srcL:'Anthropic fast mode docs',post:'opus-4-8-fast-mode-ends-30-november'},
+{id:'sol56',name:'GPT-5.6 Sol promotional price ends',m:/gpt-5\.6-sol/i,date:'2026-11-30',kind:'Promo ends',ok:true,
+what:'OpenAI says GPT-5.6 Sol promotional pricing is available until this date. The page does not state the price after it ends.',cur:[4,20],curL:'GPT-5.6 Sol promotional price',opt:[2,10],optL:'GPT-6.1 Sol standard price',
+src:'https://developers.openai.com/api/docs/models/gpt-5.6-sol',srcL:'OpenAI GPT-5.6 Sol model page',post:'gpt-5-6-sol-promo-price-ends-30-november'},
+{id:'gem4',name:'Gemini 4 Argon and Carbon introductory price ends',m:/gemini-4-(argon|carbon)/i,date:'2026-11-30',kind:'Price rise',ok:true,
+what:'The introductory price ends on 30 November. From 1 December, input and output cost twice as much.',cur:[2,10],curL:'Introductory price',opt:[4,20],optL:'Price from 1 December',
+src:'https://ai.google.dev/gemini-api/docs/pricing',srcL:'Google Gemini API pricing',post:'gemini-4-price-doubles-on-1-december'},
+{id:'son45',name:'Claude Sonnet 4.5 retirement',m:/claude-sonnet-4-5/i,date:'2026-11-30',kind:'Retirement',ok:false,
+what:'A third-party site reports that claude-sonnet-4-5-20250929 retires on this date on Anthropic-run platforms, with Sonnet 5.5 as the replacement. We could not read Anthropic\'s deprecation page, so confirm the date there. Bedrock and Vertex AI set their own dates.',cur:[3,15],curL:'Sonnet 4.5',opt:[2,10],optL:'Sonnet 5.5',
+src:'https://platform.claude.com/docs/en/about-claude/model-deprecations',srcL:'Anthropic model deprecations page (check this)',post:'ai-api-deadlines-30-november-checklist'},
+{id:'gem38',name:'Gemini 3.8 Flash price rise',m:/gemini-3\.[68]-flash/i,date:'2027-01-01',kind:'Price rise',ok:false,
+what:'A third-party site reports the price doubles from 1 January 2027. We could not read Google\'s pricing page, so confirm it there.',cur:[0.75,3.75],curL:'Current price',opt:[1.5,7.5],optL:'Reported price from 1 January',
+src:'https://ai.google.dev/gemini-api/docs/pricing',srcL:'Google Gemini API pricing (check this)',post:'ai-api-deadlines-30-november-checklist'}];
+const EXS={a:'import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n  model="claude-opus-4-8",\n  speed="fast",\n  max_tokens=1024,\n  messages=[{"role":"user","content":"Hi"}],\n)',
+b:'gpt-5.6-sol\ngpt-6.1-terra\ngpt-6.1-sol',
+c:'chat_model: claude-sonnet-4-5\nsummary_model: gemini-4-argon\nfallback_model: gemini-3.8-flash\nfast_model: claude-opus-4-8'};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>{const a=Math.abs(n);return '$'+(a>=100?Math.round(a).toLocaleString('en-US'):a.toFixed(2).replace(/\.00$/,''))};
+const days=d=>{const t=new Date(d+'T23:59:59Z');return Math.ceil((t-TODAY)/864e5)};
+const fd=d=>new Date(d+'T00:00:00Z').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+const mc=(p,i,o)=>p[0]*i+p[1]*o;
+const pr=p=>'$'+p[0]+' in / $'+p[1]+' out';
+function card(e,i,o,dim){const dl=days(e.date);
+const when=dl>1?dl+' days left':dl===1?'1 day left':dl===0?'Today':'Date has passed';
+const tag='<span class="tg '+(e.ok?'v':'u')+'">'+(e.ok?'Checked on the provider page':'Reported, not checked')+'</span><span class="tg '+(dl<0?'x':'m')+'">'+esc(e.kind)+'</span>';
+let h='<div class="dl'+(dim?' dim':'')+'"><h3>'+esc(e.name)+'</h3><p>'+tag+'</p><p class="when"><b>'+fd(e.date)+'</b> ('+when+')</p><p>'+esc(e.what)+'</p>';
+if(dim)h+='<p class="note" style="margin:6px 0">'+esc(e.condNote)+'</p>';
+const base=mc(e.cur,i,o);
+h+='<p>'+esc(e.curL)+': '+pr(e.cur)+' per 1M tokens = <span class="cost">'+money(base)+' a month</span> at your volumes.</p>';
+const opts=[[e.opt,e.optL]];if(e.opt2)opts.push([e.opt2,e.opt2L]);
+for(const [p,l] of opts){const x=mc(p,i,o),df=x-base;h+='<p>'+esc(l)+': '+pr(p)+' = <span class="cost">'+money(x)+' a month</span> ('+(df===0?'no change':(df>0?'+':'-')+money(df)+' a month')+').</p>'}
+h+='<p class="note" style="margin:6px 0 0">Source: <a href="'+e.src+'" rel="noopener" target="_blank">'+esc(e.srcL)+'</a>. Read more: <a href="/blog/'+e.post+'">our guide</a>.</p></div>';return h}
+function run(){const t=$('ti').value,i=Math.max(0,+$('mi').value||0),o=Math.max(0,+$('mo').value||0),rp=$('rp');
+if(!t.trim()){let h='<p class="note" style="margin:0 0 8px">Paste your model names above to see only the deadlines that affect you, or pick an example. All '+D.length+' tracked events are listed below.</p>';
+rp.innerHTML=h+D.slice().sort((a,b)=>a.date<b.date?-1:1).map(e=>card(e,i,o,false)).join('');return}
+const hit=[],dim=[];for(const e of D){if(e.m.test(t)){if(e.cond&&!e.cond.test(t))dim.push(e);else hit.push(e)}}
+hit.sort((a,b)=>a.date<b.date?-1:1);
+const soon=hit.filter(e=>{const d=days(e.date);return d>=0&&d<=7}).length;
+let h='<div class="sm"><div><b>'+hit.length+'</b>deadline'+(hit.length==1?'':'s')+' affect you</div><div><b>'+soon+'</b>within 7 days</div><div><b>'+hit.filter(e=>!e.ok).length+'</b>not yet checked</div></div>';
+if(!hit.length&&!dim.length)h+='<p style="margin:0">None of the tracked deadlines match the text you pasted. That does not mean no change is coming: check the provider\'s own deprecation page for your model.</p>';
+h+=hit.map(e=>card(e,i,o,false)).join('')+dim.map(e=>card(e,i,o,true)).join('');rp.innerHTML=h}
+let tm=0;$('ti').addEventListener('input',()=>{clearTimeout(tm);tm=setTimeout(run,150)});$('mi').oninput=run;$('mo').oninput=run;
+document.querySelectorAll('.chips .c').forEach(b=>b.onclick=()=>{$('ti').value=EXS[b.dataset.e];run()});
+run();
+</script></body></html>
