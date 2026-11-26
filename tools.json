@@ -90,6 +90,15 @@
    "when": "You have a prompt or document and need its size and whether it fits a context window."
   },
   {
+   "slug": "prompt-cost-compare",
+   "name": "Prompt Cost Compare",
+   "group": 0,
+   "desc": "Paste a prompt and see what it costs on every model, with the reply and monthly volume included.",
+   "title": "Compare Prompt Cost Across LLM Models",
+   "tag": "One prompt priced on every model",
+   "when": "You have a real prompt and want its cost on every model, with reply length and monthly volume."
+  },
+  {
    "slug": "pdf-to-text",
    "name": "PDF & Web to Text",
    "group": 1,

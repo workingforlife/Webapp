@@ -2,7 +2,7 @@
 title: How to Compare LLM API Prices Fairly
 description: Price per million tokens is only the start. Learn what else to compare across LLM providers: input vs output, context size, caching, batch discounts and real workload cost.
 date: 2026-11-10
-updated: 2026-11-21
+updated: 2026-11-26
 image: /assets/blog/compare-llm-api-prices-hero.jpg
 imageAlt: Comparing LLM API prices: input, output and context
 tools: model-prices, cost-forecaster, token-counter
@@ -14,7 +14,7 @@ Comparing LLM prices sounds simple: find the cheapest number. In practice, two m
 
 ## Start with price per million tokens
 
-Providers quote dollars per million tokens, with separate rates for input and output. The [Model Prices](tool:model-prices) page lists them side by side, along with the context window of each model. To turn a price list into a shortlist for your own workload, see [how to choose an LLM for your budget](post:choose-an-llm-for-your-budget). To see what has changed recently, use the [Price Change Tracker](tool:price-changes).
+Providers quote dollars per million tokens, with separate rates for input and output. The [Model Prices](tool:model-prices) page lists them side by side, along with the context window of each model. To turn a price list into a shortlist for your own workload, see [how to choose an LLM for your budget](post:choose-an-llm-for-your-budget). To see what has changed recently, use the [Price Change Tracker](tool:price-changes). For one prompt priced on every model, see [how much a prompt costs on each LLM](post:how-much-does-a-prompt-cost-on-every-model).
 
 ## Look at input and output separately
 

@@ -1,0 +1,71 @@
+<!--slug:prompt-cost-compare-->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}<script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.8.1/dist/o200k_base.js"></script><script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.8.1/dist/cl100k_base.js"></script><style>
+.sp{display:inline-block;margin-left:8px;border:1px solid #f59e0b;color:#f59e0b;border-radius:999px;padding:0 8px;font-size:11px;font-weight:600;white-space:nowrap;vertical-align:middle}
+.ck{display:flex;gap:8px;align-items:center;color:var(--tx);margin-top:14px}.ck input{width:18px;height:18px;accent-color:var(--ac)}
+.tw{max-height:560px;overflow:auto;border:1px solid var(--bd);border-radius:10px}.tw table{margin:0}.tw th{position:sticky;top:0;background:var(--sf);z-index:1}
+td.n,th.n{text-align:right;white-space:nowrap}td.mdl{font-weight:600}.rs h2{font-size:18px;margin:0 0 6px}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0 4px}.kv div{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;color:var(--mu);font-size:13px}.kv b{display:block;font-size:20px;color:var(--tx);margin-top:2px}
+@media(max-width:700px){.tw{max-height:none;border:0;overflow:visible}.rs table{display:block;min-width:0}.rs thead{display:none}.rs tbody{display:block}
+.rs tr{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}
+.rs td{display:block;border:0;padding:0;text-align:left!important;white-space:normal}.rs td::before{content:attr(data-label);display:block;color:var(--mu);font-size:11px;font-weight:400}
+.rs td[data-label=Model]{grid-column:1/-1;order:-3;font-size:16px;overflow-wrap:anywhere}.rs td[data-label=Provider]{grid-column:1/-1;order:-2;color:var(--mu)}
+.rs td[data-label=Model]::before,.rs td[data-label=Provider]::before,.rs td[data-label="#"]{display:none}.sp{display:block;width:max-content;margin:6px 0 0}}
+</style></head><body>
+{{HEADER}}
+<main><h1>Prompt Cost Compare</h1><p class="lead">Paste a prompt and see what it costs to send on every model, with the reply and monthly volume included.</p>
+<div class="card"><p class="note" id="vf" style="margin:0 0 8px">Loading prices. Price catalog refreshed {{PRICES_DATE}}.</p>
+<label for="pt">Your prompt</label><textarea id="pt" placeholder="Paste your prompt here. Nothing is uploaded." style="min-height:160px"></textarea>
+<div class="g"><div><label for="tk">Token counter</label><select id="tk"><option value="est">Estimate (any model)</option><option value="o200k">OpenAI o200k (exact for OpenAI)</option><option value="cl100k">OpenAI cl100k (exact for older OpenAI)</option></select></div><div><label for="qt">Or enter input tokens yourself</label><input id="qt" type="number" min="0" placeholder="Leave empty to count the text" inputmode="numeric"></div></div>
+<div class="g"><div><label for="qo">Reply length (output tokens)</label><input id="qo" type="number" min="0" value="300" inputmode="numeric"></div><div><label for="qr">Requests per month</label><input id="qr" type="number" min="0" value="1000" inputmode="numeric"></div><div><label for="fp">Provider</label><select id="fp"><option value="">All providers</option></select></div><div><label for="fq">Search models</label><input id="fq" type="search" placeholder="For example claude or mini" autocomplete="off"></div></div>
+<label class="ck"><input type="checkbox" id="qx">Include audio, search, image and other specialised models</label>
+<p class="note" style="margin:8px 0 0" id="tn"></p></div>
+<div class="rs" id="res" role="region" aria-live="polite" aria-label="Prompt cost results"></div>
+<div class="card" id="act" style="display:none"><button class="b s" id="cpl">Copy Link</button><button class="b s" id="csv">Download CSV</button><a class="b" href="{{HREF:model-picker}}" style="display:inline-block;text-decoration:none">Rank by monthly workload</a><a class="b s" href="{{HREF:cost-forecaster}}" style="display:inline-block;text-decoration:none">Forecast a chatbot or agent</a><span class="note" id="am" role="status"></span></div>
+<div class="about"><h2>What It Does</h2><p>It counts the tokens in your prompt, adds the reply length you expect, and prices that one request on every model in our daily price list. It then multiplies by your monthly volume. You can filter by provider, search for a model, and download the table. Models whose context window cannot hold the prompt and reply are left out.</p>
+<h2>How Accurate Is It</h2><ul><li><b>Token counts for non-OpenAI models are estimates.</b> Each provider counts tokens differently. The tool uses one count for every model, so costs for other providers can be off. OpenAI tokenizers give exact counts for OpenAI models. See <a href="/blog/why-token-counts-differ-between-models">why token counts differ between models</a>.</li><li><b>Estimate mode is a guide, not an exact count.</b> In our test of 32 sample texts it was off by about 8% on average against OpenAI's tokenizers, and 31 of the 32 fell inside the likely range the Token Counter shows. It was weakest on romanized Hindi. We did not test Claude or Gemini tokenizers, so for those models treat the count as approximate.</li><li><b>The reply length is your guess.</b> Output usually costs more per token than input, so it matters. Change it to match your use.</li><li><b>List prices only.</b> Caching, batch discounts, free tiers and negotiated rates are not included.</li></ul>
+<h2>Is My Prompt Uploaded?</h2><p>No. Counting and pricing happen in your browser. The share link stores only your settings, never your prompt text.</p>
+<h2>Questions</h2>
+<details class="q"><summary>How is the cost calculated?</summary><p>Input tokens times the input price, plus output tokens times the output price, each per million tokens. That is the cost of one request. The monthly figure multiplies it by your request count.</p></details>
+<details class="q"><summary>Why are some models missing?</summary><p>Models whose context window is smaller than your prompt plus reply are hidden, and specialised models are hidden unless you tick the box. Cloud-reseller duplicates, embeddings and fine-tunes are not in the price list.</p></details>
+<details class="q"><summary>How is this different from the Token Counter?</summary><p>The <a href="{{HREF:token-counter}}">Token Counter</a> shows the three cheapest models for sending your text once. This tool lists every model, includes the reply and your monthly volume, and lets you filter and download the table.</p></details>
+<details class="q"><summary>Where do prices come from?</summary><p>From the open-source LiteLLM catalog, refreshed daily. They are not verified against provider billing, so confirm on the provider page before relying on a number.</p></details></div>
+{{RELATED}}
+{{FOOTER}}
+<script>
+{{PRICES_JS}}
+const $=s=>document.getElementById(s);
+const EX=/audio|tts|realtime|search|deep-research|embed|image|moderation|transcribe|whisper/i;
+const nm=n=>Math.round(n).toLocaleString('en-US');
+const mp=x=>'$'+(x<0.1?(+x.toFixed(5)).toString():money(x).slice(1));
+const b64=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const ub64=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0)));
+const cs_=v=>{v=String(v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
+const base=()=>matchMedia('(max-width:700px)').matches?5:25;
+let P=[],SHOW=base(),ROWS=[],ST=null,TX=false;
+const num=id=>{const v=parseFloat($(id).value);return isFinite(v)&&v>0?v:0};
+{{ESTIMATE_JS}}
+function count(t){const k=$('tk').value,g=window['GPTTokenizer_'+k+'_base'];TX=false;if(k!='est'&&g){try{const n=g.encode(t).length;TX=true;return n}catch(e){}}return est(t)}
+function S(){const own=num('qt'),t=$('pt').value;return{i:own||count(t),own:own?1:0,o:num('qo'),r:num('qr'),p:$('fp').value,q:$('fq').value.trim(),x:$('qx').checked,tk:$('tk').value}}
+function calc(s){const q=s.q.toLowerCase().split(/\s+/).filter(Boolean);let hid=0;
+const R=P.filter(m=>m.i>0&&m.o>0&&(!s.p||m.p==s.p)&&(s.x||!EX.test(m.n))&&q.every(w=>(m.p+' '+m.n).toLowerCase().includes(w))).filter(m=>{if(m.x*1000>=s.i+s.o)return true;hid++;return false}).map(m=>{const ci=s.i*m.i/1e6,co=s.o*m.o/1e6;return{m,ci,co,per:ci+co,mo:(ci+co)*s.r}}).sort((a,b)=>a.per-b.per||(a.m.p+a.m.n<b.m.p+b.m.n?-1:1));
+return{R,hid}}
+function draw(){if(!P.length)return;const s=S();ST=s;const res=$('res');
+$('tn').textContent=s.own?'Using your own input token count.':(s.tk!='est'&&!TX&&$('pt').value.trim()?'The OpenAI tokenizer did not load, so this count is an estimate. Providers count tokens differently, so every cost below is approximate.':TX?'Exact OpenAI token count. Other providers count differently, so their costs are approximate.':'Token count is an estimate. Providers count tokens differently, so every cost below is approximate.');
+if(!s.i){res.innerHTML='<div class="card"><p>Paste a prompt, or enter input tokens, to see what it costs on each model.</p></div>';$('act').style.display='none';ROWS=[];return}
+const {R,hid}=calc(s);ROWS=R;
+if(!R.length){res.innerHTML='<div class="card"><p><b>No models match.</b> Try another provider or search, tick the specialised models box, or shorten the prompt'+(hid?' ('+hid+' models were hidden because the prompt and reply do not fit their context window)':'')+'.</p></div>';$('act').style.display='none';return}
+const per=R.map(r=>r.per),med=per.length%2?per[(per.length-1)/2]:(per[per.length/2-1]+per[per.length/2])/2,lo=R[0],hi=R[R.length-1];
+let o='<div class="card"><h2>Cost of this prompt</h2><div class="kv"><div>Input tokens'+(TX?' (exact, OpenAI)':s.own?'':' (estimate)')+'<b>'+nm(s.i)+'</b></div><div>Cheapest per request<b>'+mp(lo.per)+'</b>'+E(lo.m.n)+'</div><div>Median per request<b>'+mp(med)+'</b>across '+R.length+' models</div><div>Most expensive per request<b>'+mp(hi.per)+'</b>'+E(hi.m.n)+'</div></div>';
+o+='<p class="note" style="margin:10px 0 0">At '+nm(s.r)+' requests a month, that is '+money(lo.mo)+' on the cheapest listed model, '+money(med*s.r)+' at the median and '+money(hi.mo)+' on the most expensive'+(hid?'. '+hid+' model'+(hid>1?'s were':' was')+' left out because the prompt and reply do not fit their context window':'')+'.</p></div>';
+const h='<tr><th>#</th><th>Provider</th><th>Model</th><th class="n">Context (K)</th><th class="n">Input cost</th><th class="n">Output cost</th><th class="n">Per request</th><th class="n">Per month</th></tr>';
+o+='<div class="card"><h2>All models, cheapest first</h2><div class="ov tw"><table><thead>'+h+'</thead><tbody>'+R.slice(0,SHOW).map((r,k)=>'<tr><td data-label="#">'+(k+1)+'</td><td data-label="Provider">'+E(r.m.p)+'</td><td class="mdl" data-label="Model">'+E(r.m.n)+(EX.test(r.m.n)?'<span class="sp" title="Audio, search, research or other specialised model: priced per token here, but may have other charges">Specialised</span>':'')+'</td><td class="n" data-label="Context (K)">'+nm(r.m.x)+'</td><td class="n" data-label="Input cost">'+mp(r.ci)+'</td><td class="n" data-label="Output cost">'+mp(r.co)+'</td><td class="n" data-label="Per request"><b>'+mp(r.per)+'</b></td><td class="n" data-label="Per month">'+money(r.mo)+'</td></tr>').join('')+'</tbody></table></div>'+(R.length>SHOW?'<button class="b s" id="more">Show '+Math.min(base(),R.length-SHOW)+' more ('+(R.length-SHOW)+' left)</button>':'')+'</div>';
+res.innerHTML=o;$('act').style.display='block';const mb=$('more');if(mb)mb.onclick=()=>{SHOW+=base();draw()};
+try{const{own,...keep}=s;history.replaceState(null,'',location.pathname+(s.own?'#pcc~'+b64(JSON.stringify(keep)):''))}catch(e){}}
+function apply(x){if(x.i)$('qt').value=x.i;if(x.o!=null)$('qo').value=x.o;if(x.r!=null)$('qr').value=x.r;if(x.p&&[...$('fp').options].some(o=>o.value==x.p))$('fp').value=x.p;$('fq').value=x.q||'';$('qx').checked=!!x.x;if(x.tk)$('tk').value=x.tk}
+['pt','qt','qo','qr','fq'].forEach(id=>$(id).addEventListener('input',()=>{SHOW=base();draw()}));['tk','fp','qx'].forEach(id=>$(id).addEventListener('change',()=>{SHOW=base();draw()}));
+$('cpl').onclick=()=>{const s=ST,k={i:s.i,o:s.o,r:s.r,p:s.p,q:s.q,x:s.x,tk:s.tk},u=location.href.split('#')[0]+'#pcc~'+b64(JSON.stringify(k));(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>{$('am').textContent='Link copied. It holds your token count and settings, not your prompt.'}).catch(()=>{$('am').textContent='Copy the address from your browser bar.'})};
+$('csv').onclick=()=>{const s=ST,rows=[['Provider','Model','Context K tokens','Input USD per 1M','Output USD per 1M','Input cost USD','Output cost USD','USD per request','USD per month'],...ROWS.map(r=>[r.m.p,r.m.n,r.m.x,r.m.i,r.m.o,r.ci.toFixed(6),r.co.toFixed(6),r.per.toFixed(6),r.mo.toFixed(4)]),[],['Assumptions','input tokens='+s.i,'output tokens='+s.o,'requests per month='+s.r,TX?'exact OpenAI count':'token count may be an estimate']];const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.map(x=>x.map(cs_).join(',')).join('\n')],{type:'text/csv'}));a.download='prompt-cost-compare.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+fetch('/prices.json').then(r=>r.json()).then(j=>{P=j.models.map(m=>({p:m.provider||'Other',n:m.name,i:+m.in||0,o:+m.out||0,x:+(m.ctx||128)}));M=P.map(m=>[m.p,m.n,m.i,m.o,m.x]);VF=j.updated;verified('vf');
+const ps=[...new Set(P.map(m=>m.p))].sort();$('fp').innerHTML='<option value="">All providers</option>'+ps.map(p=>'<option>'+E(p)+'</option>').join('');
+const h=location.hash.slice(1);if(h.startsWith('pcc~')){try{apply(JSON.parse(ub64(h.slice(4))))}catch(e){}}draw()}).catch(()=>{$('vf').textContent='The price file could not be loaded. Reload the page to try again.';$('vf').style.color='var(--er)'});
+</script></body></html>
