@@ -1,8 +1,8 @@
 ---
 title: Microsoft Outage: What It Means for LLM Apps
-description: Microsoft's November 2026 outage spread through a cascading failure. See what Microsoft says happened and how to add a fallback model to your LLM app.
+description: Microsoft's final report on its November 2026 outage names four causes. See what happened and how to add a fallback model to your LLM app.
 date: 2026-11-13
-updated: 2026-11-20
+updated: 2026-11-27
 image: /assets/blog/microsoft-outage-llm-app-fallback-hero.jpg
 imageAlt: An app routing traffic to a backup provider after the main provider fails
 tools: failover-cost-estimator, cost-forecaster, token-counter, model-prices
@@ -11,25 +11,34 @@ guide: no
 ---
 On 12 November 2026, a major Microsoft outage disrupted Outlook, Teams, Copilot and other services in many countries. If you build products on large language models (LLMs), the useful question is not who was at fault but how your own app would cope if a provider or platform it depends on failed for several hours. This guide explains how failures spread, where LLM apps are exposed, how to add a fallback, and what a fallback costs.
 
-> **Updated 19 November 2026.** Microsoft has published a preliminary post-incident report, and this article now follows it. The final report is still due, so details may change. We describe only what Microsoft and news outlets have reported.
+> **Updated 27 November 2026.** Microsoft published its final post-incident report on 20 November, replacing the preliminary report of 15 November. This article now follows the final report, which names four causes instead of three. We have not seen the report itself, so we describe only what news outlets and summaries of it say.
 
 [[toc]]
 
 ## What caused the outage
 
-The outage began at 16:20 UTC on 12 November 2026 and active impact ended at 16:10 UTC on 13 November, according to Microsoft's report as summarised by [IBTimes UK](https://www.ibtimes.co.uk/microsoft-365-outage-dormant-software-defect-1832656). Exchange Online was hit hardest. Microsoft said it was not aware of a cyberattack, and an executive said there was no indication of malicious activity, as reported by [CyberSecurityNews](https://cybersecuritynews.com/microsoft-365-massive-outage-fixes-fail-as-restored-servers-keep-going-unresponsive/). [Al Jazeera](https://www.aljazeera.com/news/2026/11/13/microsoft-hit-by-global-outages-what-happened-and-why) reported that tools relying on Microsoft services, including ones used by OpenAI and Anthropic, were also disrupted.
+The outage began at 16:20 UTC on 12 November 2026 and active impact ended at 16:10 UTC on 13 November, according to Microsoft's report as summarised by [IBTimes UK](https://www.ibtimes.co.uk/microsoft-365-outage-dormant-software-defect-1832656). Exchange Online was hit hardest. During the incident Microsoft said it was not aware of a cyberattack, as reported by [CyberSecurityNews](https://cybersecuritynews.com/microsoft-365-massive-outage-fixes-fail-as-restored-servers-keep-going-unresponsive/). The final report confirms it was not an attack, and says it found no evidence of malicious activity, according to [365Fanatic's summary](https://www.365fanatic.com/m365-outage-12-november-2026-final-report/). [Al Jazeera](https://www.aljazeera.com/news/2026/11/13/microsoft-hit-by-global-outages-what-happened-and-why) reported that tools relying on Microsoft services, including ones used by OpenAI and Anthropic, were also disrupted.
 
-Microsoft's preliminary post-incident report, dated 15 November, says three things came together. [BleepingComputer](https://www.bleepingcomputer.com/news/microsoft/microsoft-says-months-old-bug-caused-global-microsoft-365-outage/), [365Fanatic](https://www.365fanatic.com/m365-outage-12-november-2026/) and [ITPro](https://www.itpro.com/software/microsoft/microsoft-365-outage-company-exec-lifts-lid-on-the-cascading-failure-that-caused-lengthy-disruption) describe them like this:
+Microsoft's final post-incident report, dated 20 November, says four things came together. [365Fanatic's summary of the final report](https://www.365fanatic.com/m365-outage-12-november-2026-final-report/) and [gHacks](https://ghacks.net/2026/11/24/microsofts-final-outage-report-blames-a-july-bug-and-confirms-some-emails-never-arrived) describe them like this. Earlier coverage of the preliminary report, such as [BleepingComputer](https://www.bleepingcomputer.com/news/microsoft/microsoft-says-months-old-bug-caused-global-microsoft-365-outage/) and [ITPro](https://www.itpro.com/software/microsoft/microsoft-365-outage-company-exec-lifts-lid-on-the-cascading-failure-that-caused-lengthy-disruption), listed three of these and treated the daily peak as background.
 
-1. **A latent defect.** A bug in a fix prepared for Microsoft's networking gateway servers made servers overload and stop responding under certain load. The fix began rolling out in July 2026 and ran for more than three months without issues. Microsoft says its test labs used different traffic and hardware, so testing missed it.
-2. **A load surge.** About 15 hours before the outage, Teams automatically failed over from an alternative gateway to the primary gateway, which also serves Exchange Online. That raised the load and changed the traffic patterns on it.
-3. **Reduced capacity.** About 14% of the gateway's server capacity was out of service because of an unrelated issue. Microsoft says there was enough spare capacity, so this had no effect on its own.
+1. **A latent defect.** Under certain load, servers running a change on Microsoft's networking gateway became overwhelmed, with tasks waiting on each other until CPU and memory ran out. The change began rolling out in July 2026 and ran for more than three months without issues. Microsoft says its load tests used different conditions and older, lower-core machines, so they missed a defect that only hit the newer, higher-core server types.
+2. **Reduced capacity.** Nearly 14% of the gateway's server capacity was out of service during routine operations. Microsoft says there was enough spare capacity, so this had no effect on its own.
+3. **A Teams failover.** On 12 November at 01:07 UTC, a routing issue in US East caused Teams timeouts, and Teams failed over to the gateway that also serves Exchange Online. That had never affected Exchange before. Everything stayed healthy for about 15 hours, because those gateways had not yet reached their daily peak.
+4. **Peak load.** Broad failures began around 16:00 UTC, as US traffic approached its daily peak. The first failures in North America came at the start of the US East business day.
 
-Together, these triggered the defect during the busiest US traffic period. Requests piled up until servers stopped responding. Traffic management moved users to healthy servers, but the defect hit those too. Within two hours it had spread across the fleet, and at its lowest point more than 80% of servers were unresponsive. Teams, OneDrive and SharePoint could move away from the faulty gateway and recovered earlier, but Exchange Online could not, for scale reasons.
+Together, these triggered the defect. Requests piled up until servers stopped responding. Traffic management moved users to healthy servers, but the defect hit those too. Within about two hours it had spread across every region, and at its lowest point more than 80% of North American servers were unresponsive. Teams, OneDrive and SharePoint could move away from the faulty gateway and recovered earlier, but Exchange Online could not, for scale reasons. Microsoft declared the incident resolved on 14 November at 04:15 UTC.
 
-Microsoft's account changed as the incident went on. At first it said it had not identified any recent change linked to the start of the impact. Later it pointed to a network configuration change and a process that sets up secure connections being overwhelmed, and on 13 November it said the incident was introduced by an issue during an earlier network capacity upgrade ([AzureBlog](https://azureblog.co.uk/posts/microsoft-365-outage-12-november-2026/), [TechRadar's live blog](https://www.techradar.com/news/live/outlook-outage-nov-2026)). The preliminary report replaces that early explanation.
+Microsoft's account changed as the incident went on. At first it said it had not identified any recent change linked to the start of the impact. Later it pointed to a network configuration change and a process that sets up secure connections being overwhelmed, and on 13 November it said the incident was introduced by an issue during an earlier network capacity upgrade ([AzureBlog](https://azureblog.co.uk/posts/microsoft-365-outage-12-november-2026/), [TechRadar's live blog](https://www.techradar.com/news/live/outlook-outage-nov-2026)). The final report replaces that early explanation.
 
-Two limits apply. We have not seen the report itself, because Microsoft shares it in its admin center, so the details here come from the outlets above. And it is preliminary: Microsoft says a final report will follow within five business days of full resolution, and it lists 20 November as the target for a full list of repair actions.
+One limit applies. We have not seen the report itself, because Microsoft shares it in its admin center, so the details here come from the outlets above, and the exact wording is Microsoft's. Admins can look for incident MO1550821 in the Microsoft 365 admin center, according to gHacks.
+
+### What happened to email
+
+Microsoft's report says no mail was lost: all queued messages were delivered, and customer data at rest was not affected. To make that possible, it extended Exchange Online's retry window from 24 to 48 hours before a non-delivery report is generated. There was one exception. Delayed messages to consumer mailboxes that had been inactive for more than 30 days expired, and their senders received non-delivery reports. That is why some headlines say certain emails never arrived.
+
+### What Microsoft says it will change
+
+Per the 365Fanatic summary, the report lists 7 repair items, all marked completed. They include reverting the change, a permanently updated server image, the longer delivery window, added capacity, extra monitoring and temporary guardrails against cascading traffic. It also lists 13 next steps. Four are due in the last quarter of 2026: traffic distribution that can no longer cascade across regions, Teams failover limited to the affected region, detection of extended capacity loss, and a faster first notice to customers. Five are due in the first quarter of 2027, including partitioned gateway capacity and load testing on the newest hardware. Four have no date yet, including smaller fault zones, a gradual ramp-up when servers return, and better retry and back-off behaviour across services. The summary notes that Microsoft's report is the authoritative source for exact wording, and it says customers do not need to change anything in their tenant.
 
 ## Why one failure can become many
 
@@ -39,9 +48,9 @@ An outage that starts small can grow through a pattern called a **cascading fail
 3. Those servers now carry more load than they were built for, so some fail too.
 4. The load shifts again, and the failure spreads.
 
-Recovery can be hard for the same reason. If you bring a server back while all the waiting traffic hits it at once, it can fail again straight away. Engineers deal with this by limiting traffic, bringing capacity back gradually and rerouting. Microsoft's preliminary report describes this pattern: traffic moved away from failing servers made the same problem more likely on the ones that were left, and servers brought back were quickly overwhelmed again by backed-up traffic. Microsoft's fix was applied to part of the capacity first, and servers were returned to service in batches.
+Recovery can be hard for the same reason. If you bring a server back while all the waiting traffic hits it at once, it can fail again straight away. Engineers deal with this by limiting traffic, bringing capacity back gradually and rerouting. Microsoft's reports describe this pattern: traffic moved away from failing servers made the same problem more likely on the ones that were left, and servers brought back were quickly overwhelmed again by backed-up traffic. Microsoft's fix was applied to part of the capacity first, and servers were returned to service in batches. Its next steps include a gradual ramp-up and admission control when servers return, which is the same idea as limiting traffic during recovery.
 
-A cascade also needs a trigger. In this case the report points to three things lining up, and it says the spare capacity was enough without the other two. So the lesson is not simply "have bigger backups". It is that a hidden defect, a failover and a capacity dip can combine in ways that no single test shows.
+A cascade also needs a trigger. In this case the report points to four things lining up, and it says the spare capacity was enough without the others. So the lesson is not simply "have bigger backups". It is that a hidden defect, a failover and a capacity dip can combine in ways that no single test shows.
 
 The lesson for your own app is the same one: a failure in one place can become a failure everywhere if nothing limits it.
 
@@ -53,7 +62,7 @@ An app that calls a model API usually depends on more than the model:
 - **One region.** A single region is a single point of failure.
 - **A failover that moves the problem.** In this incident, a normal Teams failover raised the load on a shared gateway about 15 hours before the outage. When you switch traffic to a backup, check that the backup can take it.
 - **A dependency with no alternative path.** Exchange Online could not move off the faulty gateway, while other services could. If part of your app has no alternative, plan a degraded mode for it.
-- **Retries that make things worse.** If every client retries immediately, a struggling service gets even more traffic.
+- **Retries that make things worse.** If every client retries immediately, a struggling service gets even more traffic. Better retry and back-off behaviour across services is one of Microsoft's own listed next steps.
 - **No degraded mode.** Many apps either work fully or show an error.
 
 ## How to add a fallback
@@ -64,7 +73,7 @@ You do not need a perfect design. These steps cover most of the risk.
 2. **Retry with backoff and jitter.** Wait longer after each failed attempt and add a small random delay, so your clients do not all retry together.
 3. **Use a circuit breaker.** After several failures in a row, stop calling the failing provider for a short time and switch to the fallback, then test the main provider again later.
 4. **Choose a second provider or model.** Pick one from a different company, ideally on a different cloud platform, so one outage is less likely to hit both.
-5. **Degrade gracefully.** When no model is available, show a cached answer, queue the request for later or switch to a simpler feature, instead of an error page.
+5. **Degrade gracefully.** When no model is available, show a cached answer, queue the request for later or switch to a simpler feature, instead of an error page. If you queue requests, decide how long they stay valid and tell the user when one expires. Microsoft doubled its retry window to 48 hours, and queued mail to some inactive mailboxes still expired.
 6. **Keep prompts portable.** Different models format output differently and count tokens differently. Test your prompts and your JSON output on the fallback before you need it. See [getting reliable JSON from an LLM](post:reliable-json-from-llm).
 7. **Rehearse the failover.** Turn off the main provider in a test and confirm that the fallback works, with its own keys, limits and quotas. Check that it can carry your real traffic and not only a test request, since a failover that overloads the backup spreads the problem.
 
@@ -91,15 +100,19 @@ For earlier AI outages and what they cost, see the [outage history](post:llm-out
 
 ### What caused the November 2026 Microsoft outage?
 
-According to Microsoft's preliminary post-incident report, three things came together: a latent defect in a fix for its networking gateway servers, a load surge after Teams failed over to the gateway that Exchange Online uses, and reduced server capacity from an unrelated issue. The final report is still due, so details may change.
+According to Microsoft's final post-incident report, as summarised by 365Fanatic and gHacks, four things came together: a latent defect in a change to its networking gateway servers, reduced server capacity from an unrelated issue, a Teams failover onto the gateway that Exchange Online uses, and the daily peak in US traffic.
 
 ### Was it a cyberattack?
 
-Microsoft said it was not aware of a cyberattack, and an executive said there was no indication of malicious activity. Its report describes a software defect and a load problem.
+No. The final report confirms it was not a cyberattack and says Microsoft found no evidence of malicious activity. It also says the change behind the defect was not made by AI tooling. Its report describes a software defect and a load problem.
 
 ### Did the backup servers fail because they were too small?
 
-Not according to Microsoft. It says there was enough spare capacity on its own. The failure came from the defect, the extra load and the capacity dip together, and a separate issue stopped the spread from being contained.
+Not according to Microsoft. It says the roughly 14% of capacity that was out of service would not have caused impact on its own. The failure came from the defect, the capacity dip, the Teams failover and peak load together, and a separate mechanism meant to contain the spread also failed, as gHacks reports.
+
+### Was any email lost?
+
+Microsoft says no. All queued messages were delivered, with one exception: delayed messages to consumer mailboxes inactive for more than 30 days expired, and the senders received non-delivery reports.
 
 ### What is a cascading failure?
 
@@ -119,6 +132,8 @@ Usually not. Pay-as-you-go APIs charge for what you use, so the backup model onl
 - [Al Jazeera: Microsoft hit by global outages, what happened and why](https://www.aljazeera.com/news/2026/11/13/microsoft-hit-by-global-outages-what-happened-and-why)
 - [BleepingComputer: Microsoft says months-old bug caused global Microsoft 365 outage](https://www.bleepingcomputer.com/news/microsoft/microsoft-says-months-old-bug-caused-global-microsoft-365-outage/)
 - [365Fanatic: Microsoft 365 outage of 12 and 13 November 2026](https://www.365fanatic.com/m365-outage-12-november-2026/)
+- [365Fanatic: Microsoft 365 outage, final report summary](https://www.365fanatic.com/m365-outage-12-november-2026-final-report/)
+- [gHacks: Microsoft's final outage report blames a July bug and confirms some emails never arrived](https://ghacks.net/2026/11/24/microsofts-final-outage-report-blames-a-july-bug-and-confirms-some-emails-never-arrived)
 - [ITPro: Microsoft 365 outage, exec lifts lid on the cascading failure](https://www.itpro.com/software/microsoft/microsoft-365-outage-company-exec-lifts-lid-on-the-cascading-failure-that-caused-lengthy-disruption)
 - [IBTimes UK: Microsoft apologises for massive global outage](https://www.ibtimes.co.uk/microsoft-365-outage-dormant-software-defect-1832656)
 - [AzureBlog: Microsoft 365 outage, 12 November 2026](https://azureblog.co.uk/posts/microsoft-365-outage-12-november-2026/)
