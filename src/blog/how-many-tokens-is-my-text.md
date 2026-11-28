@@ -2,7 +2,7 @@
 title: How Many Tokens Is My Text?
 description: A plain-English guide to counting tokens: what a token is, the rules of thumb for English and code, and how to get an exact count.
 date: 2026-11-10
-updated: 2026-11-21
+updated: 2026-11-28
 image: /assets/blog/how-many-tokens-is-my-text-hero.jpg
 imageAlt: The phrase "How many tokens is my text?" split into tokens
 tools: token-counter, text-cleaner, cost-forecaster
@@ -60,7 +60,7 @@ The [Token Counter](tool:token-counter) shows the exact count for OpenAI tokeniz
 
 ## Reducing the count
 
-Strip formatting you do not need, remove repeated boilerplate and trim long system prompts. The [AI Text Cleaner](tool:text-cleaner) removes Markdown symbols and invisible characters, and the [Prompt Token Optimizer](tool:prompt-token-optimizer) shows every cut before you accept it. For PDFs, see [how to send a PDF to an AI chatbot without wasting tokens](post:pdf-to-ai-chatbot-without-wasting-tokens).
+Strip formatting you do not need, remove repeated boilerplate and trim long system prompts. The [AI Text Cleaner](tool:text-cleaner) removes Markdown symbols and invisible characters, and the [Prompt Token Optimizer](tool:prompt-token-optimizer) shows every cut before you accept it. For PDFs, see [how to send a PDF to an AI chatbot without wasting tokens](post:pdf-to-ai-chatbot-without-wasting-tokens). To clean text before you count it, see [remove Markdown and hidden characters from AI text](post:remove-markdown-and-hidden-characters-from-ai-text), and to turn a count into a price, see [how to estimate prompt cost before you send it](post:estimate-prompt-cost-before-you-send-it).
 
 Once you know your count, the [Cost Forecaster](tool:cost-forecaster) turns it into a monthly budget.
 

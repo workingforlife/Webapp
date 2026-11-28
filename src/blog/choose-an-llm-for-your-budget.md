@@ -2,7 +2,7 @@
 title: How to Choose an LLM for Your Budget
 description: A five-step way to shortlist AI models by what your workload costs, then test the shortlist on your own examples before you commit to one.
 date: 2026-11-19
-updated: 2026-11-21
+updated: 2026-11-28
 image: /assets/blog/choose-an-llm-for-your-budget-hero.jpg
 imageAlt: A long list of models narrowed to a short list by cost and context
 tools: model-picker, model-prices, cost-forecaster, token-counter
@@ -55,7 +55,7 @@ This is the step no price list can do for you. Collect 20 to 50 real examples of
 
 ## Next, forecast the shortlist
 
-Once you have two or three candidates, take them to the [Cost Forecaster](tool:cost-forecaster). It handles chatbots and agents, where history makes each turn cost more than the last. You can also open the four cheapest in [Model Prices](tool:model-prices) to compare them side by side.
+Once you have two or three candidates, take them to the [Cost Forecaster](tool:cost-forecaster). It handles chatbots and agents, where history makes each turn cost more than the last. You can also open the four cheapest in [Model Prices](tool:model-prices) to compare them side by side. To see what one real prompt costs on every model, see [how much a prompt costs on every model](post:how-much-does-a-prompt-cost-on-every-model).
 
 ## Frequently asked questions
 

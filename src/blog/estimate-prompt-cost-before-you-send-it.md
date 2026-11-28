@@ -2,6 +2,7 @@
 title: Estimate Prompt Cost Before You Send It
 description: A four-step method to price a prompt before you send it: count the tokens, guess the reply, apply the rates and multiply by volume.
 date: 2026-11-26
+updated: 2026-11-28
 image: /assets/blog/estimate-prompt-cost-before-you-send-it-hero.jpg
 imageAlt: Four steps from counting tokens to a monthly cost
 tools: prompt-cost-compare, token-counter, cost-forecaster
@@ -39,7 +40,7 @@ The prices here are for illustration, not a real model. The [Prompt Cost Compare
 
 ## Check against a real bill
 
-After a few days of real use, compare your estimate with the usage figures your provider reports. Adjust your token counts and reply length to match.
+After a few days of real use, compare your estimate with the usage figures your provider reports. Adjust your token counts and reply length to match. To see the same prompt priced on every model, see [how much a prompt costs on every model](post:how-much-does-a-prompt-cost-on-every-model), and see [what few-shot examples cost in tokens](post:what-few-shot-examples-cost-in-tokens) for prompts with examples. To see what a rewrite changes in tokens and cost, use [Prompt Diff](tool:prompt-diff), and [how to compare two prompts](post:compare-two-prompts-diff-tokens-and-cost) walks through the comparison.
 
 ## Frequently asked questions
 

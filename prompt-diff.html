@@ -1,0 +1,308 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Prompt Diff: Compare Two Prompts | AI Utility Belt</title><meta name="description" content="Compare two versions of a prompt. See every change, the token difference per edit, and what the new version costs."><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{--bg:#05070d;--sf:#0b1220;--bd:#1b2a4a;--tx:#e6edf9;--mu:#8a9bbd;--ac:#3b82f6;--ac2:#60a5fa;--tx2:#cdd8ee;--mu2:#5d6e91;--bd2:#3b4f7a;--ok:#4ade80;--er:#f87171;--wn:#fbbf24;--hdr:rgba(5,7,13,.94);--shadow:rgba(0,0,0,.6);--hv:#14233f;--fl:#0f1d3a;color-scheme:dark}
+:root[data-theme=light]{--bg:#f4f7fc;--sf:#ffffff;--bd:#d3dcee;--tx:#0f172a;--mu:#4f5e7d;--ac:#2563eb;--ac2:#1d4ed8;--tx2:#26344f;--mu2:#5b6b8a;--bd2:#b4c1da;--ok:#15803d;--er:#b91c1c;--wn:#b45309;--hdr:rgba(244,247,252,.94);--shadow:rgba(15,23,42,.18);--hv:#e3ecfc;--fl:#dbe7ff;color-scheme:light}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.sh{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--hdr);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.sh-in{max-width:1000px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.sh a,.sh summary{color:var(--tx);text-decoration:none}.sh-logo{display:flex;align-items:center;gap:10px;font-weight:700;margin-right:auto}.sh-logo svg{width:32px;height:32px;flex:none}.sh-wm{font-size:18px;letter-spacing:-.01em;white-space:nowrap}.sh-wm i,.ft-r b i{font-style:normal;color:var(--ac2)}
+.sh-nav{display:flex;align-items:center;gap:6px}.sh-nav>a,.sh-dd summary{padding:6px 10px;border-radius:8px;transition:background .12s,color .12s}.sh-nav>a:hover,.sh-dd summary:hover,.sh-dd[open] summary{color:var(--tx);background:var(--hv)}
+.sh-dd{position:relative}.sh-dd summary{cursor:pointer;list-style:none}.sh-dd summary::-webkit-details-marker{display:none}.sh-dd summary::after{content:"";display:inline-block;width:6px;height:6px;margin:0 2px 3px 8px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg);transition:transform .15s}.sh-dd[open] summary::after{transform:rotate(-135deg);margin-bottom:-2px}
+.sh-menu{position:absolute;right:0;top:140%;width:min(560px,92vw);max-height:70vh;overflow:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px}
+.sh-g i{display:block;font-style:normal;color:var(--ac2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}.sh-g a{display:block;padding:6px 8px;margin:0 -8px;font-size:14px;border-radius:8px;transition:background .12s}.sh-g a:hover,.sh-g a:focus-visible{background:var(--hv);color:var(--tx)}
+.ft{border-top:1px solid var(--bd);margin-top:40px;padding:24px 20px calc(24px + env(safe-area-inset-bottom,0px));color:var(--mu);font:13px/1.7 system-ui,sans-serif}.ft-in{max-width:1000px;margin:auto}.ft a{color:var(--mu);margin-right:14px;display:inline-block;text-decoration:none}.ft a:hover{color:var(--ac2)}
+.rel{max-width:1000px;margin:30px auto 0;padding:0 20px;font-family:system-ui,sans-serif;color:var(--tx)}.rel h3{margin:0 0 10px}
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tc{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px;text-decoration:none;color:var(--tx)}.tc:hover{border-color:var(--ac)}.tc b{display:block}.tc span{color:var(--mu);font-size:13px}
+.ft-r{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin-bottom:8px}.ft-r b{color:var(--tx)}.ft-t{margin-right:auto}.ft-r a{margin:0}.ft p{margin:0}.ft-n{display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:space-between}
+.b,.btn,.chip,.tb{transition:filter .12s,transform .06s,border-color .12s}
+@media(hover:hover){.b:hover,.btn:hover{filter:brightness(1.18)}:root[data-theme=light] .b:hover,:root[data-theme=light] .btn:hover{filter:brightness(.88)}.b.s:hover{filter:none;background:var(--bd2);color:var(--tx)}.chip:hover{border-color:var(--ac);background:var(--hv)}.tb:not(.on):hover{color:var(--tx);background:var(--hv)}.tc:hover,.post:hover{background:var(--hv)}}
+.b:active,.btn:active,.chip:active,.tb:active{transform:translateY(1px)}
+:focus-visible{outline:2px solid var(--ac2);outline-offset:2px;border-radius:4px}
+.b:disabled,.btn:disabled{opacity:.5;cursor:not-allowed}
+.crumbs{max-width:900px;margin:0 auto;padding:14px 20px 0;font:13px/1.4 system-ui,sans-serif;color:var(--mu)}.crumbs a{color:var(--mu);text-decoration:none}.crumbs a:hover{color:var(--ac2)}.crumbs span{margin:0 6px}
+.tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:6px;padding:0;border:1px solid var(--bd2);border-radius:50%;background:transparent;color:var(--mu);font:600 11px/1 system-ui,sans-serif;cursor:help;vertical-align:middle}.tip:hover,.tip[aria-expanded=true]{color:#fff;background:var(--ac);border-color:var(--ac)}
+.tipbox{position:absolute;z-index:40;width:min(300px,calc(100vw - 24px));background:var(--sf);border:1px solid var(--ac);border-radius:10px;padding:10px 12px;font:13px/1.5 system-ui,sans-serif;color:var(--tx2);box-shadow:0 8px 24px var(--shadow)}.tipbox b{display:block;color:var(--tx);margin-bottom:2px}.tipbox a{color:var(--ac2);display:inline-block;margin-top:4px}
+.ttop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:20px;line-height:1;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s,bottom .15s}.ttop.on{opacity:.95;pointer-events:auto}body.tray-on .ttop{bottom:calc(84px + env(safe-area-inset-bottom,0px))}.ttop:hover{border-color:var(--ac)}
+.ad{max-width:900px;margin:22px auto;padding:0 20px;min-height:100px;text-align:center}.ad small{display:block;color:var(--mu2);font:11px system-ui,sans-serif;margin-bottom:4px}
+.ft-leg{margin-top:6px}
+.tipbox .tx{display:block;color:var(--tx2)}.tipbox .ty{display:block;margin-top:6px;color:var(--tx2);font-size:12.5px}.tipbox .ty i{font-style:normal;color:var(--ac2);font-weight:600}
+.sh-theme,.sh-search{display:inline-flex}.sh-search:hover{border-color:var(--ac);color:var(--ac2)}.sh-search svg{width:18px;height:18px}.sh-theme:hover{border-color:var(--ac);color:var(--ac2)}.sh-theme svg{width:18px;height:18px}.sh-theme .sun{display:none}:root[data-theme=light] .sh-theme .sun{display:block}:root[data-theme=light] .sh-theme .moon{display:none}
+:root[data-theme=light] .sh-logo svg,:root[data-theme=light] .ft svg{filter:none}
+.sh-burger{display:none}
+.sh-theme,.sh-burger,.sh-search{align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:1px solid var(--bd);border-radius:50%;background:transparent;color:var(--tx);cursor:pointer}.sh-burger:hover,.sh-burger[aria-expanded=true]{border-color:var(--ac);background:var(--hv)}.sh-burger svg{width:18px;height:18px}
+@media(max-width:700px){
+.sh-in{flex-wrap:nowrap;gap:10px;padding:10px 16px}.sh-logo{min-width:0}.sh-wm{font-size:17px}
+.sh-burger{display:inline-flex}
+.sh-nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:2px;background:var(--sf);border-bottom:1px solid var(--bd);padding:8px 16px 14px;max-height:calc(100vh - 64px);overflow:auto;box-shadow:0 12px 24px var(--shadow)}
+.sh.open .sh-nav{display:flex}
+.sh-nav>a,.sh-dd summary{padding:12px 10px;font-size:16px;display:flex;justify-content:space-between;align-items:center}
+.sh-dd{position:static}.sh-dd summary::after{width:8px;height:8px;margin-right:4px}
+.sh-menu{position:static;width:auto;max-height:none;overflow:visible;display:block;background:none;border:0;border-radius:0;padding:10px 0 8px 10px}.sh-g{margin-bottom:10px}.sh-g a{padding:9px 10px;margin:0;font-size:15px}
+.sh-g i{display:flex;justify-content:space-between;align-items:center;padding:11px 10px;margin:0;cursor:pointer;border-radius:8px}.sh-g i:hover{background:var(--hv)}.sh-g i::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg);margin:-3px 4px 0 0;transition:transform .15s}.sh-g.shut i::after{transform:rotate(-45deg);margin-top:0}.sh-g.shut a{display:none}.sh-nav .sh-menu .sh-all{margin:0;padding:12px 10px}
+body .sq{padding-top:12px}
+}
+
+.sh-g a span{display:block}.sh-g a small{display:block;color:var(--mu);font-size:12px;line-height:1.3;margin-top:1px}
+.sh-g a[aria-current=page],.sh-nav>a[aria-current=page]{color:var(--ac2);background:var(--hv)}.sh-dd summary.cur{color:var(--ac2)}
+.sh-menu .sh-all{grid-column:1/-1;display:block;padding:9px 8px;margin:0 -8px -4px;border-top:1px solid var(--bd);border-radius:0 0 8px 8px;font-size:14px;font-weight:600;color:var(--ac2)}.sh-menu .sh-all:hover{background:var(--hv)}
+.menu-open .ttop,.sq-open .ttop{display:none}.sq-open{overflow:hidden}
+.sq{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:flex-start;padding:10vh 12px 12px;font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}.sq[hidden]{display:none}
+.sq-b{width:min(580px,100%);max-height:78vh;overflow:auto;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:12px;box-shadow:0 18px 40px var(--shadow)}
+.sq-b input{width:100%;box-sizing:border-box;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:11px 12px;font:inherit;font-size:16px}.sq-b input:focus{outline:2px solid var(--ac);outline-offset:1px}
+.sq-r{list-style:none;margin:8px 0 0;padding:0}.sq-r a{display:block;padding:9px 10px;border-radius:8px;color:var(--tx);text-decoration:none}.sq-r a:hover,.sq-r a.on{background:var(--hv)}.sq-r b{display:block;font-weight:600}.sq-r small{display:block;color:var(--mu);font-size:13px;line-height:1.35;margin-top:1px}
+.sq-t{float:right;margin-left:8px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ac2);border:1px solid var(--bd);border-radius:999px;padding:1px 8px}.sq-0{padding:10px;color:var(--mu)}.sq-h{margin:8px 2px 0;color:var(--mu);font-size:12px}
+</style><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:900px;margin:auto;padding:0 20px}h1{font-size:30px;margin:28px 0 6px}.lead{color:var(--mu);margin:0 0 16px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:18px;margin:14px 0}
+label{display:block;color:var(--mu);font-size:13px;margin:12px 0 4px}
+input,select,textarea{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:9px;font:inherit}
+textarea{min-height:150px;font:13px ui-monospace,Menlo,Consolas,monospace}input[type=checkbox]{width:auto}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 14px}
+.b{font:inherit;cursor:pointer;border:0;border-radius:8px;background:var(--ac);color:#fff;padding:9px 14px;margin:12px 8px 0 0}.b.s{background:var(--bd);color:var(--tx)}
+.st{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.st div{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;color:var(--mu);font-size:13px}.st b{display:block;font-size:20px;color:var(--ac2)}
+.ov{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:520px}th,td{padding:7px;border-bottom:1px solid var(--bd);text-align:left}th{color:var(--mu);font-weight:500}th[data-k]{cursor:pointer}
+.note{color:var(--mu);font-size:12px;margin-top:10px}.ok{color:var(--ok)}.er{color:var(--er)}
+.about h2{font-size:20px;margin:30px 0 6px;color:var(--ac2)}.about p,.about li{color:var(--tx2)}
+details.q{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:12px 16px;margin:8px 0}details.q summary{cursor:pointer;font-weight:600}details.q p{color:var(--tx2);margin:8px 0 0}
+.tabs{display:flex;gap:4px;border:1px solid var(--bd);border-radius:999px;padding:3px;width:max-content;max-width:100%;margin-bottom:6px}.tabs .tb{font:inherit;cursor:pointer;border:0;background:none;color:var(--mu);padding:8px 14px;border-radius:999px}.tabs .tb.on{background:var(--ac);color:#fff}
+select[size]{width:100%}input[type=search]{-webkit-appearance:none;appearance:none}
+</style><style>
+.sx{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.diff{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--bd);border-radius:10px;padding:12px;max-height:440px;overflow:auto;background:var(--bg)}
+.diff del{background:#3b1d1d;color:var(--er);text-decoration:line-through}.diff ins{background:#12301f;color:var(--ok);text-decoration:none}
+.hk.fl{outline:2px solid var(--ac);border-radius:3px}.gap{color:var(--mu);font-style:italic}.pl{font-size:13px;color:var(--mu);margin:0 0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chips .c{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--bg);color:var(--ac2);border-radius:999px;padding:6px 12px;margin:0}
+.big{font-size:34px;font-weight:700;line-height:1.15}.big small{font-size:15px;font-weight:400;color:var(--mu)}
+.sv{color:var(--ok)}.up{color:var(--er)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:14px 0 4px}.kv div{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;color:var(--mu);font-size:13px}.kv b{display:block;font-size:20px;color:var(--tx);margin-top:2px}.kv b.sv{color:var(--ok)}.kv b.up{color:var(--er)}
+.tw{max-height:420px;overflow:auto;border:1px solid var(--bd);border-radius:10px}.tw table{margin:0}.tw th{position:sticky;top:0;background:var(--sf);z-index:1}
+td.n,th.n{text-align:right;white-space:nowrap}.et tbody tr{cursor:pointer}.et tbody tr:hover{background:var(--bg)}.et td{vertical-align:top;overflow-wrap:anywhere}
+.mu{color:var(--mu);font-size:12px}.kv .mu{display:block;font-weight:400;margin-top:2px}
+@media(max-width:700px){.sx{grid-template-columns:1fr}.tw{max-height:none;border:0;overflow:visible}.et{display:block;min-width:0}.et thead{display:none}.et tbody{display:block}
+.et tr{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}
+.et td{display:block;border:0;padding:0;text-align:left!important;white-space:normal}.et td::before{content:attr(data-label);display:block;color:var(--mu);font-size:11px;font-weight:400}
+.et td[data-label=Removed],.et td[data-label=Added]{grid-column:1/-1}}
+</style><style>.tp{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-4px 0 14px}.tp .b{margin:0;padding:6px 12px;font-size:13px}.pv{font-size:13px;color:var(--mu)}.pv:before{content:"\1F512\00a0"}.tn{font-size:13px;color:var(--mu)}.nx{margin:18px 0 6px;padding:10px 14px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);font-size:15px}.nx a{color:var(--ac2);font-weight:600}.nx span{color:var(--mu2);font-size:13px;margin-left:6px}.about ol{padding-left:22px}</style><script>try{var t=localStorage.getItem("aub-theme");if(t==="light")document.documentElement.dataset.theme="light"}catch(e){}</script><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#05070d"><meta property="og:type" content="website"><meta property="og:site_name" content="AI Utility Belt"><meta property="og:title" content="Prompt Diff: Compare Two Prompts | AI Utility Belt"><meta property="og:description" content="Compare two versions of a prompt. See every change, the token difference per edit, and what the new version costs."><meta name="twitter:card" content="summary_large_image"><meta name="robots" content="max-image-preview:large"><link rel="canonical" href="https://aiutilitybelt.dev/prompt-diff"><meta property="og:url" content="https://aiutilitybelt.dev/prompt-diff"><meta property="og:image" content="https://aiutilitybelt.dev/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><script>window.TOKLIBS=["https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.8.1/dist/o200k_base.js","https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.8.1/dist/cl100k_base.js"];</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Prompt Diff","url":"https://aiutilitybelt.dev/prompt-diff","description":"Compare two versions of a prompt. See every change, the token difference per edit, and what the new version costs.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"AI Utility Belt","url":"https://aiutilitybelt.dev/","logo":"https://aiutilitybelt.dev/logo.svg"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is my prompt uploaded?","acceptedAnswer":{"@type":"Answer","text":"No. The comparison runs in your browser. The page fetches the price list, and the exact tokenizer files if you choose one, but your text is not part of those requests. There is no share link on purpose, because it would put your prompts in the address."}},{"@type":"Question","name":"Why do the edits not add up to the total?","acceptedAnswer":{"@type":"Answer","text":"Each edit is counted on its own, but tokens depend on the text around them. Words at the edge of an edit can join their neighbours into different tokens. Use the total change for decisions."}},{"@type":"Question","name":"Do spaces and line breaks count?","acceptedAnswer":{"@type":"Answer","text":"Yes, they can cost tokens, and a change that only adds or removes whitespace is shown with dots and line-break marks. Hidden characters are covered in how to save tokens in a prompt ."}},{"@type":"Question","name":"Should I compare by words or by lines?","acceptedAnswer":{"@type":"Answer","text":"Words shows exactly what changed inside a sentence. Lines is easier to read for lists and templates where whole lines were rewritten. Very long prompts switch to lines on their own."}},{"@type":"Question","name":"Where do the prices come from?","acceptedAnswer":{"@type":"Answer","text":"From the open-source LiteLLM catalog, refreshed daily. They are not verified against provider billing, so confirm on the provider page before relying on a number."}}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aiutilitybelt.dev/"},{"@type":"ListItem","position":2,"name":"Prompt Diff","item":"https://aiutilitybelt.dev/prompt-diff"}]}</script></head><body>
+<div class="sh" role="banner"><div class="sh-in"><a class="sh-logo" href="/" aria-label="AI Utility Belt home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AI Utility Belt"><defs><linearGradient id="lg-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5aa2ff"/><stop offset="1" stop-color="#1f56d8"/></linearGradient><linearGradient id="lg-hl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="lg-cw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dbe8ff"/></linearGradient><filter id="lg-sh" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="1.2" stdDeviation="1.1" flood-color="#0b2a73" flood-opacity=".45"/></filter></defs><rect width="64" height="64" rx="15" fill="url(#lg-bg)"/><path d="M0 15A15 15 0 0 1 15 0h34a15 15 0 0 1 15 15v14H0z" fill="url(#lg-hl)"/><g filter="url(#lg-sh)"><rect x="6" y="17" width="15" height="32" rx="5" fill="url(#lg-cw)"/><rect x="24.5" y="11" width="15" height="38" rx="5" fill="url(#lg-cw)"/><rect x="43" y="17" width="15" height="32" rx="5" fill="url(#lg-cw)"/></g><g transform="translate(13.5 27)" fill="none" stroke="#f59e0b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle r="4.7"/><circle r="1.5" fill="#f59e0b" stroke="none"/></g><g transform="translate(32 21)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-1.7 -4.8L-2.7 4.8M2.7 -4.8L1.7 4.8M-5 -1.7H5M-5 1.7H5"/></g><g transform="translate(50.5 27)" fill="none" stroke="#0891b2" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-4.8 -3.8L-.9 0L-4.8 3.8M1.2 4.4H5.2"/></g><rect x="9.0" y="36" width="9" height="2.4" rx="1.2" fill="#b9cdfa"/><rect x="9.0" y="41" width="6" height="2.4" rx="1.2" fill="#d3e0fc"/><rect x="27.5" y="30" width="9" height="2.4" rx="1.2" fill="#b9cdfa"/><rect x="27.5" y="35" width="6" height="2.4" rx="1.2" fill="#d3e0fc"/><rect x="46.0" y="36" width="9" height="2.4" rx="1.2" fill="#b9cdfa"/><rect x="46.0" y="41" width="6" height="2.4" rx="1.2" fill="#d3e0fc"/></svg><span class="sh-wm"><i>AI</i> Utility Belt</span></a><div class="sh-nav" id="sh-nav" role="navigation"><details class="sh-dd"><summary>Tools</summary><div class="sh-menu"><div class="sh-g"><i>Costs and Models</i><a href="/cost-forecaster"><span>Cost Forecaster</span><small>Monthly cost of chatbots and agents</small></a><a href="/model-picker"><span>Model Picker</span><small>Rank models for your workload</small></a><a href="/price-changes"><span>Price Change Tracker</span><small>What got cheaper or dearer</small></a><a href="/deadline-checker"><span>Deadline Checker</span><small>Which deadlines hit your models</small></a><a href="/failover-cost-estimator"><span>Failover Cost Estimator</span><small>Cost of running on a backup model</small></a><a href="/token-counter"><span>Token Counter</span><small>Count tokens, check the limit</small></a><a href="/prompt-cost-compare"><span>Prompt Cost Compare</span><small>One prompt priced on every model</small></a></div><div class="sh-g"><i>Documents and Text</i><a href="/pdf-to-text"><span>PDF &amp; Web to Text</span><small>PDF or web page to clean text</small></a><a href="/text-cleaner"><span>AI Text Cleaner</span><small>Strip Markdown and hidden characters</small></a><a href="/chunker"><span>Text Chunker</span><small>Split long text for search (RAG)</small></a><a href="/chat-export"><span>Chat Export</span><small>Save chats as Markdown, Word, PDF</small></a></div><div class="sh-g"><i>Prompts</i><a href="/prompt-builder"><span>Prompt Builder</span><small>Reusable templates with variables</small></a><a href="/prompt-token-optimizer"><span>Prompt Token Optimizer</span><small>Trim filler, review every cut</small></a><a href="/prompt-diff"><span>Prompt Diff</span><small>Compare two prompt versions</small></a></div><div class="sh-g"><i>Developer</i><a href="/json-validator"><span>JSON Validator</span><small>Check JSON against a schema</small></a><a href="/json-repair"><span>JSON Repair</span><small>Fix broken JSON from models</small></a></div><a class="sh-all" href="/tools">Browse all tools &rarr;</a></div></details><a href="/model-prices">Model Prices</a><a href="/blog/">Blog</a><a href="/how-it-works">How It Works</a></div><button class="sh-search" type="button" aria-label="Search tools and guides" title="Search (press /)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button><button class="sh-theme" type="button" aria-label="Switch to light theme" title="Switch theme"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button class="sh-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sh-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>&rsaquo;</span><span style="margin:0">Prompt Diff</span></nav><main><h1>Prompt Diff</h1><p class="lead">Compare two versions of a prompt. See every change, how many tokens each edit adds or saves, and what the new version costs.</p><div class="tp"><span class="pv">Runs in your browser. Nothing you enter is uploaded.</span><button type="button" class="b s" data-sl>Copy link with my input</button><span class="tn" role="status" aria-live="polite"></span></div>
+<div class="card"><div class="sx"><div><label for="pa">Original prompt</label><textarea id="pa" style="min-height:200px" placeholder="Paste the old version here…"></textarea></div><div><label for="pb">Revised prompt</label><textarea id="pb" style="min-height:200px" placeholder="Paste the new version here…"></textarea></div></div>
+<div class="g"><div><label for="tk">Tokenizer</label><select id="tk"><option value="est">Estimate (any model)</option><option value="o200k">OpenAI o200k (exact)</option><option value="cl100k">OpenAI cl100k (exact)</option></select></div><div><label for="md">Compare by</label><select id="md"><option value="words">Words</option><option value="lines">Lines</option></select></div></div>
+<div class="chips"><button class="c" id="exb">Load an example</button><button class="c" id="swb">Swap the two</button><button class="c" id="clb">Clear</button></div>
+<p class="note" style="margin:8px 0 0">Both prompts stay in your browser. Nothing you paste is uploaded.</p></div>
+<div class="card"><p class="note" id="vf" style="margin:0 0 8px">Loading prices. Price catalog refreshed 2026-11-27.</p><div class="g"><div><label for="pm">Model for the cost figures</label><select id="pm"></select></div><div><label for="qr">Requests per month that send this prompt</label><input id="qr" type="number" min="0" value="100000" inputmode="numeric"></div></div>
+<p class="note" style="margin:6px 0 0">Cost counts the prompt as input tokens at the model's list price. Output tokens and caching are not included. For those, use the <a href="/cost-forecaster">Cost Forecaster</a>.</p></div>
+<p class="card" id="ph" style="margin:0">Paste two versions of a prompt above, or load the example, to see the differences.</p>
+<div id="rs" style="display:none">
+<div class="card"><h2 style="margin:0 0 4px;font-size:18px">Token change</h2><div class="big" id="bg"></div><div class="kv" id="kv"></div><p class="note" id="sn" style="margin:8px 0 0"></p></div>
+<div class="card"><h2 style="margin:0 0 4px;font-size:18px">Changes</h2><p class="note" style="margin:0 0 8px">Red with a line through is removed, green is added. A dot (·) is a space and ↵ is a line break when a change is only whitespace.</p>
+<div class="g"><div><label for="vw">View</label><select id="vw"><option value="inline">One column</option><option value="side">Side by side</option></select></div><div style="display:flex;align-items:flex-end"><label style="margin:0 0 10px;display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="co" style="width:auto;margin:0"> Show changes only, with context</label></div></div>
+<div id="dw"></div></div>
+<div class="card" id="ec"><h2 style="margin:0 0 4px;font-size:18px">Tokens per edit</h2><p class="note" style="margin:0 0 8px">Each edit is counted on its own text, so the figures may not add up exactly to the total above. Select a row to jump to that change.</p>
+<div class="g"><div><label for="od">Order</label><select id="od"><option value="doc">In the text</option><option value="size">Biggest change first</option></select></div></div>
+<div class="ov tw"><table class="et"><thead><tr><th>#</th><th>Removed</th><th>Added</th><th class="n">Tokens</th></tr></thead><tbody id="eb"></tbody></table></div><button class="b s" id="more" style="display:none"></button></div>
+<div class="card"><button class="b" id="cs">Copy Summary</button><button class="b s" id="cd">Copy Diff as Text</button><span class="note" id="am" role="status"></span></div>
+</div>
+<p class="nx"><b>Next:</b> <a href="/prompt-token-optimizer">Trim the revised prompt further</a> <span>Prompt Token Optimizer</span></p><div class="about"><h2>How to Use</h2><ol><li>Paste the original prompt on the left and the revised one on the right, or load an example.</li><li>Choose how to compare: by words or by lines.</li><li>Read the token change, the cost, and the tokens added or saved by each edit.</li></ol><h2>What It Does</h2><p>Paste an old and a new version of a prompt and Prompt Diff marks what was removed and what was added. It counts the tokens in both versions, shows the change for each edit, and turns the difference into a cost per request and per month on the model you choose.</p>
+<h2>How the Numbers Work</h2><ul><li><b>Total change.</b> The tokens in the whole revised prompt minus the whole original. This is the number to trust.</li><li><b>Tokens per edit.</b> Each change is counted on its removed text and its added text separately. A tokenizer's counts depend on the neighbouring text, so these can differ slightly from the total.</li><li><b>Estimate or exact.</b> The estimate works for any model and the Token Counter shows its likely range. Choose an exact OpenAI tokenizer for OpenAI models. Other providers can count differently, see <a href="/blog/why-token-counts-differ-between-models">why token counts differ</a>.</li><li><b>Cost.</b> Tokens times the model's input price, from the daily price list, times your monthly requests.</li></ul>
+<h2>What It Does Not Tell You</h2><p>Fewer tokens is cheaper, not better. A shorter prompt can drop an instruction the model needed, so compare the answers as well. See <a href="/blog/how-to-test-a-prompt-change-before-shipping">how to test a prompt change before shipping</a>. To find savings in the first place, try the <a href="/prompt-token-optimizer">Prompt Token Optimizer</a>.</p>
+<h2 id="faq">Frequently Asked Questions</h2>
+<details class="q"><summary>Is my prompt uploaded?</summary><p>No. The comparison runs in your browser. The page fetches the price list, and the exact tokenizer files if you choose one, but your text is not part of those requests. There is no share link on purpose, because it would put your prompts in the address.</p></details>
+<details class="q"><summary>Why do the edits not add up to the total?</summary><p>Each edit is counted on its own, but tokens depend on the text around them. Words at the edge of an edit can join their neighbours into different tokens. Use the total change for decisions.</p></details>
+<details class="q"><summary>Do spaces and line breaks count?</summary><p>Yes, they can cost tokens, and a change that only adds or removes whitespace is shown with dots and line-break marks. Hidden characters are covered in <a href="/blog/how-to-save-tokens-in-a-prompt-myths-tested">how to save tokens in a prompt</a>.</p></details>
+<details class="q"><summary>Should I compare by words or by lines?</summary><p>Words shows exactly what changed inside a sentence. Lines is easier to read for lists and templates where whole lines were rewritten. Very long prompts switch to lines on their own.</p></details>
+<details class="q"><summary>Where do the prices come from?</summary><p>From the open-source LiteLLM catalog, refreshed daily. They are not verified against provider billing, so confirm on the provider page before relying on a number.</p></details></div>
+<style>.rel .posts{display:grid;gap:12px}.rel .post{display:block;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px;text-decoration:none;color:var(--tx)}.rel .post:hover{border-color:var(--ac)}.rel .post b{display:block;font-size:18px;margin-bottom:4px}.rel .post span{color:var(--mu);font-size:14px}.rel .post time{display:block;color:var(--mu2);font-size:12px;margin-top:6px}</style><div class="rel"><h3>Learn more: guides for this tool</h3><div class="posts"><a class="post" href="/blog/compare-two-prompts-diff-tokens-and-cost"><b>Compare Two Prompts: Diff, Tokens &amp; Cost</b><span>How to compare two versions of a prompt: see every change, the token difference per edit, and what the new version costs per request and per month.</span><time datetime="2026-11-28">November 28, 2026</time></a><a class="post" href="/blog/how-to-test-a-prompt-change-before-shipping"><b>How to Test a Prompt Change Before Shipping</b><span>A simple routine for testing a prompt edit: change one thing, keep a test set, run both versions, compare quality, tokens and cost, then keep a changelog.</span><time datetime="2026-11-28">November 28, 2026</time></a></div></div><div class="rel"><h3>Related tools</h3><div class="tg"><a class="tc" href="/prompt-builder"><b>Prompt Builder</b><span>Reusable prompt templates with variables, saving and share links.</span></a><a class="tc" href="/prompt-token-optimizer"><b>Prompt Token Optimizer</b><span>Cut filler and repeats from long prompts, review every change, and see what it saves.</span></a><a class="tc" href="/cost-forecaster"><b>Cost Forecaster</b><span>Forecast monthly LLM costs for chatbots, agents and batch jobs.</span></a></div></div>
+<div class="ft"><div class="ft-in"><div class="ft-r"><a class="ft-b" href="/"><b><i>AI</i> Utility Belt</b></a><span class="ft-t">Private tools for AI costs, tokens and prompts</span><a href="/tools">All Tools</a><a href="/blog/">Blog</a><a href="/glossary">Glossary</a><a href="/how-it-works">How It Works</a><a href="/about">About</a><a href="mailto:contact@aiutilitybelt.dev">Feedback</a></div><div class="ft-n"><p>Prices come from an open-source catalog and are not verified against provider billing. Nothing you paste or upload leaves your browser.</p><p>&copy; 2026 AI Utility Belt</p></div><p class="ft-leg"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></p></div></div>
+<button class="ttop" type="button" aria-label="Back to top">&#8593;</button>
+<script>(function(){
+var d=document.querySelector(".sh-dd");if(d){document.addEventListener("click",function(e){if(d.open&&!d.contains(e.target))d.open=false});document.addEventListener("keydown",function(e){if(e.key==="Escape"&&d.open){d.open=false;d.querySelector("summary").focus()}});d.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("a"))d.open=false})}
+var hd=document.querySelector(".sh"),bg=document.querySelector(".sh-burger");if(hd&&bg){var shut=function(){hd.classList.remove("open");document.body.classList.remove("menu-open");bg.setAttribute("aria-expanded","false");bg.setAttribute("aria-label","Open menu")};bg.addEventListener("click",function(e){e.stopPropagation();var o=hd.classList.toggle("open");document.body.classList.toggle("menu-open",o);bg.setAttribute("aria-expanded",o?"true":"false");bg.setAttribute("aria-label",o?"Close menu":"Open menu")});document.addEventListener("click",function(e){if(hd.classList.contains("open")&&!hd.contains(e.target))shut();else if(e.target.closest&&e.target.closest(".sh-nav a"))shut()});document.addEventListener("keydown",function(e){if(e.key==="Escape"&&hd.classList.contains("open")){shut();bg.focus()}});window.addEventListener("resize",function(){if(innerWidth>700)shut()})}
+var pth=location.pathname.replace(/\.html$/,"").replace(/\/+$/,"")||"/";document.querySelectorAll(".sh-nav a").forEach(function(a){var u=(a.getAttribute("href")||"").replace(/\/+$/,"")||"/";if(u===pth||(u==="/blog"&&pth.indexOf("/blog")===0)){a.setAttribute("aria-current","page");var dd=a.closest(".sh-dd");if(dd)dd.querySelector("summary").classList.add("cur")}});
+var mq=matchMedia("(max-width:700px)"),gs=document.querySelectorAll(".sh-g");gs.forEach(function(g){if(!g.querySelector("[aria-current]"))g.classList.add("shut");var h=g.firstElementChild;var tg=function(){if(!mq.matches)return;g.classList.toggle("shut");h.setAttribute("aria-expanded",g.classList.contains("shut")?"false":"true")};h.addEventListener("click",tg);h.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();tg()}})});
+var gsync=function(){gs.forEach(function(g){var h=g.firstElementChild;if(mq.matches){h.setAttribute("role","button");h.tabIndex=0;h.setAttribute("aria-expanded",g.classList.contains("shut")?"false":"true")}else{h.removeAttribute("role");h.removeAttribute("tabindex");h.removeAttribute("aria-expanded")}})};gsync();(mq.addEventListener?mq.addEventListener("change",gsync):mq.addListener(gsync));
+var sb=document.querySelector(".sh-search"),SI=null,sq=null,sa=-1;
+function sx(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function sclose(){if(sq){sq.hidden=true;document.body.classList.remove("sq-open");if(sb)sb.focus()}}
+function sset(n){var l=sq.querySelectorAll(".sq-r a");if(!l.length)return;sa=(n+l.length)%l.length;l.forEach(function(a,i){a.classList.toggle("on",i===sa);if(i===sa)a.scrollIntoView({block:"nearest"})})}
+function srun(){var o=sq.querySelector(".sq-r"),q=sq.querySelector("input").value.trim().toLowerCase();sa=-1;if(!q||!SI){o.innerHTML="";return}var tk=q.split(/\s+/),R=[];SI.forEach(function(e){var s=0;for(var i=0;i<tk.length;i++){var t=tk[i],a=e.t.indexOf(t),b=e.d.indexOf(t);if(a<0&&b<0)return;s+=(a>=0?(a===0||e.t.charAt(a-1)===" "?5:3):0)+(b>=0?1:0)}R.push([s+e.w,e])});R.sort(function(x,y){return y[0]-x[0]});o.innerHTML=R.length?R.slice(0,8).map(function(r){var e=r[1];return '<li><a href="'+sx(e.u)+'"><span class="sq-t">'+sx(e.k)+'</span><b>'+sx(e.n)+'</b><small>'+sx(e.s)+'</small></a></li>'}).join(""):'<li class="sq-0">No matches. Try a shorter word, such as "json" or "cost".</li>'}
+function sopen(){if(!sq){sq=document.createElement("div");sq.className="sq";sq.innerHTML='<div class="sq-b" role="dialog" aria-modal="true" aria-label="Search tools and guides"><input type="search" placeholder="Search tools, guides and terms" aria-label="Search tools and guides" autocomplete="off"><ul class="sq-r"></ul><p class="sq-h">Tools, guides, prices and glossary. Press Esc to close.</p></div>';document.body.appendChild(sq);sq.addEventListener("click",function(e){if(e.target===sq)sclose()});var i=sq.querySelector("input");i.addEventListener("input",srun);i.addEventListener("keydown",function(e){if(e.key==="ArrowDown"){e.preventDefault();sset(sa+1)}else if(e.key==="ArrowUp"){e.preventDefault();sset(sa<0?-1:sa-1)}else if(e.key==="Enter"){var l=sq.querySelectorAll(".sq-r a"),a=l[sa<0?0:sa];if(a){e.preventDefault();location.href=a.href}}})}sq.hidden=false;document.body.classList.add("sq-open");sq.querySelector("input").focus();if(!SI){fetch("/assets/search.json?v=b7235932").then(function(r){return r.json()}).then(function(j){SI=j.map(function(e){return{k:e[0],n:e[1],u:e[2],s:e[3].length>96?e[3].slice(0,96).replace(/\s+\S*$/,"")+"\u2026":e[3],t:e[1].toLowerCase(),d:(e[3]+" "+(e[4]||"")).toLowerCase(),w:e[0]==="Tool"?2:e[0]==="Guide"?1:0}});srun()}).catch(function(){sq.querySelector(".sq-h").textContent="Search could not load. Please try again later."})}}
+if(sb)sb.addEventListener("click",sopen);
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&sq&&!sq.hidden){sclose();return}if(e.key==="/"&&!e.ctrlKey&&!e.metaKey&&!e.altKey){var t=e.target,n=t&&t.tagName;if(n==="INPUT"||n==="TEXTAREA"||n==="SELECT"||(t&&t.isContentEditable))return;e.preventDefault();sopen()}});
+var th=document.querySelector(".sh-theme");function setT(t,save){document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==="light"?"#f4f7fc":"#05070d";if(th){th.setAttribute("aria-label",t==="light"?"Switch to dark theme":"Switch to light theme")}if(save){try{localStorage.setItem("aub-theme",t)}catch(e){}}window.dispatchEvent(new Event("themechange"))}
+if(th){setT(document.documentElement.dataset.theme==="light"?"light":"dark",false);th.addEventListener("click",function(){setT(document.documentElement.dataset.theme==="light"?"dark":"light",true)})}
+var L={};window.lazy=function(u){return L[u]||(L[u]=new Promise(function(ok,no){var s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=function(){delete L[u];no(Error("Could not load "+u))};document.head.appendChild(s)}))};
+var tl=window.TOKLIBS||[];if(tl.length){var go=function(){["input","change","paste","focusin","pointerdown"].forEach(function(t){document.removeEventListener(t,go,true)});Promise.all(tl.map(window.lazy)).then(function(){var a=document.activeElement;if(a&&a.dispatchEvent)a.dispatchEvent(new Event("input",{bubbles:true}));window.dispatchEvent(new Event("toklib"))}).catch(function(){})};["input","change","paste","focusin","pointerdown"].forEach(function(t){document.addEventListener(t,go,true)})}
+var b=document.querySelector(".ttop");if(b){var sc=function(){b.classList.toggle("on",window.scrollY>700)};window.addEventListener("scroll",sc,{passive:true});sc();b.addEventListener("click",function(){window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"})})}
+var G=[],GU="/glossary",box=null,cur=null;
+function close(){if(box){box.remove();box=null}if(cur){cur.setAttribute("aria-expanded","false");cur=null}}
+function show(btn,g){close();cur=btn;btn.setAttribute("aria-expanded","true");box=document.createElement("div");box.className="tipbox";box.setAttribute("role","tooltip");var h="<b></b><span class='tx'></span>";if(g.y)h+="<span class='ty'><i>Typical:</i> </span>";h+="<a></a>";box.innerHTML=h;box.children[0].textContent=g.t;box.children[1].textContent=g.x;if(g.y)box.children[2].appendChild(document.createTextNode(g.y));var a=box.querySelector("a");a.href=GU+"#"+g.g;a.textContent="Read more in the Glossary";document.body.appendChild(box);var r=btn.getBoundingClientRect(),w=box.offsetWidth,x=Math.max(12,Math.min(r.left+scrollX-8,scrollX+document.documentElement.clientWidth-w-12));box.style.left=x+"px";box.style.top=(r.bottom+scrollY+8)+"px"}
+function scan(){if(!G.length)return;var els=document.querySelectorAll("main label,main th,main h3,main h4");els.forEach(function(el){if(el.dataset.tip||el.closest(".about,.q,.prose,.qc,.rel"))return;el.dataset.tip="1";var t=el.textContent.replace(/\s+/g," ").trim();if(!t)return;for(var i=0;i<G.length;i++){var g=G[i];if(g.re.test(t)){var bt=document.createElement("button");bt.type="button";bt.className="tip";bt.textContent="?";bt.setAttribute("aria-label","What does "+g.t+" mean?");bt.setAttribute("aria-expanded","false");(function(bt,g){bt.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();if(cur===bt)close();else show(bt,g)});bt.addEventListener("mouseenter",function(){if(matchMedia("(hover:hover)").matches)show(bt,g)})})(bt,g);el.appendChild(bt);break}}})}
+document.addEventListener("click",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip")))close()});document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+document.addEventListener("mouseover",function(e){if(box&&!box.contains(e.target)&&!(e.target.classList&&e.target.classList.contains("tip"))&&matchMedia("(hover:hover)").matches&&cur&&!cur.contains(e.target))close()});
+var tm=null,mo=new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(function(){mo.disconnect();scan();obs()},120)});function obs(){var m=document.querySelector("main");if(m)mo.observe(m,{childList:true,subtree:true})}
+window.lazy("/assets/tips.js?v=b4500667").then(function(){G=(window.TIPS||[]).map(function(g){g.re=new RegExp(g.m,"i");return g});scan();obs()}).catch(function(){});
+
+})();</script>
+<script>
+const SAMPLE=[['Anthropic','Large (sample)',5,25,1000],['Anthropic','Mid (sample)',3,15,1000],['Anthropic','Small (sample)',1,5,200],['Google','Flash (sample)',0.3,2.5,1000],['Google','Pro (sample)',1.25,10,1000],['OpenAI','Large (sample)',2.5,10,128],['OpenAI','Mini (sample)',0.15,0.6,128]];
+let M=SAMPLE,VF='';
+const E=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=x=>'$'+(x>0&&x<0.01?x.toFixed(5):x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
+function loadPrices(cb){cb();fetch('/prices.json').then(r=>r.json()).then(j=>{M=j.models.map(m=>[m.provider||'Other',m.name,m.in,m.out,m.ctx||128]).sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:a[1]<b[1]?-1:1);VF=j.updated;cb()}).catch(()=>{})}
+function verified(id){const el=document.getElementById(id),d=VF?(Date.now()-new Date(VF))/864e5:null;el.style.color=(d==null||d>7)?'var(--er)':'var(--ok)';el.textContent=d==null?'Showing sample prices because the price file could not be loaded.':'Price catalog refreshed '+VF+(d>7?' (over a week old, treat with caution)':'')+' · '+M.length+' models'}
+
+const $=s=>document.getElementById(s);var TX=false;
+/* Token estimate, v2. A single "characters per token" rule fails for code, JSON and non-Latin scripts, so this adds up a rough
+   token count for each kind of text. The numbers in EST_K are starting values: re-fit them with scripts/make-calibration.mjs
+   whenever you have exact tokenizer counts. estParts() returns {mid, lo, hi, kind}; est() returns the middle figure. */
+const EST_K={
+ word:[.85,1,1.3],   // Latin word: 1 token up to 8 letters, then +1 per 4 letters; [low, middle, high] multipliers
+ num:[.9,1,1.15],    // digit runs: 1 token per 3 digits
+ brk:[.9,1,1.1],     // line breaks and indentation runs: 1 token each
+ sym:[.75,1,1.3],    // punctuation runs: SYMW tokens per character, at least 1
+ indic:[.6,.95,1.5],   // tokens per character for Devanagari, Bengali, Tamil and other Indic scripts
+ cjk:[.7,.93,1.25],  // Chinese, Japanese, Korean
+ cyr:[.3,.4,.58],    // Cyrillic and Greek
+ arab:[.4,.62,1],  // Arabic and Hebrew
+ thai:[.4,.6,1],
+ symw:.4,           // tokens per punctuation character
+ emoji:[2,2,3],
+ other:[.4,.7,1.2]};
+function estParts(t){
+ if(!t||!t.trim())return{mid:0,lo:0,hi:0,kind:'prose'};
+ const r=/([A-Za-zÀ-ɏḀ-ỿ]+)|(\d+)|(\s*\n\s*|[ \t]{2,})|([ \t])|([!-\/:-@\[-`{-~]+)|([\s\S])/gu,S=[0,0,0];let m,nl=0,sy=0,tot=0;
+ const add=(b,k)=>{S[0]+=b*k[0];S[1]+=b*k[1];S[2]+=b*k[2]};
+ while(m=r.exec(t)){
+  const s=m[0];
+  if(m[1]){add(s.length<=8?1:1+Math.ceil((s.length-8)/4),EST_K.word);tot+=s.length}
+  else if(m[2]){add(Math.ceil(s.length/3),EST_K.num);tot+=s.length}
+  else if(m[3])add(1,EST_K.brk);
+  else if(m[4]){}
+  else if(m[5]){add(Math.max(1,Math.round(s.length*EST_K.symw)),EST_K.sym);sy+=s.length;tot+=s.length}
+  else{
+   const c=s.codePointAt(0);tot++;
+   const k=c>=0x900&&c<=0xDFF?EST_K.indic:c>=0xE00&&c<=0xE7F?EST_K.thai:(c>=0x3040&&c<=0x30FF)||(c>=0x3400&&c<=0x4DBF)||(c>=0x4E00&&c<=0x9FFF)||(c>=0xAC00&&c<=0xD7AF)||(c>=0xF900&&c<=0xFAFF)?EST_K.cjk:(c>=0x370&&c<=0x52F)?EST_K.cyr:(c>=0x590&&c<=0x6FF)||(c>=0x750&&c<=0x77F)?EST_K.arab:c>=0x1F000||(c>=0x2600&&c<=0x27BF)?EST_K.emoji:EST_K.other;
+   add(1,k);if(k!==EST_K.emoji&&k!==EST_K.other)nl++}
+ }
+ return{mid:Math.ceil(S[1]),lo:Math.floor(S[0]),hi:Math.ceil(S[2]),kind:nl/Math.max(1,tot)>.2?'nonlatin':sy/Math.max(1,tot)>.2?'symbols':'prose'};
+}
+const est=t=>estParts(t).mid;
+
+const EX=/audio|tts|realtime|search|deep-research|embed|image|moderation|transcribe|whisper/i;
+const nm=n=>Math.round(n).toLocaleString('en-US');
+const sg=n=>(n>0?'+':n<0?'−':'')+nm(Math.abs(n));
+const mf=x=>{const a=Math.abs(x);if(a===0)return '$0.00';if(a>=0.01)return money(a);const d=Math.min(10,Math.max(2,1-Math.floor(Math.log10(a))));return '$'+a.toFixed(d)};
+const ms=x=>(x<0?'−':x>0?'+':'')+mf(x);
+const key=m=>m.p+'|'+m.n;
+let P=[],ST=null,SHOWN=100,TM=0;
+function tk(t){const k=$('tk').value,g=window['GPTTokenizer_'+k+'_base'];TX=false;if(k!='est'&&g){try{const n=g.encode(t).length;TX=true;return n}catch(e){}}return est(t)}
+const split=(t,m)=>m=='lines'?(t.match(/[^\n]*\n|[^\n]+$/g)||[]):(t.match(/\s+|[^\s]+/g)||[]);
+function lcs(a,b){let s=0;const n0=a.length,m0=b.length;
+while(s<n0&&s<m0&&a[s]===b[s])s++;
+let ea=n0,eb=m0;while(ea>s&&eb>s&&a[ea-1]===b[eb-1]){ea--;eb--}
+const A=a.slice(s,ea),B=b.slice(s,eb),n=A.length,m=B.length;
+if(n*m>3e7)return null;
+const ops=[];for(let i=0;i<s;i++)ops.push(['=',a[i]]);
+if(!n||!m){A.forEach(x=>ops.push(['-',x]));B.forEach(x=>ops.push(['+',x]))}
+else{const W=m+1,L=new Uint16Array((n+1)*W);
+for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i*W+j]=A[i]===B[j]?L[(i+1)*W+j+1]+1:Math.max(L[(i+1)*W+j],L[i*W+j+1]);
+let i=0,j=0;while(i<n&&j<m){if(A[i]===B[j]){ops.push(['=',A[i]]);i++;j++}else if(L[(i+1)*W+j]>=L[i*W+j+1]){ops.push(['-',A[i]]);i++}else{ops.push(['+',B[j]]);j++}}
+while(i<n)ops.push(['-',A[i++]]);while(j<m)ops.push(['+',B[j++]])}
+for(let i=ea;i<n0;i++)ops.push(['=',a[i]]);
+return ops}
+function segs(ops){const out=[];let cur=null;
+for(const[t,s]of ops){if(t=='='){if(cur){out.push(cur);cur=null}const l=out[out.length-1];if(l&&l.t=='eq')l.s+=s;else out.push({t:'eq',s})}
+else{if(!cur)cur={t:'ch',d:'',i:''};if(t=='-')cur.d+=s;else cur.i+=s}}
+if(cur)out.push(cur);
+const m=[];for(let k=0;k<out.length;k++){const x=out[k];
+if(x.t=='eq'&&/^\s+$/.test(x.s)&&m.length&&m[m.length-1].t=='ch'&&out[k+1]&&out[k+1].t=='ch'){const p=m[m.length-1],nx=out[k+1];p.d+=x.s+nx.d;p.i+=x.s+nx.i;k++}else m.push(x)}
+return m}
+const vis=s=>E(s).replace(/ /g,'·').replace(/\t/g,'→').replace(/\n/g,'↵\n');
+const sh=s=>/^\s+$/.test(s)?vis(s):E(s);
+const exr=s=>{if(!s)return '—';if(/^\s+$/.test(s))return vis(s).replace(/\n/g,'');const t=s.length>90?s.slice(0,87)+'…':s;return E(t).replace(/\n/g,'↵ ')};
+function ctx(s,first,last){if(s.length<=240)return E(s);const h=first?'':E(s.slice(0,100)),t=last?'':E(s.slice(-100)),sk=s.length-(first?0:100)-(last?0:100);return h+'<span class="gap">⋯ '+nm(sk)+' unchanged characters ⋯</span>'+t}
+function render(S,side,only){let h='',k=0;S.forEach((x,ix)=>{if(x.t=='eq'){h+=only?ctx(x.s,ix==0,ix==S.length-1):E(x.s)}else{k++;
+if(side=='L'){h+='<span class="hk" id="hL'+k+'">'+(x.d?'<del>'+sh(x.d)+'</del>':'')+'</span>'}
+else if(side=='R'){h+='<span class="hk" id="hR'+k+'">'+(x.i?'<ins>'+sh(x.i)+'</ins>':'')+'</span>'}
+else{h+='<span class="hk" id="hI'+k+'">'+(x.d?'<del>'+sh(x.d)+'</del>':'')+(x.i?'<ins>'+sh(x.i)+'</ins>':'')+'</span>'}}});return h}
+function model(){return P.find(m=>key(m)==$('pm').value)}
+function calc(){
+const a=$('pa').value.replace(/\r\n?/g,'\n'),b=$('pb').value.replace(/\r\n?/g,'\n'),ph=$('ph');
+if(!a&&!b){ST=null;$('rs').style.display='none';ph.style.display='block';ph.textContent='Paste two versions of a prompt above, or load the example, to see the differences.';return}
+let mode=$('md').value,note='',ops=lcs(split(a,mode),split(b,mode));
+if(!ops&&mode=='words'){mode='lines';ops=lcs(split(a,'lines'),split(b,'lines'));note='These prompts are long, so the comparison switched to whole lines.'}
+if(!ops){ST=null;$('rs').style.display='none';ph.style.display='block';ph.textContent='These prompts are too long to compare in the browser. Compare them one section at a time.';return}
+const S=segs(ops),ta=tk(a),tb=tk(b),exact=TX,H=[];
+S.forEach(x=>{if(x.t=='ch'){const r=x.d?tk(x.d):0,ad=x.i?tk(x.i):0;x.k=H.length+1;H.push({d:x.d,i:x.i,r,a:ad,n:ad-r,k:x.k})}});
+TX=exact;
+ST={a,b,S,H,ta,tb,exact,note,sel:$('tk').value,la:exact?null:estParts(a),lb:exact?null:estParts(b)};
+ph.style.display='none';$('rs').style.display='block';SHOWN=100;
+drawSum();drawDiff();drawEdits()}
+function drawSum(){const s=ST;if(!s)return;const m=model(),r=Math.max(0,parseFloat($('qr').value)||0),d=s.tb-s.ta,pc=s.ta?d/s.ta*100:(s.tb?100:0),ap=s.exact?'':'≈ ',cls=d<0?'sv':d>0?'up':'';
+$('bg').className='big '+cls;$('bg').innerHTML=ap+sg(d)+' <small>tokens ('+(pc>0?'+':pc<0?'−':'')+Math.abs(pc).toFixed(1)+'%)</small>';
+let nr=0,na=0;s.H.forEach(h=>{if(h.n<0)nr++;else if(h.n>0)na++});
+let o='<div>Original<b>'+ap+nm(s.ta)+'</b></div><div>Revised<b>'+ap+nm(s.tb)+'</b></div><div>Edits<b>'+s.H.length+'</b><span class="mu">'+nr+' save tokens, '+na+' add tokens</span></div>';
+if(m){const ca=s.ta*m.i/1e6,cb=s.tb*m.i/1e6,dm=(cb-ca)*r,c2=dm<0?'sv':dm>0?'up':'';
+o+='<div>Per request<b class="'+c2+'">'+mf(ca)+' → '+mf(cb)+'</b><span class="mu">'+ms(cb-ca)+' at $'+m.i+' per 1M input tokens</span></div><div>Per month ('+nm(r)+' requests)<b class="'+c2+'">'+ms(dm)+'</b><span class="mu">'+money(ca*r)+' → '+money(cb*r)+'</span></div>'}
+else o+='<div>Cost<b>—</b><span class="mu">Prices not loaded</span></div>';
+$('kv').innerHTML=o;
+let n=s.note;if(s.a===s.b)n=(n?n+' ':'')+'The two prompts are identical.';
+if(!s.exact){n=(n?n+' ':'')+(s.sel!='est'?'The exact tokenizer did not load, so these are estimates. ':'Estimates. ')+'Likely range: original '+nm(s.la.lo)+' to '+nm(s.la.hi)+', revised '+nm(s.lb.lo)+' to '+nm(s.lb.hi)+' tokens. Choose an exact OpenAI tokenizer above for OpenAI models.'}
+else n=(n?n+' ':'')+'Exact token counts for the OpenAI '+s.sel+' tokenizer. Other providers count differently.';
+$('sn').textContent=n}
+function drawDiff(){const s=ST;if(!s)return;const v=$('vw').value,only=$('co').checked,w=$('dw');
+if(!s.H.length){w.innerHTML='<div class="diff">'+(s.a?E(s.a):'')+'</div>';return}
+if(v=='side'){w.innerHTML='<div class="sx"><div><p class="pl">Original</p><div class="diff" id="dL">'+render(s.S,'L',only)+'</div></div><div><p class="pl">Revised</p><div class="diff" id="dR">'+render(s.S,'R',only)+'</div></div></div>';
+const L=$('dL'),R=$('dR');let act=null;const sy=(f,t)=>()=>{if(act===f){const m=f.scrollHeight-f.clientHeight;t.scrollTop=m>0?f.scrollTop*(t.scrollHeight-t.clientHeight)/m:0}};
+[[L,R],[R,L]].forEach(([f,t])=>{['pointerenter','touchstart','wheel','focus'].forEach(e=>f.addEventListener(e,()=>{act=f},{passive:true}));f.addEventListener('scroll',sy(f,t))})}
+else w.innerHTML='<div class="diff" id="dI">'+render(s.S,'I',only)+'</div>'}
+function drawEdits(){const s=ST;if(!s)return;const ec=$('ec');if(!s.H.length){ec.style.display='none';return}ec.style.display='block';
+const L=s.H.slice();if($('od').value=='size')L.sort((x,y)=>Math.abs(y.n)-Math.abs(x.n)||x.k-y.k);
+$('eb').innerHTML=L.slice(0,SHOWN).map(h=>'<tr data-k="'+h.k+'" tabindex="0"><td data-label="#">'+h.k+'</td><td data-label="Removed">'+exr(h.d)+'</td><td data-label="Added">'+exr(h.i)+'</td><td class="n" data-label="Tokens"><b class="'+(h.n<0?'sv':h.n>0?'up':'')+'">'+sg(h.n)+'</b> <span class="mu">(−'+h.r+' / +'+h.a+')</span></td></tr>').join('');
+const mb=$('more');if(L.length>SHOWN){mb.style.display='inline-block';mb.textContent='Show more ('+(L.length-SHOWN)+' left)'}else mb.style.display='none'}
+function jump(k){const v=$('vw').value;[v=='side'?'hL':'hI',v=='side'?'hR':''].forEach(p=>{if(!p)return;const el=document.getElementById(p+k);if(!el)return;if(p!='hR')el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('fl');setTimeout(()=>el.classList.remove('fl'),1400)})}
+function say(t){$('am').textContent=t}
+function copy(t,msg){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>say(msg)).catch(()=>say('Copy failed. Select the text and copy it yourself.'))}
+function summary(){const s=ST,m=model(),r=Math.max(0,parseFloat($('qr').value)||0),d=s.tb-s.ta,pc=s.ta?d/s.ta*100:0,ap=s.exact?'':'about ';
+let o='Prompt Diff summary\nOriginal: '+ap+nm(s.ta)+' tokens\nRevised: '+ap+nm(s.tb)+' tokens\nChange: '+sg(d)+' tokens ('+(pc>0?'+':pc<0?'−':'')+Math.abs(pc).toFixed(1)+'%), '+(s.exact?'exact '+s.sel+' count':'estimate')+'\nEdits: '+s.H.length+'\n';
+if(m){const ca=s.ta*m.i/1e6,cb=s.tb*m.i/1e6;o+='Model: '+m.n+' at $'+m.i+' per 1M input tokens\nPer request: '+mf(ca)+' to '+mf(cb)+' ('+ms(cb-ca)+')\nPer month at '+nm(r)+' requests: '+money(ca*r)+' to '+money(cb*r)+' ('+ms((cb-ca)*r)+')\n'}
+return o+'Input tokens only. Output and caching not included.'}
+function asText(){return ST.S.map(x=>x.t=='eq'?x.s:(x.d?'[-'+x.d+'-]':'')+(x.i?'{+'+x.i+'+}':'')).join('')}
+const EXA='You are a helpful assistant for our customer support team.\nPlease read the customer\'s message very carefully and then write a reply.\nIt is important that you always stay polite and professional.\nIn order to help the customer, first of all find out what the problem is.\nKeep the reply short. Do not make up any information that you are not sure about.\nIf you do not know the answer, please say so.';
+const EXB='You are a support assistant for our customer team.\nRead the customer\'s message carefully, then write a reply.\nAlways stay polite and professional.\nTo help the customer, first find the problem.\nKeep the reply short. Do not invent information you are not sure about.\nIf you do not know the answer, say so.\nReply in the customer\'s language.';
+function later(f,ms_){return()=>{clearTimeout(TM);TM=setTimeout(f,ms_)}}
+['pa','pb'].forEach(id=>$(id).addEventListener('input',later(calc,200)));
+['tk','md'].forEach(id=>$(id).addEventListener('change',calc));
+['pm','qr'].forEach(id=>$(id).addEventListener('input',drawSum));
+['vw','co'].forEach(id=>$(id).addEventListener('change',drawDiff));
+$('od').addEventListener('change',drawEdits);
+$('more').onclick=()=>{SHOWN+=100;drawEdits()};
+$('eb').addEventListener('click',e=>{const tr=e.target.closest('tr');if(tr)jump(tr.dataset.k)});
+$('eb').addEventListener('keydown',e=>{if(e.key=='Enter'){const tr=e.target.closest('tr');if(tr)jump(tr.dataset.k)}});
+$('exb').onclick=()=>{$('pa').value=EXA;$('pb').value=EXB;calc()};
+$('swb').onclick=()=>{const t=$('pa').value;$('pa').value=$('pb').value;$('pb').value=t;calc()};
+$('clb').onclick=()=>{$('pa').value='';$('pb').value='';say('');calc()};
+$('cs').onclick=()=>{if(ST)copy(summary(),'Summary copied.')};
+$('cd').onclick=()=>{if(ST)copy(asText(),'Copied. Removed text is in [- -], added text in {+ +}.')};
+fetch('/prices.json').then(r=>r.json()).then(j=>{P=j.models.filter(m=>+m.in>0&&!EX.test(m.name)).map(m=>({p:m.provider||'Other',n:m.name,i:+m.in||0}));M=j.models.map(m=>[m.provider||'Other',m.name,m.in,m.out,m.ctx||128]);VF=j.updated;verified('vf');
+const ps=[...new Set(P.map(m=>m.p))].sort(),by={};P.forEach(m=>{(by[m.p]=by[m.p]||[]).push(m)});
+$('pm').innerHTML=ps.map(p=>'<optgroup label="'+E(p)+'">'+by[p].sort((a,b)=>a.n<b.n?-1:1).map(m=>'<option value="'+E(key(m))+'">'+E(m.n)+'</option>').join('')+'</optgroup>').join('');
+const d=P.find(m=>m.n=='claude-sonnet-5-5');if(d)$('pm').value=key(d);drawSum()}).catch(()=>{$('vf').textContent='The price file could not be loaded. Token counts still work. Reload the page to try again.';$('vf').style.color='var(--er)'});
+</script><script>window.TOOLX={"share":["pa","pb"]}</script><script>(function(){var C=window.TOOLX||{},d=document;function $(i){return d.getElementById(i)}
+function say(m){var n=d.querySelector('.tp .tn');if(n){n.textContent=m;clearTimeout(say.t);say.t=setTimeout(function(){n.textContent=''},4000)}}
+function fire(el){['input','change'].forEach(function(e){el.dispatchEvent(new Event(e,{bubbles:true}))})}
+function setv(o){Object.keys(o).forEach(function(k){var e=$(k);if(e){e.value=o[k];fire(e)}})}
+var ex=d.querySelector('[data-ex]');if(ex&&C.sample)ex.addEventListener('click',function(){setv(C.sample);say('Example loaded.')});
+function b64(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function unb64(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return decodeURIComponent(escape(atob(s)))}
+var sl=d.querySelector('[data-sl]');
+if(sl&&C.share)sl.addEventListener('click',function(){var o={},any=false;C.share.forEach(function(k){var e=$(k);if(e&&e.value){o[k]=e.value;any=true}});
+ if(!any){say('Add some text first.');return}
+ var h=b64(JSON.stringify(o));if(h.length>3000){say('Too long for a link. Use a shorter sample.');return}
+ var u=location.href.split('#')[0]+'#in='+h;
+ (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){say('Link copied. It holds your text inside the link itself; our servers never see it.')}).catch(function(){prompt('Copy this link',u)})});
+var m=/^#in=([\w-]+)$/.exec(location.hash);if(m&&C.share){try{var o=JSON.parse(unb64(m[1]));var ok={};C.share.forEach(function(k){if(typeof o[k]==='string')ok[k]=o[k]});setv(ok);say('Loaded from the link.')}catch(e){}}
+var last=null;d.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(b&&/^\s*(copy|share)/i.test(b.textContent)&&!b.hasAttribute('data-sl'))last=b},true);
+if(navigator.clipboard&&navigator.clipboard.writeText){var w=navigator.clipboard.writeText.bind(navigator.clipboard);try{navigator.clipboard.writeText=function(t){var b=last;last=null;var p=w(t);if(b&&p&&p.then)p.then(function(){if(b.dataset.f)return;b.dataset.f=b.textContent;b.textContent='Copied ✓';setTimeout(function(){b.textContent=b.dataset.f;delete b.dataset.f},1600)},function(){});return p}}catch(e){}}
+})();
+</script></body></html>

@@ -2,6 +2,7 @@
 title: Paste or Upload: Which Uses Fewer Tokens?
 description: Is it cheaper to paste text or upload a file to an AI? It depends on the file type. What PDFs, text files and long pastes cost, with a worked example.
 date: 2026-11-20
+updated: 2026-11-28
 image: /assets/blog/paste-or-upload-which-uses-fewer-tokens-hero.jpg
 imageAlt: Pasted text compared with an uploaded PDF, with the PDF adding a page image to the token count
 tools: pdf-to-text, token-counter, cost-forecaster
@@ -30,7 +31,7 @@ You can give an AI a document by pasting its text or by attaching the file, and 
 
 ## Text files: no real difference
 
-Anthropic's help centre says that for non-PDF documents, Claude extracts text only. That means a text, Word or Markdown file arrives as text, and the token count is the count of that text. Pasting the same words gives the same cost, with two small exceptions: the file's formatting may add or drop characters, and hidden characters or odd line breaks in either version cost extra. Our [token myths guide](post:how-to-save-tokens-in-a-prompt-myths-tested) shows how much those can add.
+Anthropic's help centre says that for non-PDF documents, Claude extracts text only. That means a text, Word or Markdown file arrives as text, and the token count is the count of that text. Pasting the same words gives the same cost, with two small exceptions: the file's formatting may add or drop characters, and hidden characters or odd line breaks in either version cost extra. Our [token myths guide](post:how-to-save-tokens-in-a-prompt-myths-tested) shows how much those can add. To strip them yourself, see [remove Markdown and hidden characters from AI text](post:remove-markdown-and-hidden-characters-from-ai-text).
 
 ## PDFs: the one case where pasting wins
 
@@ -58,7 +59,7 @@ Chat apps sometimes decide for you. Third-party write-ups report that ChatGPT tu
 
 ## Long files and retrieval
 
-Some products do not put the whole file in context and use [[tip:retrieval]] instead. OpenAI's help page for ChatGPT Enterprise says that PDFs over a 110,000-token limit have their text and images embedded in a search index, and the app retrieves the relevant parts. Anthropic's help page says Claude accepts any number of files as long as the total content fits the context window, and a third-party guide reports that Anthropic's help centre says retrieval switches on when a project approaches that limit. Retrieval can use fewer tokens per question, but the model sees only the retrieved parts, so it can miss things that are spread across the document.
+Some products do not put the whole file in context and use [[tip:retrieval]] instead. OpenAI's help page for ChatGPT Enterprise says that PDFs over a 110,000-token limit have their text and images embedded in a search index, and the app retrieves the relevant parts. Anthropic's help page says Claude accepts any number of files as long as the total content fits the context window, and a third-party guide reports that Anthropic's help centre says retrieval switches on when a project approaches that limit. Retrieval can use fewer tokens per question, but the model sees only the retrieved parts, so it can miss things that are spread across the document. If you build the retrieval yourself, [chunk size and overlap for RAG](post:chunk-size-and-overlap-for-rag) covers how to split the text.
 
 ## How to choose
 

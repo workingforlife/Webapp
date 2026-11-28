@@ -2,7 +2,7 @@
 title: Reusable Prompt Templates With Variables
 description: Write a prompt once and fill in the blanks each time. Build reusable AI prompt templates with variables, with three examples and sharing tips.
 date: 2026-11-19
-updated: 2026-11-22
+updated: 2026-11-28
 image: /assets/blog/reusable-prompt-templates-hero.jpg
 imageAlt: A prompt template with highlighted variable blanks
 tools: prompt-builder, prompt-token-optimizer, token-counter
@@ -62,7 +62,7 @@ The last one pairs well with [getting reliable JSON from an LLM](post:reliable-j
 
 ## Keep the cost in check
 
-A template that you reuse is sent many times, so its length adds up. Count it with the [Token Counter](tool:token-counter), and trim repeated filler with the [Prompt Token Optimizer](tool:prompt-token-optimizer), which lets you review every change and shows what it saves. For more ways to reduce spend, see [seven ways to cut your LLM bill](post:cut-your-llm-bill).
+A template that you reuse is sent many times, so its length adds up. Count it with the [Token Counter](tool:token-counter), and trim repeated filler with the [Prompt Token Optimizer](tool:prompt-token-optimizer), which lets you review every change and shows what it saves. For more ways to reduce spend, see [seven ways to cut your LLM bill](post:cut-your-llm-bill). To compare two versions of a template, see [how to test a prompt change before shipping](post:how-to-test-a-prompt-change-before-shipping), and see [what few-shot examples cost in tokens](post:what-few-shot-examples-cost-in-tokens) if the template includes examples.
 
 ## Saving and sharing
 

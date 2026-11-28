@@ -2,6 +2,7 @@
 title: Why AI Answers Get Cut Off: Token Limits
 description: When an AI reply stops mid-sentence or returns broken JSON, a token limit is usually the cause. Learn the two limits, how to detect them and how to fix it.
 date: 2026-11-22
+updated: 2026-11-28
 image: /assets/blog/why-ai-answers-get-cut-off-max-output-tokens-hero.jpg
 imageAlt: An AI reply stopping mid-sentence at a token limit
 tools: json-validator, token-counter, cost-forecaster
@@ -32,7 +33,7 @@ In Anthropic's documentation, a response that stops at `max_tokens` should be ra
 
 When a reply is cut off in the middle of a JSON object, the result cannot be parsed. Anthropic's documentation also notes that a truncated reply can contain an incomplete tool call, in which case you retry with a higher limit. If you see parse errors that appear only now and then, with long outputs, check the stop reason first.
 
-You can see the problem quickly by pasting the output into the [JSON Validator](tool:json-validator). A truncated object will show an error at the very end. For the wider approach to reliable output, see [how to get reliable JSON from an LLM](post:reliable-json-from-llm).
+You can see the problem quickly by pasting the output into the [JSON Validator](tool:json-validator). A truncated object will show an error at the very end. For the wider approach to reliable output, see [how to get reliable JSON from an LLM](post:reliable-json-from-llm). If you already have a cut-off reply, [recover truncated JSON](post:recover-truncated-json-from-an-llm) shows what can be saved, [fix broken JSON from ChatGPT and Claude](post:fix-broken-json-from-chatgpt-and-claude) covers the other common breakages, and [when not to auto-repair LLM JSON](post:when-not-to-auto-repair-llm-json) explains when repair is the wrong choice.
 
 ## Reasoning models can use up the budget
 

@@ -2,6 +2,7 @@
 title: Why Output Tokens Cost More Than Input
 description: AI APIs charge more for the tokens a model writes than for those you send. See why, what the price gap looks like across providers, and how to use it.
 date: 2026-11-19
+updated: 2026-11-28
 image: /assets/blog/input-vs-output-tokens-why-output-costs-more-hero.jpg
 imageAlt: A short output bar costing as much as a long input bar
 tools: model-prices, cost-forecaster, token-counter
@@ -64,7 +65,7 @@ The same 100 tokens are worth five times as much on the output side, because tha
 
 ## What this means for your bill
 
-- **Ask for shorter answers when you can.** A length limit, a format such as bullet points or "answer in two sentences", or a JSON field list can cut output sharply.
+- **Ask for shorter answers when you can.** A length limit, a format such as bullet points or "answer in two sentences", or a JSON field list can cut output sharply. If answers keep stopping mid-sentence, see [why AI answers get cut off](post:why-ai-answers-get-cut-off-max-output-tokens).
 - **Do not cut input blindly.** Input is usually much larger than output, especially with long history or documents, so it can still be most of the bill. Compare both.
 - **Watch long-running agents and reasoning models.** Output grows with thinking, while input grows with history. See [what an agent costs compared with a chatbot](post:ai-agent-vs-chatbot-vs-batch-cost).
 - **Compare models on both prices.** A model with cheap input can lose on a task that produces long output. See [how to compare LLM API prices](post:compare-llm-api-prices).

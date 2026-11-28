@@ -147,6 +147,15 @@
    "when": "A long prompt costs too much and you want to cut wording safely."
   },
   {
+   "slug": "prompt-diff",
+   "name": "Prompt Diff",
+   "group": 2,
+   "desc": "Compare two versions of a prompt. See every change, the token difference per edit, and what the new version costs.",
+   "title": "Prompt Diff: Compare Two Prompts",
+   "tag": "Compare two prompt versions",
+   "when": "You edited a prompt and want to see each change and what it does to tokens and cost."
+  },
+  {
    "slug": "json-validator",
    "name": "JSON Validator",
    "group": 3,

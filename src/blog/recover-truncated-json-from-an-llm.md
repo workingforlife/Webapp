@@ -2,6 +2,7 @@
 title: Recover Truncated JSON From an LLM
 description: Why AI JSON gets cut off, what you can safely recover, and how to avoid it with a shorter reply, smaller batches and a check on the stop reason.
 date: 2026-11-24
+updated: 2026-11-28
 image: /assets/blog/recover-truncated-json-from-an-llm-hero.jpg
 imageAlt: A JSON array cut off mid-item with a dotted line where the rest should be
 tools: json-repair, json-validator, token-counter
@@ -35,7 +36,7 @@ The [JSON Repair](tool:json-repair) tool closes strings, arrays and objects so t
 ## Prevent it
 
 - **Ask for less per request.** Request 20 records at a time instead of 200.
-- **Allow a longer reply.** Raise the maximum output length where your provider permits it.
+- **Allow a longer reply.** Raise the maximum output length where your provider permits it. See [why AI answers get cut off](post:why-ai-answers-get-cut-off-max-output-tokens) for how the limit works.
 - **Use compact output.** Minified JSON and short key names use fewer tokens.
 - **Estimate the size first.** Paste a sample of the output into the [Token Counter](tool:token-counter) and multiply by the number of items. The count is exact only for OpenAI tokenizers and an estimate for other providers.
 

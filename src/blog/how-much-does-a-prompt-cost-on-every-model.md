@@ -2,6 +2,7 @@
 title: How Much Does a Prompt Cost on Each LLM?
 description: One 1,000-token prompt priced across 195 models from our 18 Nov list: the cheapest, the median and the most expensive, and what drives the gap.
 date: 2026-11-26
+updated: 2026-11-28
 image: /assets/blog/how-much-does-a-prompt-cost-on-every-model-hero.jpg
 imageAlt: A single prompt with price tags from low to high across many models
 tools: prompt-cost-compare, model-prices, model-picker
@@ -47,7 +48,7 @@ A low price does not mean good answers. Small models save money and can fail on 
 
 ## Price your own prompt
 
-The [Prompt Cost Compare](tool:prompt-cost-compare) tool does this for your text. Paste your prompt, set the reply length and monthly volume, and see the cost on each model. To rank models by a full workload, use the [Model Picker](tool:model-picker).
+The [Prompt Cost Compare](tool:prompt-cost-compare) tool does this for your text. Paste your prompt, set the reply length and monthly volume, and see the cost on each model. To rank models by a full workload, use the [Model Picker](tool:model-picker). For the steps behind the number, see [how to estimate prompt cost before you send it](post:estimate-prompt-cost-before-you-send-it), and for the cost of examples in a prompt, see [what few-shot examples cost in tokens](post:what-few-shot-examples-cost-in-tokens).
 
 ## Frequently asked questions
 

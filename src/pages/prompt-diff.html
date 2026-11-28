@@ -1,0 +1,153 @@
+<!--slug:prompt-diff-->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{{TITLE}}</title><meta name="description" content="{{DESC}}"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{{SHARED_CSS}}{{TOOL_CSS}}<style>
+.sx{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.diff{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--bd);border-radius:10px;padding:12px;max-height:440px;overflow:auto;background:var(--bg)}
+.diff del{background:#3b1d1d;color:var(--er);text-decoration:line-through}.diff ins{background:#12301f;color:var(--ok);text-decoration:none}
+.hk.fl{outline:2px solid var(--ac);border-radius:3px}.gap{color:var(--mu);font-style:italic}.pl{font-size:13px;color:var(--mu);margin:0 0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}.chips .c{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--bg);color:var(--ac2);border-radius:999px;padding:6px 12px;margin:0}
+.big{font-size:34px;font-weight:700;line-height:1.15}.big small{font-size:15px;font-weight:400;color:var(--mu)}
+.sv{color:var(--ok)}.up{color:var(--er)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:14px 0 4px}.kv div{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;color:var(--mu);font-size:13px}.kv b{display:block;font-size:20px;color:var(--tx);margin-top:2px}.kv b.sv{color:var(--ok)}.kv b.up{color:var(--er)}
+.tw{max-height:420px;overflow:auto;border:1px solid var(--bd);border-radius:10px}.tw table{margin:0}.tw th{position:sticky;top:0;background:var(--sf);z-index:1}
+td.n,th.n{text-align:right;white-space:nowrap}.et tbody tr{cursor:pointer}.et tbody tr:hover{background:var(--bg)}.et td{vertical-align:top;overflow-wrap:anywhere}
+.mu{color:var(--mu);font-size:12px}.kv .mu{display:block;font-weight:400;margin-top:2px}
+@media(max-width:700px){.sx{grid-template-columns:1fr}.tw{max-height:none;border:0;overflow:visible}.et{display:block;min-width:0}.et thead{display:none}.et tbody{display:block}
+.et tr{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}
+.et td{display:block;border:0;padding:0;text-align:left!important;white-space:normal}.et td::before{content:attr(data-label);display:block;color:var(--mu);font-size:11px;font-weight:400}
+.et td[data-label=Removed],.et td[data-label=Added]{grid-column:1/-1}}
+</style><script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.8.1/dist/o200k_base.js"></script><script src="https://cdn.jsdelivr.net/npm/gpt-tokenizer@2.8.1/dist/cl100k_base.js"></script></head><body>
+{{HEADER}}
+<main><h1>Prompt Diff</h1><p class="lead">Compare two versions of a prompt. See every change, how many tokens each edit adds or saves, and what the new version costs.</p>
+<div class="card"><div class="sx"><div><label for="pa">Original prompt</label><textarea id="pa" style="min-height:200px" placeholder="Paste the old version here…"></textarea></div><div><label for="pb">Revised prompt</label><textarea id="pb" style="min-height:200px" placeholder="Paste the new version here…"></textarea></div></div>
+<div class="g"><div><label for="tk">Tokenizer</label><select id="tk"><option value="est">Estimate (any model)</option><option value="o200k">OpenAI o200k (exact)</option><option value="cl100k">OpenAI cl100k (exact)</option></select></div><div><label for="md">Compare by</label><select id="md"><option value="words">Words</option><option value="lines">Lines</option></select></div></div>
+<div class="chips"><button class="c" id="exb">Load an example</button><button class="c" id="swb">Swap the two</button><button class="c" id="clb">Clear</button></div>
+<p class="note" style="margin:8px 0 0">Both prompts stay in your browser. Nothing you paste is uploaded.</p></div>
+<div class="card"><p class="note" id="vf" style="margin:0 0 8px">Loading prices. Price catalog refreshed {{PRICES_DATE}}.</p><div class="g"><div><label for="pm">Model for the cost figures</label><select id="pm"></select></div><div><label for="qr">Requests per month that send this prompt</label><input id="qr" type="number" min="0" value="100000" inputmode="numeric"></div></div>
+<p class="note" style="margin:6px 0 0">Cost counts the prompt as input tokens at the model's list price. Output tokens and caching are not included. For those, use the <a href="{{HREF:cost-forecaster}}">Cost Forecaster</a>.</p></div>
+<p class="card" id="ph" style="margin:0">Paste two versions of a prompt above, or load the example, to see the differences.</p>
+<div id="rs" style="display:none">
+<div class="card"><h2 style="margin:0 0 4px;font-size:18px">Token change</h2><div class="big" id="bg"></div><div class="kv" id="kv"></div><p class="note" id="sn" style="margin:8px 0 0"></p></div>
+<div class="card"><h2 style="margin:0 0 4px;font-size:18px">Changes</h2><p class="note" style="margin:0 0 8px">Red with a line through is removed, green is added. A dot (·) is a space and ↵ is a line break when a change is only whitespace.</p>
+<div class="g"><div><label for="vw">View</label><select id="vw"><option value="inline">One column</option><option value="side">Side by side</option></select></div><div style="display:flex;align-items:flex-end"><label style="margin:0 0 10px;display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="co" style="width:auto;margin:0"> Show changes only, with context</label></div></div>
+<div id="dw"></div></div>
+<div class="card" id="ec"><h2 style="margin:0 0 4px;font-size:18px">Tokens per edit</h2><p class="note" style="margin:0 0 8px">Each edit is counted on its own text, so the figures may not add up exactly to the total above. Select a row to jump to that change.</p>
+<div class="g"><div><label for="od">Order</label><select id="od"><option value="doc">In the text</option><option value="size">Biggest change first</option></select></div></div>
+<div class="ov tw"><table class="et"><thead><tr><th>#</th><th>Removed</th><th>Added</th><th class="n">Tokens</th></tr></thead><tbody id="eb"></tbody></table></div><button class="b s" id="more" style="display:none"></button></div>
+<div class="card"><button class="b" id="cs">Copy Summary</button><button class="b s" id="cd">Copy Diff as Text</button><span class="note" id="am" role="status"></span></div>
+</div>
+<div class="about"><h2>What It Does</h2><p>Paste an old and a new version of a prompt and Prompt Diff marks what was removed and what was added. It counts the tokens in both versions, shows the change for each edit, and turns the difference into a cost per request and per month on the model you choose.</p>
+<h2>How the Numbers Work</h2><ul><li><b>Total change.</b> The tokens in the whole revised prompt minus the whole original. This is the number to trust.</li><li><b>Tokens per edit.</b> Each change is counted on its removed text and its added text separately. A tokenizer's counts depend on the neighbouring text, so these can differ slightly from the total.</li><li><b>Estimate or exact.</b> The estimate works for any model and the Token Counter shows its likely range. Choose an exact OpenAI tokenizer for OpenAI models. Other providers can count differently, see <a href="/blog/why-token-counts-differ-between-models">why token counts differ</a>.</li><li><b>Cost.</b> Tokens times the model's input price, from the daily price list, times your monthly requests.</li></ul>
+<h2>What It Does Not Tell You</h2><p>Fewer tokens is cheaper, not better. A shorter prompt can drop an instruction the model needed, so compare the answers as well. See <a href="/blog/how-to-test-a-prompt-change-before-shipping">how to test a prompt change before shipping</a>. To find savings in the first place, try the <a href="{{HREF:prompt-token-optimizer}}">Prompt Token Optimizer</a>.</p>
+<h2>Questions</h2>
+<details class="q"><summary>Is my prompt uploaded?</summary><p>No. The comparison runs in your browser. The page fetches the price list, and the exact tokenizer files if you choose one, but your text is not part of those requests. There is no share link on purpose, because it would put your prompts in the address.</p></details>
+<details class="q"><summary>Why do the edits not add up to the total?</summary><p>Each edit is counted on its own, but tokens depend on the text around them. Words at the edge of an edit can join their neighbours into different tokens. Use the total change for decisions.</p></details>
+<details class="q"><summary>Do spaces and line breaks count?</summary><p>Yes, they can cost tokens, and a change that only adds or removes whitespace is shown with dots and line-break marks. Hidden characters are covered in <a href="/blog/how-to-save-tokens-in-a-prompt-myths-tested">how to save tokens in a prompt</a>.</p></details>
+<details class="q"><summary>Should I compare by words or by lines?</summary><p>Words shows exactly what changed inside a sentence. Lines is easier to read for lists and templates where whole lines were rewritten. Very long prompts switch to lines on their own.</p></details>
+<details class="q"><summary>Where do the prices come from?</summary><p>From the open-source LiteLLM catalog, refreshed daily. They are not verified against provider billing, so confirm on the provider page before relying on a number.</p></details></div>
+{{RELATED}}
+{{FOOTER}}
+<script>
+{{PRICES_JS}}
+const $=s=>document.getElementById(s);var TX=false;
+{{ESTIMATE_JS}}
+const EX=/audio|tts|realtime|search|deep-research|embed|image|moderation|transcribe|whisper/i;
+const nm=n=>Math.round(n).toLocaleString('en-US');
+const sg=n=>(n>0?'+':n<0?'−':'')+nm(Math.abs(n));
+const mf=x=>{const a=Math.abs(x);if(a===0)return '$0.00';if(a>=0.01)return money(a);const d=Math.min(10,Math.max(2,1-Math.floor(Math.log10(a))));return '$'+a.toFixed(d)};
+const ms=x=>(x<0?'−':x>0?'+':'')+mf(x);
+const key=m=>m.p+'|'+m.n;
+let P=[],ST=null,SHOWN=100,TM=0;
+function tk(t){const k=$('tk').value,g=window['GPTTokenizer_'+k+'_base'];TX=false;if(k!='est'&&g){try{const n=g.encode(t).length;TX=true;return n}catch(e){}}return est(t)}
+const split=(t,m)=>m=='lines'?(t.match(/[^\n]*\n|[^\n]+$/g)||[]):(t.match(/\s+|[^\s]+/g)||[]);
+function lcs(a,b){let s=0;const n0=a.length,m0=b.length;
+while(s<n0&&s<m0&&a[s]===b[s])s++;
+let ea=n0,eb=m0;while(ea>s&&eb>s&&a[ea-1]===b[eb-1]){ea--;eb--}
+const A=a.slice(s,ea),B=b.slice(s,eb),n=A.length,m=B.length;
+if(n*m>3e7)return null;
+const ops=[];for(let i=0;i<s;i++)ops.push(['=',a[i]]);
+if(!n||!m){A.forEach(x=>ops.push(['-',x]));B.forEach(x=>ops.push(['+',x]))}
+else{const W=m+1,L=new Uint16Array((n+1)*W);
+for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i*W+j]=A[i]===B[j]?L[(i+1)*W+j+1]+1:Math.max(L[(i+1)*W+j],L[i*W+j+1]);
+let i=0,j=0;while(i<n&&j<m){if(A[i]===B[j]){ops.push(['=',A[i]]);i++;j++}else if(L[(i+1)*W+j]>=L[i*W+j+1]){ops.push(['-',A[i]]);i++}else{ops.push(['+',B[j]]);j++}}
+while(i<n)ops.push(['-',A[i++]]);while(j<m)ops.push(['+',B[j++]])}
+for(let i=ea;i<n0;i++)ops.push(['=',a[i]]);
+return ops}
+function segs(ops){const out=[];let cur=null;
+for(const[t,s]of ops){if(t=='='){if(cur){out.push(cur);cur=null}const l=out[out.length-1];if(l&&l.t=='eq')l.s+=s;else out.push({t:'eq',s})}
+else{if(!cur)cur={t:'ch',d:'',i:''};if(t=='-')cur.d+=s;else cur.i+=s}}
+if(cur)out.push(cur);
+const m=[];for(let k=0;k<out.length;k++){const x=out[k];
+if(x.t=='eq'&&/^\s+$/.test(x.s)&&m.length&&m[m.length-1].t=='ch'&&out[k+1]&&out[k+1].t=='ch'){const p=m[m.length-1],nx=out[k+1];p.d+=x.s+nx.d;p.i+=x.s+nx.i;k++}else m.push(x)}
+return m}
+const vis=s=>E(s).replace(/ /g,'·').replace(/\t/g,'→').replace(/\n/g,'↵\n');
+const sh=s=>/^\s+$/.test(s)?vis(s):E(s);
+const exr=s=>{if(!s)return '—';if(/^\s+$/.test(s))return vis(s).replace(/\n/g,'');const t=s.length>90?s.slice(0,87)+'…':s;return E(t).replace(/\n/g,'↵ ')};
+function ctx(s,first,last){if(s.length<=240)return E(s);const h=first?'':E(s.slice(0,100)),t=last?'':E(s.slice(-100)),sk=s.length-(first?0:100)-(last?0:100);return h+'<span class="gap">⋯ '+nm(sk)+' unchanged characters ⋯</span>'+t}
+function render(S,side,only){let h='',k=0;S.forEach((x,ix)=>{if(x.t=='eq'){h+=only?ctx(x.s,ix==0,ix==S.length-1):E(x.s)}else{k++;
+if(side=='L'){h+='<span class="hk" id="hL'+k+'">'+(x.d?'<del>'+sh(x.d)+'</del>':'')+'</span>'}
+else if(side=='R'){h+='<span class="hk" id="hR'+k+'">'+(x.i?'<ins>'+sh(x.i)+'</ins>':'')+'</span>'}
+else{h+='<span class="hk" id="hI'+k+'">'+(x.d?'<del>'+sh(x.d)+'</del>':'')+(x.i?'<ins>'+sh(x.i)+'</ins>':'')+'</span>'}}});return h}
+function model(){return P.find(m=>key(m)==$('pm').value)}
+function calc(){
+const a=$('pa').value.replace(/\r\n?/g,'\n'),b=$('pb').value.replace(/\r\n?/g,'\n'),ph=$('ph');
+if(!a&&!b){ST=null;$('rs').style.display='none';ph.style.display='block';ph.textContent='Paste two versions of a prompt above, or load the example, to see the differences.';return}
+let mode=$('md').value,note='',ops=lcs(split(a,mode),split(b,mode));
+if(!ops&&mode=='words'){mode='lines';ops=lcs(split(a,'lines'),split(b,'lines'));note='These prompts are long, so the comparison switched to whole lines.'}
+if(!ops){ST=null;$('rs').style.display='none';ph.style.display='block';ph.textContent='These prompts are too long to compare in the browser. Compare them one section at a time.';return}
+const S=segs(ops),ta=tk(a),tb=tk(b),exact=TX,H=[];
+S.forEach(x=>{if(x.t=='ch'){const r=x.d?tk(x.d):0,ad=x.i?tk(x.i):0;x.k=H.length+1;H.push({d:x.d,i:x.i,r,a:ad,n:ad-r,k:x.k})}});
+TX=exact;
+ST={a,b,S,H,ta,tb,exact,note,sel:$('tk').value,la:exact?null:estParts(a),lb:exact?null:estParts(b)};
+ph.style.display='none';$('rs').style.display='block';SHOWN=100;
+drawSum();drawDiff();drawEdits()}
+function drawSum(){const s=ST;if(!s)return;const m=model(),r=Math.max(0,parseFloat($('qr').value)||0),d=s.tb-s.ta,pc=s.ta?d/s.ta*100:(s.tb?100:0),ap=s.exact?'':'≈ ',cls=d<0?'sv':d>0?'up':'';
+$('bg').className='big '+cls;$('bg').innerHTML=ap+sg(d)+' <small>tokens ('+(pc>0?'+':pc<0?'−':'')+Math.abs(pc).toFixed(1)+'%)</small>';
+let nr=0,na=0;s.H.forEach(h=>{if(h.n<0)nr++;else if(h.n>0)na++});
+let o='<div>Original<b>'+ap+nm(s.ta)+'</b></div><div>Revised<b>'+ap+nm(s.tb)+'</b></div><div>Edits<b>'+s.H.length+'</b><span class="mu">'+nr+' save tokens, '+na+' add tokens</span></div>';
+if(m){const ca=s.ta*m.i/1e6,cb=s.tb*m.i/1e6,dm=(cb-ca)*r,c2=dm<0?'sv':dm>0?'up':'';
+o+='<div>Per request<b class="'+c2+'">'+mf(ca)+' → '+mf(cb)+'</b><span class="mu">'+ms(cb-ca)+' at $'+m.i+' per 1M input tokens</span></div><div>Per month ('+nm(r)+' requests)<b class="'+c2+'">'+ms(dm)+'</b><span class="mu">'+money(ca*r)+' → '+money(cb*r)+'</span></div>'}
+else o+='<div>Cost<b>—</b><span class="mu">Prices not loaded</span></div>';
+$('kv').innerHTML=o;
+let n=s.note;if(s.a===s.b)n=(n?n+' ':'')+'The two prompts are identical.';
+if(!s.exact){n=(n?n+' ':'')+(s.sel!='est'?'The exact tokenizer did not load, so these are estimates. ':'Estimates. ')+'Likely range: original '+nm(s.la.lo)+' to '+nm(s.la.hi)+', revised '+nm(s.lb.lo)+' to '+nm(s.lb.hi)+' tokens. Choose an exact OpenAI tokenizer above for OpenAI models.'}
+else n=(n?n+' ':'')+'Exact token counts for the OpenAI '+s.sel+' tokenizer. Other providers count differently.';
+$('sn').textContent=n}
+function drawDiff(){const s=ST;if(!s)return;const v=$('vw').value,only=$('co').checked,w=$('dw');
+if(!s.H.length){w.innerHTML='<div class="diff">'+(s.a?E(s.a):'')+'</div>';return}
+if(v=='side'){w.innerHTML='<div class="sx"><div><p class="pl">Original</p><div class="diff" id="dL">'+render(s.S,'L',only)+'</div></div><div><p class="pl">Revised</p><div class="diff" id="dR">'+render(s.S,'R',only)+'</div></div></div>';
+const L=$('dL'),R=$('dR');let act=null;const sy=(f,t)=>()=>{if(act===f){const m=f.scrollHeight-f.clientHeight;t.scrollTop=m>0?f.scrollTop*(t.scrollHeight-t.clientHeight)/m:0}};
+[[L,R],[R,L]].forEach(([f,t])=>{['pointerenter','touchstart','wheel','focus'].forEach(e=>f.addEventListener(e,()=>{act=f},{passive:true}));f.addEventListener('scroll',sy(f,t))})}
+else w.innerHTML='<div class="diff" id="dI">'+render(s.S,'I',only)+'</div>'}
+function drawEdits(){const s=ST;if(!s)return;const ec=$('ec');if(!s.H.length){ec.style.display='none';return}ec.style.display='block';
+const L=s.H.slice();if($('od').value=='size')L.sort((x,y)=>Math.abs(y.n)-Math.abs(x.n)||x.k-y.k);
+$('eb').innerHTML=L.slice(0,SHOWN).map(h=>'<tr data-k="'+h.k+'" tabindex="0"><td data-label="#">'+h.k+'</td><td data-label="Removed">'+exr(h.d)+'</td><td data-label="Added">'+exr(h.i)+'</td><td class="n" data-label="Tokens"><b class="'+(h.n<0?'sv':h.n>0?'up':'')+'">'+sg(h.n)+'</b> <span class="mu">(−'+h.r+' / +'+h.a+')</span></td></tr>').join('');
+const mb=$('more');if(L.length>SHOWN){mb.style.display='inline-block';mb.textContent='Show more ('+(L.length-SHOWN)+' left)'}else mb.style.display='none'}
+function jump(k){const v=$('vw').value;[v=='side'?'hL':'hI',v=='side'?'hR':''].forEach(p=>{if(!p)return;const el=document.getElementById(p+k);if(!el)return;if(p!='hR')el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('fl');setTimeout(()=>el.classList.remove('fl'),1400)})}
+function say(t){$('am').textContent=t}
+function copy(t,msg){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>say(msg)).catch(()=>say('Copy failed. Select the text and copy it yourself.'))}
+function summary(){const s=ST,m=model(),r=Math.max(0,parseFloat($('qr').value)||0),d=s.tb-s.ta,pc=s.ta?d/s.ta*100:0,ap=s.exact?'':'about ';
+let o='Prompt Diff summary\nOriginal: '+ap+nm(s.ta)+' tokens\nRevised: '+ap+nm(s.tb)+' tokens\nChange: '+sg(d)+' tokens ('+(pc>0?'+':pc<0?'−':'')+Math.abs(pc).toFixed(1)+'%), '+(s.exact?'exact '+s.sel+' count':'estimate')+'\nEdits: '+s.H.length+'\n';
+if(m){const ca=s.ta*m.i/1e6,cb=s.tb*m.i/1e6;o+='Model: '+m.n+' at $'+m.i+' per 1M input tokens\nPer request: '+mf(ca)+' to '+mf(cb)+' ('+ms(cb-ca)+')\nPer month at '+nm(r)+' requests: '+money(ca*r)+' to '+money(cb*r)+' ('+ms((cb-ca)*r)+')\n'}
+return o+'Input tokens only. Output and caching not included.'}
+function asText(){return ST.S.map(x=>x.t=='eq'?x.s:(x.d?'[-'+x.d+'-]':'')+(x.i?'{+'+x.i+'+}':'')).join('')}
+const EXA='You are a helpful assistant for our customer support team.\nPlease read the customer\'s message very carefully and then write a reply.\nIt is important that you always stay polite and professional.\nIn order to help the customer, first of all find out what the problem is.\nKeep the reply short. Do not make up any information that you are not sure about.\nIf you do not know the answer, please say so.';
+const EXB='You are a support assistant for our customer team.\nRead the customer\'s message carefully, then write a reply.\nAlways stay polite and professional.\nTo help the customer, first find the problem.\nKeep the reply short. Do not invent information you are not sure about.\nIf you do not know the answer, say so.\nReply in the customer\'s language.';
+function later(f,ms_){return()=>{clearTimeout(TM);TM=setTimeout(f,ms_)}}
+['pa','pb'].forEach(id=>$(id).addEventListener('input',later(calc,200)));
+['tk','md'].forEach(id=>$(id).addEventListener('change',calc));
+['pm','qr'].forEach(id=>$(id).addEventListener('input',drawSum));
+['vw','co'].forEach(id=>$(id).addEventListener('change',drawDiff));
+$('od').addEventListener('change',drawEdits);
+$('more').onclick=()=>{SHOWN+=100;drawEdits()};
+$('eb').addEventListener('click',e=>{const tr=e.target.closest('tr');if(tr)jump(tr.dataset.k)});
+$('eb').addEventListener('keydown',e=>{if(e.key=='Enter'){const tr=e.target.closest('tr');if(tr)jump(tr.dataset.k)}});
+$('exb').onclick=()=>{$('pa').value=EXA;$('pb').value=EXB;calc()};
+$('swb').onclick=()=>{const t=$('pa').value;$('pa').value=$('pb').value;$('pb').value=t;calc()};
+$('clb').onclick=()=>{$('pa').value='';$('pb').value='';say('');calc()};
+$('cs').onclick=()=>{if(ST)copy(summary(),'Summary copied.')};
+$('cd').onclick=()=>{if(ST)copy(asText(),'Copied. Removed text is in [- -], added text in {+ +}.')};
+fetch('/prices.json').then(r=>r.json()).then(j=>{P=j.models.filter(m=>+m.in>0&&!EX.test(m.name)).map(m=>({p:m.provider||'Other',n:m.name,i:+m.in||0}));M=j.models.map(m=>[m.provider||'Other',m.name,m.in,m.out,m.ctx||128]);VF=j.updated;verified('vf');
+const ps=[...new Set(P.map(m=>m.p))].sort(),by={};P.forEach(m=>{(by[m.p]=by[m.p]||[]).push(m)});
+$('pm').innerHTML=ps.map(p=>'<optgroup label="'+E(p)+'">'+by[p].sort((a,b)=>a.n<b.n?-1:1).map(m=>'<option value="'+E(key(m))+'">'+E(m.n)+'</option>').join('')+'</optgroup>').join('');
+const d=P.find(m=>m.n=='claude-sonnet-5-5');if(d)$('pm').value=key(d);drawSum()}).catch(()=>{$('vf').textContent='The price file could not be loaded. Token counts still work. Reload the page to try again.';$('vf').style.color='var(--er)'});
+</script></body></html>

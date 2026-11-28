@@ -2,6 +2,7 @@
 title: Remove Markdown and Hidden Characters
 description: Pasting AI text into email or documents can bring stray symbols and invisible characters. See what they are, what they break and how to clean them safely.
 date: 2026-11-22
+updated: 2026-11-28
 image: /assets/blog/remove-markdown-and-hidden-characters-from-ai-text-hero.jpg
 imageAlt: AI text with Markdown symbols turned into clean plain text
 tools: text-cleaner, token-counter
@@ -95,7 +96,7 @@ You can ask the model for plain text when you write the prompt, for example "Rep
 
 ## Tokens and cleaning
 
-Markdown symbols and invisible characters can add a few tokens, so cleaning text before you send it back to a model can trim the count slightly. The effect is small, so do it for tidiness, not for savings. You can compare the before and after counts in the [Token Counter](tool:token-counter).
+Markdown symbols and invisible characters can add a few tokens, so cleaning text before you send it back to a model can trim the count slightly. The effect is small, so do it for tidiness, not for savings. You can compare the before and after counts in the [Token Counter](tool:token-counter). To trim the wording itself, see [shorten a prompt without losing quality](post:shorten-a-prompt-without-losing-quality).
 
 ## Frequently asked questions
 

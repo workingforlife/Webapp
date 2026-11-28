@@ -2,7 +2,7 @@
 title: How to Estimate the Monthly Cost of an LLM Chatbot
 description: A step-by-step method for forecasting what a chatbot will cost each month, including why conversation history makes bills grow faster than expected.
 date: 2026-11-10
-updated: 2026-11-21
+updated: 2026-11-28
 image: /assets/blog/estimate-monthly-cost-of-an-llm-chatbot-hero.jpg
 imageAlt: Chat messages growing longer as a conversation continues
 tools: cost-forecaster, token-counter, model-prices
@@ -62,7 +62,7 @@ Real traffic includes retries, longer conversations than average and tool calls.
 
 ## Skip the spreadsheet
 
-The [Cost Forecaster](tool:cost-forecaster) does all of this for you. Enter the six inputs, pick a model, and it models growing history, prompt caching and the context window, then shows which inputs move the bill most. You can export the result as Excel, PDF or an image to share with your team. Once you have the number, [seven ways to cut your LLM bill](post:cut-your-llm-bill) shows where to trim it, and [comparing API prices fairly](post:compare-llm-api-prices) helps you choose the model.
+The [Cost Forecaster](tool:cost-forecaster) does all of this for you. Enter the six inputs, pick a model, and it models growing history, prompt caching and the context window, then shows which inputs move the bill most. You can export the result as Excel, PDF or an image to share with your team. Once you have the number, [seven ways to cut your LLM bill](post:cut-your-llm-bill) shows where to trim it, and [comparing API prices fairly](post:compare-llm-api-prices) helps you choose the model. For a single prompt rather than a whole month, see [how to estimate prompt cost before you send it](post:estimate-prompt-cost-before-you-send-it), and see [what few-shot examples cost in tokens](post:what-few-shot-examples-cost-in-tokens) if your system prompt carries examples.
 
 ## Frequently asked questions
 

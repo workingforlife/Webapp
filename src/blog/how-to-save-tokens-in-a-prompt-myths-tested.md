@@ -2,6 +2,7 @@
 title: How to Save Tokens in a Prompt: Myths Tested
 description: Does "&" cost more than "and"? We tested 42 prompt habits on OpenAI's tokenizers: what saves tokens, what makes no difference and what quietly wastes them.
 date: 2026-11-20
+updated: 2026-11-28
 image: /assets/blog/how-to-save-tokens-in-a-prompt-myths-tested-hero.jpg
 imageAlt: Prompt habits compared by token count, with "&" and "and" both costing the same
 tools: token-counter, prompt-token-optimizer, text-cleaner
@@ -94,7 +95,7 @@ Trimming a prompt saves tokens on every request, but long conversations and larg
 1. Paste the prompt into the [Token Counter](tool:token-counter) and note the count. Pick an OpenAI tokenizer for an exact count on OpenAI models.
 2. Change one thing at a time and count again. Whitespace, symbols and punctuation rarely matter, so spend your time on the big items above.
 3. Use the [Prompt Token Optimizer](tool:prompt-token-optimizer) to find filler and repeats, and review each change it suggests.
-4. Compare the answers before and after, not only the counts.
+4. Compare the answers before and after, not only the counts. See [how to test a prompt change before shipping](post:how-to-test-a-prompt-change-before-shipping), and use [Prompt Diff](tool:prompt-diff) to see each edit and its token change.
 
 ## Frequently asked questions
 

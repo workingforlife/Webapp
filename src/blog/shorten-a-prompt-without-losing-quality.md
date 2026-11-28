@@ -2,6 +2,7 @@
 title: Shorten a Prompt Without Losing Quality
 description: Long prompts are re-sent on every request, so wasted words cost money. Learn what is safe to cut, what is not, and how to test the shorter prompt.
 date: 2026-11-22
+updated: 2026-11-28
 image: /assets/blog/shorten-a-prompt-without-losing-quality-hero.jpg
 imageAlt: A long prompt trimmed to a shorter one
 tools: prompt-token-optimizer, token-counter, prompt-builder
@@ -50,7 +51,7 @@ The tool never changes numbers, links, variables, quoted text, code or tags, and
 
 ## Test before you switch
 
-The shorter prompt may not behave the same, because wording can matter to a model. Run the old and new prompt on a handful of real inputs and compare the answers. Only switch if the answers hold up.
+The shorter prompt may not behave the same, because wording can matter to a model. Run the old and new prompt on a handful of real inputs and compare the answers. Only switch if the answers hold up. [Prompt Diff](tool:prompt-diff) shows which words changed and what each edit saves, and [how to test a prompt change before shipping](post:how-to-test-a-prompt-change-before-shipping) gives a routine for the comparison.
 
 ## Measure what you saved
 
@@ -62,7 +63,7 @@ The saving can be smaller than expected if your system prompt is cached, because
 
 ## Keep the short version reusable
 
-Once you have a prompt you like, keep it as a template with variables, so you do not have to rebuild it. See [reusable prompt templates](post:reusable-prompt-templates).
+Once you have a prompt you like, keep it as a template with variables, so you do not have to rebuild it. See [reusable prompt templates](post:reusable-prompt-templates). If the prompt carries examples, [what few-shot examples cost in tokens](post:what-few-shot-examples-cost-in-tokens) shows what they cost, and [remove Markdown and hidden characters from AI text](post:remove-markdown-and-hidden-characters-from-ai-text) covers cleaning symbols and invisible characters before you count.
 
 ## Frequently asked questions
 

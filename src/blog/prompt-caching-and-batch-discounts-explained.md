@@ -2,6 +2,7 @@
 title: Prompt Caching and Batch Discounts Explained
 description: Two ways to cut your AI API bill without changing the model: caching repeated prompt text and batching non-urgent work. How each works, with an example.
 date: 2026-11-19
+updated: 2026-11-28
 image: /assets/blog/prompt-caching-and-batch-discounts-explained-hero.jpg
 imageAlt: A repeated prompt prefix read from cache at a lower price
 tools: cost-forecaster, model-prices, token-counter
@@ -69,7 +70,7 @@ For a quick sense of scale, using the example above: halving the cached prefix c
 
 ## Check the savings for your case
 
-The [Cost Forecaster](tool:cost-forecaster) lets you switch caching on and enter a batch discount, so you can see the effect on a monthly bill for a chatbot, an agent or a batch job. Count your real system prompt in the [Token Counter](tool:token-counter) first, since the size of the repeated part drives the result. For the wider list of savings, see [seven ways to cut your LLM bill](post:cut-your-llm-bill).
+The [Cost Forecaster](tool:cost-forecaster) lets you switch caching on and enter a batch discount, so you can see the effect on a monthly bill for a chatbot, an agent or a batch job. Count your real system prompt in the [Token Counter](tool:token-counter) first, since the size of the repeated part drives the result. For the wider list of savings, see [seven ways to cut your LLM bill](post:cut-your-llm-bill). To see what repeated examples cost before caching, see [what few-shot examples cost in tokens](post:what-few-shot-examples-cost-in-tokens).
 
 ## Frequently asked questions
 

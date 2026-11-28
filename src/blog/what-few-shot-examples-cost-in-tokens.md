@@ -2,6 +2,7 @@
 title: What Few-Shot Examples Cost in Tokens
 description: Every example in a prompt is paid for on every request. See how 750 extra tokens add up across models, and how to decide whether examples are worth it.
 date: 2026-11-26
+updated: 2026-11-28
 image: /assets/blog/what-few-shot-examples-cost-in-tokens-hero.jpg
 imageAlt: A stack of example cards with a running token and cost counter
 tools: prompt-cost-compare, cost-forecaster, token-counter
@@ -39,7 +40,7 @@ Ask these questions:
 ## Ways to cut the cost
 
 - **Cache the repeated part.** If the examples are identical across requests, providers that offer prompt caching bill repeated reads at a lower rate. See [prompt caching and batch discounts](post:prompt-caching-and-batch-discounts-explained).
-- **Trim the examples.** Remove filler and shorten them. See [how to cut your LLM bill](post:cut-your-llm-bill).
+- **Trim the examples.** Remove filler and shorten them. See [how to cut your LLM bill](post:cut-your-llm-bill). [Prompt Diff](tool:prompt-diff) shows the token change for each edit, and [how to estimate prompt cost before you send it](post:estimate-prompt-cost-before-you-send-it) gives the full routine.
 - **Measure the tokens.** Use the [Token Counter](tool:token-counter) to count the examples. The count is exact for OpenAI and an estimate for other providers.
 - **Forecast the whole month.** The [Cost Forecaster](tool:cost-forecaster) turns a per-request cost into a monthly budget.
 
